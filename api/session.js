@@ -102,11 +102,45 @@ async function readUsers() {
   } catch (e) { console.error(e); return []; }
 }
 
+async function getRememberSession(token) {
+  if (!useFirestore || !token) return null;
+  try {
+    const snap = await db.collection("rememberSessions").where("token", "==", token).limit(1).get();
+    if (snap.empty) return null;
+    const data = snap.docs[0].data();
+    if (data.exp && data.exp < Math.floor(Date.now() / 1000)) {
+      await snap.docs[0].ref.delete();
+      return null;
+    }
+    return { user: { id: data.userId, name: data.name, email: data.email } };
+  } catch (e) { console.error(e); return null; }
+}
+
+async function cleanExpiredSessions() {
+  if (!useFirestore) return;
+  try {
+    const cutoff = Math.floor(Date.now() / 1000);
+    const snap = await db.collection("rememberSessions").where("exp", "<", cutoff).get();
+    const batch = db.batch();
+    snap.forEach(doc => batch.delete(doc.ref));
+    if (!snap.empty) await batch.commit();
+  } catch (e) { console.error("Failed to clean sessions:", e); }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
   try {
+    await cleanExpiredSessions();
     const cookies = parseCookies(req.headers.cookie || "");
-    const session = verifySessionToken(cookies[SESSION_COOKIE]);
-    return res.status(200).json({ authenticated: !!session, user: session });
+    const cookieSession = verifySessionToken(cookies[SESSION_COOKIE]);
+    if (cookieSession) {
+      return res.status(200).json({ authenticated: true, user: cookieSession });
+    }
+    const authHeader = req.headers.authorization?.replace("Bearer ", "");
+    const rememberSession = authHeader && await getRememberSession(authHeader);
+    if (rememberSession) {
+      return res.status(200).json({ authenticated: true, user: rememberSession.user });
+    }
+    return res.status(200).json({ authenticated: false, user: null });
   } catch (e) { console.error(e); return res.status(500).json({ error: "Internal server error" }); }
 }

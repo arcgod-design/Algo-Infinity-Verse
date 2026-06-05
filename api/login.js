@@ -28,8 +28,25 @@ function fromB64u(i) { return Buffer.from(i.replace(/-/g,"+").replace(/_/g,"/"),
 function createSessionToken(u) { const h=b64u(JSON.stringify({alg:"HS256",typ:"JWT"})); const p=b64u(JSON.stringify({sub:u.id,name:u.name,email:u.email,exp:Math.floor(Date.now()/1000)+SESSION_MAX_AGE_SECONDS})); return `${h}.${p}.${sign(`${h}.${p}`)}`; }
 function passwordMatches(p, s) { const c=crypto.pbkdf2Sync(p,s.salt,s.iterations||PBKDF2_ITERATIONS,PASSWORD_KEY_LENGTH,s.digest||"sha256"); const b=Buffer.from(s.hash,"hex"); return b.length===c.length&&crypto.timingSafeEqual(b,c); }
 function sessionCookie(t) { const sec=process.env.VERCEL==="1"; return [`${SESSION_COOKIE}=${encodeURIComponent(t)}`,"HttpOnly","SameSite=Lax","Path=/",`Max-Age=${SESSION_MAX_AGE_SECONDS}`,sec?"Secure":""].filter(Boolean).join("; "); }
+function createRememberToken() { return crypto.randomBytes(32).toString("hex"); }
 
 async function readUsers() { if(!useFirestore)return[]; try{const s=await db.collection("users").get();return s.docs.map(d=>({id:d.id,...d.data()}));}catch(e){console.error(e);return[];} }
+
+async function storeRememberSession(user) {
+  if (!useFirestore) return null;
+  try {
+    const token = createRememberToken();
+    await db.collection("rememberSessions").doc(user.id).set({
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+      token,
+      exp: Math.floor(Date.now() / 1000) + SESSION_MAX_AGE_SECONDS,
+      createdAt: new Date().toISOString()
+    });
+    return token;
+  } catch (e) { console.error(e); return null; }
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -40,6 +57,9 @@ export default async function handler(req, res) {
     const user=users.find(u=>u.email===cleanEmail);
     if(!user||!passwordMatches(pwd,user.password))return res.status(401).json({error:"Invalid email or password."});
     const token=createSessionToken(user);
-    return res.status(200).setHeader("Set-Cookie",sessionCookie(token)).json({user:{id:user.id,name:user.name,email:user.email}});
+    const rememberToken = await storeRememberSession(user);
+    const headers = { "Set-Cookie": sessionCookie(token) };
+    if (rememberToken) headers["X-Remember-Token"] = rememberToken;
+    return res.status(200).set(headers).json({user:{id:user.id,name:user.name,email:user.email}});
   } catch(e){console.error(e);return res.status(500).json({error:"Internal server error"});}
 }
