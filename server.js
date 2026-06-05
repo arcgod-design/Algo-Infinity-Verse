@@ -197,6 +197,65 @@ async function writeUsers(users) {
   await fs.writeFile(USERS_FILE, `${JSON.stringify(users, null, 2)}\n`);
 }
 
+function publicUser(user) {
+  return {
+    id: user.id,
+    name: user.name || "Learner",
+    xp: Number(user.xp || user.progress?.xp || 0),
+    level: Number(user.level || user.progress?.level || 1),
+    avatar: user.avatar || user.progress?.avatar || "🚀",
+    updatedAt: user.progressUpdatedAt || user.updatedAt || user.createdAt || null,
+  };
+}
+
+function leaderboardRows(users) {
+  return users
+    .map(publicUser)
+    .sort((a, b) => b.xp - a.xp || a.name.localeCompare(b.name))
+    .map((user, index) => ({ ...user, rank: index + 1 }));
+}
+
+async function updateUserProgress(userId, progress) {
+  const nextProgress = {
+    name: String(progress.name || "").trim(),
+    xp: Math.max(0, Number(progress.xp) || 0),
+    level: Math.max(1, Number(progress.level) || 1),
+    avatar: String(progress.avatar || "🚀").trim() || "🚀",
+    progressUpdatedAt: new Date().toISOString(),
+  };
+
+  if (!useFirestore) {
+    const users = await readUsers();
+    const userIndex = users.findIndex((user) => user.id === userId);
+    if (userIndex === -1) return null;
+
+    users[userIndex] = {
+      ...users[userIndex],
+      name: nextProgress.name || users[userIndex].name,
+      xp: nextProgress.xp,
+      level: nextProgress.level,
+      avatar: nextProgress.avatar,
+      progressUpdatedAt: nextProgress.progressUpdatedAt,
+    };
+    await writeUsers(users);
+    return publicUser(users[userIndex]);
+  }
+
+  const snapshot = await db.collection(COLLECTIONS.USERS).where("id", "==", userId).limit(1).get();
+  if (snapshot.empty) return null;
+
+  const doc = snapshot.docs[0];
+  await doc.ref.update({
+    name: nextProgress.name || doc.data().name,
+    xp: nextProgress.xp,
+    level: nextProgress.level,
+    avatar: nextProgress.avatar,
+    progressUpdatedAt: nextProgress.progressUpdatedAt,
+  });
+
+  return publicUser({ id: userId, ...doc.data(), ...nextProgress });
+}
+
 function hashPassword(password, salt = crypto.randomBytes(16).toString("hex")) {
   const hash = crypto
     .pbkdf2Sync(password, salt, PBKDF2_ITERATIONS, PASSWORD_KEY_LENGTH, "sha256")
@@ -267,6 +326,32 @@ async function handleApi(req, res, pathname) {
     return sendJson(res, 200, { authenticated: Boolean(session), user: session });
   }
 
+async function readAllUsersForLeaderboard() {
+  if (!useFirestore) return readUsers();
+  const snapshot = await db.collection(COLLECTIONS.USERS).get();
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+  if (pathname === "/api/leaderboard" && req.method === "GET") {
+    const session = getSession(req);
+    const users = await readAllUsersForLeaderboard();
+    return sendJson(res, 200, {
+      leaders: leaderboardRows(users),
+      currentUserId: session?.sub || null,
+    });
+  }
+
+  if (pathname === "/api/progress" && req.method === "PUT") {
+    const session = getSession(req);
+    if (!session) return sendJson(res, 401, { error: "Authentication required." });
+
+    const payload = await readJsonBody(req);
+    const user = await updateUserProgress(session.sub, payload);
+    if (!user) return sendJson(res, 404, { error: "User not found." });
+
+    return sendJson(res, 200, { user });
+  }
+
   if (pathname === "/api/signup" && req.method === "POST") {
     const payload = await readJsonBody(req);
     const validationError = validateSignup(payload);
@@ -283,6 +368,9 @@ async function handleApi(req, res, pathname) {
       name: String(payload.name).trim(),
       email,
       password: hashPassword(String(payload.password)),
+      xp: 0,
+      level: 1,
+      avatar: "🚀",
       createdAt: new Date().toISOString(),
     };
     users.push(user);

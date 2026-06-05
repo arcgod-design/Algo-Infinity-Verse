@@ -1057,6 +1057,11 @@ let userProgress = {
   },
 };
 
+const LEADERBOARD_LIMIT = 10;
+let progressSyncTimer = null;
+let leaderboardRequestId = 0;
+let cachedSession = null;
+
 applySavedTheme();
 
 // ===== QUIZ EDITOR (state) =====
@@ -1920,11 +1925,11 @@ function selectQuizAnswer(selectedIndex) {
   }, 1200);
 }
 
-console.log("FINISH QUIZ");
-console.log("Score:", currentQuiz.score);
-console.log("Questions:", currentQuiz.questions.length);
-
 function finishQuiz() {
+  console.log("FINISH QUIZ");
+  console.log("Score:", currentQuiz.score);
+  console.log("Questions:", currentQuiz.questions.length);
+
   const topicKey = currentQuiz.topic;
   const score = currentQuiz.score;
   const total = currentQuiz.questions.length;
@@ -1973,16 +1978,16 @@ function finishQuiz() {
   updateGamification();
 }
 
-console.log("SHOW RESULTS");
-console.log({
-  score,
-  total,
-  percentage,
-  xpEarned,
-  completionTime,
-});
-
 function showQuizResults(score, total, percentage, xpEarned, completionTime) {
+  console.log("SHOW RESULTS");
+  console.log({
+    score,
+    total,
+    percentage,
+    xpEarned,
+    completionTime,
+  });
+
   const resultEl = document.getElementById("topicQuizResult");
   if (!resultEl) return;
 
@@ -2645,25 +2650,114 @@ function updateBadges() {
 function updateLeaderboard() {
   const leaderboardList = document.getElementById("leaderboardList");
 
-  // Mock leaderboard data
-  const leaders = [
-    { name: "CodeMaster", xp: 15420, rank: 1 },
-    { name: "AlgoNinja", xp: 14890, rank: 2 },
-    { name: "DevGuru", xp: 13200, rank: 3 },
-    { name: "You", xp: userProgress.xp, rank: 4 },
-    { name: "BinaryBeast", xp: 11500, rank: 5 },
-  ];
+  if (!leaderboardList) return;
 
-  leaderboardList.innerHTML = leaders
-    .map(
-      (user) => `
-        <div class="leaderboard-item ${user.name === "You" ? "current-user" : ""}" style="${user.name === "You" ? "border: 2px solid var(--primary);" : ""}">
+  const requestId = ++leaderboardRequestId;
+  renderLeaderboardRows(buildLeaderboardRows([], getCurrentUserId()), getCurrentUserId(), {
+    emptyMessage: "Loading leaderboard...",
+  });
+
+  loadLeaderboard()
+    .then(({ leaders, currentUserId }) => {
+      if (requestId !== leaderboardRequestId) return;
+      const resolvedCurrentUserId = currentUserId || getCurrentUserId();
+      const rows = buildLeaderboardRows(leaders, resolvedCurrentUserId);
+      renderLeaderboardRows(rows, resolvedCurrentUserId);
+    })
+    .catch((error) => {
+      console.warn("Could not load leaderboard:", error);
+      if (requestId !== leaderboardRequestId) return;
+      renderLeaderboardRows(buildLeaderboardRows([], getCurrentUserId()), getCurrentUserId(), {
+        emptyMessage: "Leaderboard unavailable. Showing your local progress.",
+      });
+    });
+}
+
+async function loadLeaderboard() {
+  if (location.protocol === "file:") {
+    return { leaders: [], currentUserId: null };
+  }
+
+  const response = await fetch("/api/leaderboard", { credentials: "include" });
+  if (!response.ok) throw new Error("Leaderboard request failed.");
+  return response.json();
+}
+
+function buildLeaderboardRows(leaders = [], currentUserId = getCurrentUserId()) {
+  const rowsById = new Map();
+  leaders.forEach((leader) => {
+    const normalized = normalizeLeaderboardEntry(leader);
+    if (normalized.id) rowsById.set(normalized.id, normalized);
+  });
+
+  const currentEntry = getCurrentLeaderboardEntry(currentUserId);
+  rowsById.set(currentEntry.id, currentEntry);
+
+  const rankedRows = Array.from(rowsById.values())
+    .sort((a, b) => b.xp - a.xp || a.name.localeCompare(b.name))
+    .map((leader, index) => ({ ...leader, rank: index + 1 }));
+
+  const visibleRows = rankedRows.slice(0, LEADERBOARD_LIMIT);
+  if (!visibleRows.some((leader) => leader.id === currentEntry.id)) {
+    const currentRow = rankedRows.find((leader) => leader.id === currentEntry.id);
+    if (currentRow) visibleRows[visibleRows.length - 1] = currentRow;
+  }
+
+  return visibleRows;
+}
+
+function normalizeLeaderboardEntry(entry) {
+  return {
+    id: String(entry.id || ""),
+    name: String(entry.name || "Learner"),
+    xp: Math.max(0, Number(entry.xp) || 0),
+    level: Math.max(1, Number(entry.level) || 1),
+    avatar: String(entry.avatar || "🚀"),
+    rank: Number(entry.rank) || null,
+  };
+}
+
+function getCurrentLeaderboardEntry(currentUserId = getCurrentUserId()) {
+  return normalizeLeaderboardEntry({
+    id: currentUserId || "local-user",
+    name: getCurrentDisplayName(),
+    xp: userProgress.xp,
+    level: userProgress.level,
+    avatar: userProgress.avatar,
+  });
+}
+
+function getCurrentUserId() {
+  return window.algoAuth?.user?.sub || window.algoAuth?.user?.id || cachedSession?.user?.sub || "local-user";
+}
+
+function getCurrentDisplayName() {
+  return window.algoAuth?.user?.name || cachedSession?.user?.name || userProgress.name || "Learner";
+}
+
+function renderLeaderboardRows(rows, currentUserId = getCurrentUserId(), options = {}) {
+  const leaderboardList = document.getElementById("leaderboardList");
+  if (!leaderboardList) return;
+
+  if (!rows.length) {
+    leaderboardList.innerHTML = `<p class="empty-state">${options.emptyMessage || "No leaderboard data yet."}</p>`;
+    return;
+  }
+
+  leaderboardList.innerHTML = rows
+    .map((user) => {
+      const isCurrentUser = user.id === currentUserId || (currentUserId === "local-user" && user.id === "local-user");
+      const displayName = isCurrentUser ? `${user.name} (You)` : user.name;
+
+      return `
+        <div class="leaderboard-item ${isCurrentUser ? "current-user" : ""}">
             <span class="leader-rank">#${user.rank}</span>
-            <span class="leader-name">${user.name}</span>
+            <span class="leader-avatar" aria-hidden="true">${escapeHtml(user.avatar)}</span>
+            <span class="leader-name">${escapeHtml(displayName)}</span>
             <span class="leader-xp">${user.xp.toLocaleString()} XP</span>
         </div>
-    `,
-    )
+    `;
+    })
     .join("");
 }
 
@@ -3016,9 +3110,80 @@ function saveUserData() {
   try {
     userProgress.lastActive = new Date().toISOString();
     localStorage.setItem("algoInfinityVerse", JSON.stringify(userProgress));
+    queueProgressSync();
   } catch (error) {
     console.warn("Could not save user data to localStorage:", error);
   }
+}
+
+let progressSyncInFlight = null;
+let pendingProgressSync = false;
+
+function queueProgressSync() {
+  if (location.protocol === "file:") return;
+  clearTimeout(progressSyncTimer);
+  progressSyncTimer = setTimeout(syncUserProgress, 600);
+}
+
+async function syncUserProgress() {
+  if (progressSyncInFlight) {
+    pendingProgressSync = true;
+    return progressSyncInFlight;
+  }
+
+  const session = await getAuthenticatedSession();
+  if (!session?.authenticated) return;
+
+  const payload = {
+    name: userProgress.name,
+    xp: userProgress.xp,
+    level: userProgress.level,
+    avatar: userProgress.avatar,
+  };
+
+  progressSyncInFlight = (async () => {
+    try {
+      const response = await fetch("/api/progress", {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error("Progress sync failed.");
+      updateLeaderboard();
+    } catch (error) {
+      console.warn("Could not sync user progress:", error);
+    } finally {
+      progressSyncInFlight = null;
+      if (pendingProgressSync) {
+        pendingProgressSync = false;
+        queueProgressSync();
+      }
+    }
+  })();
+
+  return progressSyncInFlight;
+}
+  } catch (error) {
+    console.warn("Could not sync user progress:", error);
+  }
+}
+
+async function getAuthenticatedSession() {
+  if (window.algoAuth) {
+    cachedSession = window.algoAuth;
+    return cachedSession;
+  }
+  if (cachedSession) return cachedSession;
+
+  try {
+    const response = await fetch("/api/session", { credentials: "include" });
+    cachedSession = response.ok ? await response.json() : { authenticated: false, user: null };
+  } catch {
+    cachedSession = { authenticated: false, user: null };
+  }
+
+  return cachedSession;
 }
 
 function loadUserData() {

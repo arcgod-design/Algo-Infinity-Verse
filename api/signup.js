@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     if(rp!==rc)return res.status(400).json({error:"Passwords do not match."});
     const users=await readUsers();
     if(users.some(u=>u.email===cleanEmail))return res.status(409).json({error:"An account with this email already exists."});
-    const user={id:crypto.randomUUID(),name:cleanName,email:cleanEmail,password:hashPassword(rp),createdAt:new Date().toISOString()};
+    const user={id:crypto.randomUUID(),name:cleanName,email:cleanEmail,password:hashPassword(rp),xp:0,level:1,avatar:"🚀",createdAt:new Date().toISOString()};
     if(useFirestore){await db.collection("users").add(user);}
     const token=createSessionToken(user);
     return res.status(201).setHeader("Set-Cookie",sessionCookie(token)).json({user:{id:user.id,name:user.name,email:user.email}});
