@@ -3811,17 +3811,37 @@ function highlightJS(line) {
   result = result.replace(strings, '<span class=\"token string\">$1</span>');
   result = result.replace(keywords, '<span class=\"token keyword\">$1</span>');
 
+  // NOTE: Avoid negative lookbehind `(?<!)` for compatibility.
+  // Some browsers throw SyntaxError during regex compilation.
+  // This regex matches numeric literals; additional boundary validation is done per match.
   const numberRegex =
-    /(?<!\\.[a-zA-Z])\\b(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?\\b(?!\\.[a-zA-Z])/g;
+    /\\b(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?\\b/g;
+
   if (!/<span class=\"token string\">/.test(result)) {
-    result = result.replace(
-      numberRegex,
-      '<span class=\"token number\">$1</span>',
-    );
+    result = result.replace(numberRegex, (match, numPart, expPart, offset) => {
+      // Replicate old intent of excluding cases like `.a` or `a.` around the number.
+      const beforeChar = offset > 0 ? result[offset - 1] : "";
+      const afterIndex = offset + match.length;
+      const afterChar = afterIndex < result.length ? result[afterIndex] : "";
+
+      // If the character right before/after is a dot followed by/preceded by a letter,
+      // skip number highlighting to avoid false positives.
+      // (Best-effort; keep it simple and, most importantly, crash-free.)
+      const beforeIsDotLetter =
+        beforeChar === "." && /[a-zA-Z]/.test(afterChar);
+      const afterIsDotLetter =
+        afterChar === "." && /[a-zA-Z]/.test(beforeChar);
+
+      if (beforeIsDotLetter || afterIsDotLetter) return match;
+      return `<span class=\"token number\">${match}</span>`;
+    });
   }
+
+
 
   return result;
 }
+
 
 // ===== CODE EDITOR UTILITIES =====
 function updateLineNumbers() {
