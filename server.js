@@ -374,6 +374,7 @@ function resolveStaticPath(pathname) {
     "/login": "login.html",
     "/signup": "signup.html",
     "/community": "community.html",
+    "/python-learning": "python-learning.html",
     "/support-page": "support-page/index.html",
     "/support-page/": "support-page/index.html",
   };

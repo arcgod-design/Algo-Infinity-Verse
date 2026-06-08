@@ -16,6 +16,10 @@
     {
       "source": "/community",
       "destination": "/community.html"
+    },
+    {
+      "source": "/python-learning",
+      "destination": "/python-learning.html"
     }
   ],
   "headers": [
