@@ -192,7 +192,10 @@ function initProgressTracker() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (Array.isArray(saved)) completed = new Set(saved);
-  } catch {
+    else if (saved !== null) localStorage.removeItem(STORAGE_KEY);
+  } 
+  catch {
+     localStorage.removeItem(STORAGE_KEY);
   }
 
   function updateUI() {
