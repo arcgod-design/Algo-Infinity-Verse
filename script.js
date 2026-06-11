@@ -1044,6 +1044,35 @@ const dsaTopics = [
       "Fibonacci Number",
     ],
   },
+  {
+    id: 7,
+    name: "Matrix",
+    icon: "🔢",
+    description: "2D arrays, traversal techniques, rotations, and grid-based interview problems",
+    difficulty: "Medium",
+    theory: `
+    <h3 style="color:var(--accent); margin-bottom:1rem;">🔢 Matrix — 2D Array Mastery</h3>
+    <p style="margin-bottom:1rem;">A matrix is a <strong>2D grid of elements</strong> accessed by row and column in O(1) time.</p>
+    <h4 style="color:var(--primary); margin:1rem 0 0.5rem;">⚡ Key Operations & Complexity</h4>
+    <table style="width:100%; border-collapse:collapse; margin-bottom:1rem; font-size:0.9rem;">
+      <tr style="background:var(--dark-card);"><th style="padding:0.5rem 1rem; text-align:left; border:1px solid var(--glass-border);">Operation</th><th style="padding:0.5rem 1rem; text-align:left; border:1px solid var(--glass-border);">Time</th></tr>
+      <tr><td style="padding:0.5rem 1rem; border:1px solid var(--glass-border);">Access element</td><td style="padding:0.5rem 1rem; border:1px solid var(--glass-border); color:#22c55e;">O(1) ✅</td></tr>
+      <tr style="background:var(--dark-card);"><td style="padding:0.5rem 1rem; border:1px solid var(--glass-border);">Linear traversal</td><td style="padding:0.5rem 1rem; border:1px solid var(--glass-border);">O(M×N)</td></tr>
+      <tr><td style="padding:0.5rem 1rem; border:1px solid var(--glass-border);">Transpose / Rotate</td><td style="padding:0.5rem 1rem; border:1px solid var(--glass-border);">O(N²)</td></tr>
+      <tr style="background:var(--dark-card);"><td style="padding:0.5rem 1rem; border:1px solid var(--glass-border);">Search (sorted matrix)</td><td style="padding:0.5rem 1rem; border:1px solid var(--glass-border); color:#22c55e;">O(M+N) ✅</td></tr>
+    </table>
+    <h4 style="color:var(--primary); margin:1rem 0 0.5rem;">🎯 Must-Know Interview Patterns</h4>
+    <ul style="list-style:none; padding:0; margin-bottom:1rem;">
+      <li style="padding:0.3rem 0;">→ <strong>Spiral Traversal</strong> — boundary pointer shrinking</li>
+      <li style="padding:0.3rem 0;">→ <strong>BFS/DFS on Grid</strong> — island counting, flood fill</li>
+      <li style="padding:0.3rem 0;">→ <strong>Transpose + Reverse</strong> — in-place 90° rotation</li>
+      <li style="padding:0.3rem 0;">→ <strong>Top-right corner search</strong> — O(M+N) sorted matrix search</li>
+    </ul>
+    <h4 style="color:var(--primary); margin:1rem 0 0.5rem;">🏆 Real Interview Questions from FAANG</h4>
+    <p style="color:var(--text-secondary);">Spiral Matrix (Amazon), Rotate Image (Google), Number of Islands (Microsoft), Search a 2D Matrix (Meta)</p>
+    `,
+    problems: ["Spiral Matrix", "Rotate Image", "Number of Islands", "Set Matrix Zeroes", "Search a 2D Matrix"],
+  },
 ];
 
 const practiceProblems = [
@@ -2207,7 +2236,7 @@ function getQuizTopicKey(topic) {
     "dynamic programming": "dp",
   };
 
-  return keyMap[name] || toKnownKey(name) || name.replace(/\s+/g, "");
+  return keyMap[name] || toKnownKey(name) || null;
 }
 
 
@@ -2221,6 +2250,7 @@ function initQuizSection() {
 
     dsaTopics.forEach((topic, index) => {
       const topicKey = getQuizTopicKey(topic);
+      if (!topicKey) return;
       const card = document.createElement("div");
       card.className = "quiz-card animate-in";
       card.style.animationDelay = `${index * 0.1}s`;
