@@ -54,6 +54,7 @@ body {
 
 .cat-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
 .cat-card:hover { border-color: var(--quiz-primary); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); background: var(--quiz-bg); }
+.cat-card:focus-visible { outline: 2px solid var(--quiz-primary); outline-offset: 2px; }
 .cat-icon { font-size: 2.5rem; color: var(--quiz-secondary); }
 .cat-title { font-size: 1.2rem; font-weight: 600; margin: 0; color: #fff; font-family: 'Orbitron', sans-serif;}
 .cat-desc { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
@@ -62,6 +63,7 @@ body {
 .quiz-header { display: flex; align-items: center; gap: 2rem; margin-bottom: 2.5rem; }
 .btn-exit { background: transparent; border: 1px solid var(--glass-border); color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
 .btn-exit:hover { background: rgba(239, 68, 68, 0.1); color: var(--quiz-danger); border-color: var(--quiz-danger); }
+.btn-exit:focus-visible { outline: 2px solid var(--quiz-danger); outline-offset: 2px; }
 
 .quiz-progress-container { flex: 1; }
 .progress-text { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 500; font-family: 'Fira Code', monospace; color: var(--quiz-secondary); text-transform: uppercase; }
@@ -74,6 +76,7 @@ body {
 .options-grid { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.5rem; }
 .option-btn { background: rgba(0,0,0,0.3); border: 2px solid #334155; padding: 1.25rem 1.5rem; border-radius: 12px; color: var(--text-primary); font-family: 'Poppins', sans-serif; font-size: 1rem; cursor: pointer; text-align: left; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
 .option-btn:hover:not(:disabled) { border-color: var(--quiz-primary); background: rgba(217, 70, 239, 0.05); }
+.option-btn:focus-visible:not(:disabled) { outline: 2px solid var(--quiz-primary); outline-offset: 2px; }
 
 /* Option States */
 .option-btn.selected { border-color: var(--quiz-secondary); box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); }
@@ -89,6 +92,7 @@ body {
 .btn-next { background: var(--quiz-gradient); border: none; color: #fff; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer; transition: opacity 0.2s, transform 0.2s; display: flex; align-items: center; gap: 0.5rem; }
 .btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
 .btn-next:hover:not(:disabled) { transform: translateY(-2px); }
+.btn-next:focus-visible:not(:disabled) { outline: 2px solid var(--quiz-secondary); outline-offset: 2px; }
 
 /* Results View */
 .results-container { text-align: center; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 4rem 2rem; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -101,10 +105,18 @@ body {
 .results-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 .btn-restart { background: transparent; border: 1px solid var(--quiz-secondary); color: var(--quiz-secondary); padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 500; transition: all 0.2s; display: flex; gap: 0.5rem; align-items: center; }
 .btn-restart:hover { background: rgba(6, 182, 212, 0.1); }
+.btn-restart:focus-visible { outline: 2px solid var(--quiz-secondary); outline-offset: 2px; }
 .btn-return { background: var(--quiz-gradient); border: none; color: #fff; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 500; transition: all 0.2s; display: flex; gap: 0.5rem; align-items: center; }
 .btn-return:hover { transform: translateY(-2px); }
+.btn-return:focus-visible { outline: 2px solid var(--quiz-primary); outline-offset: 2px; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .quiz-view { animation: none; }
+    .cat-card, .option-btn, .btn-next, .btn-restart, .btn-return, .btn-exit { transition: none; }
+    .cat-card:hover, .btn-next:hover:not(:disabled), .btn-return:hover { transform: none; }
+}
 
 @media (max-width: 768px) {
     .question-container { padding: 2rem 1.5rem; }

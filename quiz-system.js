@@ -221,7 +221,7 @@ class QuizUI {
         this.btnNextQuestion.disabled = false; // Enable next button
     }
 
-    renderResults(scoreData) {
+    renderResults(scoreData, isSaving = false) {
         this.quizProgressBar.style.width = '100%'; // max out progress
         this.finalScoreDisplay.textContent = `${scoreData.percentage}%`;
         
@@ -234,6 +234,11 @@ class QuizUI {
         } else {
             this.resultsMessage.textContent = "Keep practicing! Review the learning materials and try again.";
             this.finalScoreDisplay.style.color = 'var(--quiz-danger)';
+        }
+
+        // Show saving status
+        if (isSaving) {
+            this.resultsMessage.textContent += ' Saving results...';
         }
     }
 }
@@ -281,11 +286,14 @@ class QuizController {
 
     async handleFinishQuiz() {
         const scoreData = this.state.getFinalScore();
-        this.ui.renderResults(scoreData);
+        this.ui.renderResults(scoreData, true);
         this.ui.switchView('results');
 
         // Save quiz result to Firestore if user is authenticated
         await this.saveQuizResult(scoreData);
+        
+        // Update results message after save attempt
+        this.ui.renderResults(scoreData, false);
     }
 
     async saveQuizResult(scoreData) {
