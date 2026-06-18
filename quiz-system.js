@@ -279,9 +279,57 @@ class QuizController {
         }
     }
 
-    handleFinishQuiz() {
-        this.ui.renderResults(this.state.getFinalScore());
+    async handleFinishQuiz() {
+        const scoreData = this.state.getFinalScore();
+        this.ui.renderResults(scoreData);
         this.ui.switchView('results');
+
+        // Save quiz result to Firestore if user is authenticated
+        await this.saveQuizResult(scoreData);
+    }
+
+    async saveQuizResult(scoreData) {
+        try {
+            // Check if user is authenticated via session
+            const sessionResp = await fetch('/api/session', { credentials: 'include' });
+            const sessionData = await sessionResp.json();
+
+            if (!sessionData.authenticated || !sessionData.user) {
+                // User not logged in — skip saving
+                console.log('Quiz result not saved: user not authenticated.');
+                return;
+            }
+
+            const category = QuizData.categories.find(c => c.id === this.state.activeCategoryId);
+            if (!category) return;
+
+            const payload = {
+                quizId: category.id,
+                quizTitle: category.title,
+                score: scoreData.score,
+                totalQuestions: scoreData.total,
+                correctAnswers: scoreData.score,
+                percentage: scoreData.percentage,
+                topic: category.title,
+            };
+
+            const response = await fetch('/api/quiz-results', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                console.warn('Failed to save quiz result:', err.error || response.statusText);
+            } else {
+                console.log('Quiz result saved successfully.');
+            }
+        } catch (error) {
+            // Network failure — log but don't block UI
+            console.warn('Quiz result save failed (network):', error.message);
+        }
     }
 
     handleRestart() {

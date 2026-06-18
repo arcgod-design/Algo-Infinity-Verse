@@ -732,6 +732,90 @@ async function handleApi(req, res, pathname) {
     return sendJson(res, 200, { success: true, cards: Object.values(userCards) });
   }
 
+  // ── Quiz Results (Firestore) ──────────────────────────────────────────────
+  if (pathname === "/api/quiz-results" && req.method === "POST") {
+    const session = getSession(req);
+    if (!session) return sendJson(res, 401, { error: "Authentication required." });
+    if (!useFirestore) return sendJson(res, 503, { error: "User store unavailable." });
+
+    let payload;
+    try {
+      payload = await readJsonBody(req);
+    } catch {
+      return sendJson(res, 400, { error: "Invalid JSON body." });
+    }
+
+    const { quizId, quizTitle, score, totalQuestions, correctAnswers, percentage, topic } = payload;
+    if (!quizId || !quizTitle || score === undefined || !totalQuestions || correctAnswers === undefined || percentage === undefined || !topic) {
+      return sendJson(res, 400, { error: "Missing required fields: quizId, quizTitle, score, totalQuestions, correctAnswers, percentage, topic." });
+    }
+
+    if (typeof score !== "number" || score < 0) return sendJson(res, 400, { error: "score must be a non-negative number." });
+    if (typeof totalQuestions !== "number" || totalQuestions < 1) return sendJson(res, 400, { error: "totalQuestions must be >= 1." });
+    if (typeof correctAnswers !== "number" || correctAnswers < 0) return sendJson(res, 400, { error: "correctAnswers must be >= 0." });
+    if (typeof percentage !== "number" || percentage < 0 || percentage > 100) return sendJson(res, 400, { error: "percentage must be 0-100." });
+
+    try {
+      const attemptId = crypto.randomUUID();
+      const attempt = {
+        quizId: String(quizId),
+        quizTitle: String(quizTitle),
+        score: Number(score),
+        totalQuestions: Number(totalQuestions),
+        correctAnswers: Number(correctAnswers),
+        percentage: Number(percentage),
+        topic: String(topic),
+        completedAt: new Date().toISOString(),
+      };
+
+      await db
+        .collection("users")
+        .doc(session.sub)
+        .collection("quizResults")
+        .doc(attemptId)
+        .set(attempt);
+
+      return sendJson(res, 201, { success: true, attemptId, attempt });
+    } catch (error) {
+      console.error("Failed to save quiz result:", error);
+      return sendJson(res, 500, { error: "Failed to save quiz result." });
+    }
+  }
+
+  if (pathname === "/api/quiz-results" && req.method === "GET") {
+    const session = getSession(req);
+    if (!session) return sendJson(res, 401, { error: "Authentication required." });
+    if (!useFirestore) return sendJson(res, 503, { error: "User store unavailable." });
+
+    try {
+      const url = new URL(req.url, `http://${req.headers.host}`);
+      const limit = Math.min(parseInt(url.searchParams.get("limit") || "20", 10), 100);
+      const topic = url.searchParams.get("topic");
+
+      let query = db
+        .collection("users")
+        .doc(session.sub)
+        .collection("quizResults")
+        .orderBy("completedAt", "desc")
+        .limit(limit);
+
+      if (topic) {
+        query = query.where("topic", "==", topic);
+      }
+
+      const snapshot = await query.get();
+      const results = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      return sendJson(res, 200, { success: true, results, count: results.length });
+    } catch (error) {
+      console.error("Failed to fetch quiz results:", error);
+      return sendJson(res, 500, { error: "Failed to fetch quiz results." });
+    }
+  }
+
   return sendJson(res, 404, { error: "Not found." });
 }
 
