@@ -753,6 +753,7 @@ async function handleApi(req, res, pathname) {
     if (typeof score !== "number" || score < 0) return sendJson(res, 400, { error: "score must be a non-negative number." });
     if (typeof totalQuestions !== "number" || totalQuestions < 1) return sendJson(res, 400, { error: "totalQuestions must be >= 1." });
     if (typeof correctAnswers !== "number" || correctAnswers < 0) return sendJson(res, 400, { error: "correctAnswers must be >= 0." });
+    if (correctAnswers > totalQuestions) return sendJson(res, 400, { error: "correctAnswers cannot exceed totalQuestions." });
     if (typeof percentage !== "number" || percentage < 0 || percentage > 100) return sendJson(res, 400, { error: "percentage must be 0-100." });
 
     try {
