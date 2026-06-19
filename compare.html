@@ -9,23 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span class="logo-icon">🧮</span>
-                <span class="logo-text">Algo<span class="logo-highlight">Verse</span></span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="compare.html" class="active"><i class="fas fa-code-compare"></i> Compare</a></li>
-                <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
-            </ul>
-            <button class="theme-toggle" id="themeToggle">
-                <i class="fas fa-moon"></i>
-            </button>
-        </div>
-    </nav>
+<body data-page="compare">
+    <div id="navbar-placeholder"></div>
 
     <main class="compare-container">
         <header class="compare-header">
@@ -97,10 +82,13 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <p>Built with ❤️ for the DSA learning community</p>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script src="compare.js"></script>
+
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
 </body>
 </html>

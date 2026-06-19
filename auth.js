@@ -98,46 +98,60 @@
   }
 
   function renderAuthNav() {
-    document.querySelectorAll(".nav-links").forEach((navLinks) => {
-      let slot = navLinks.querySelector(".auth-nav-item");
+    function inject() {
+      document.querySelectorAll(".nav-links").forEach((navLinks) => {
+        let slot = navLinks.querySelector(".auth-nav-item");
 
-      if (!slot) {
-        slot = document.createElement("li");
-        slot.className = "auth-nav-item";
-        navLinks.appendChild(slot);
-      }
+        if (!slot) {
+          slot = document.createElement("li");
+          slot.className = "auth-nav-item";
+          navLinks.appendChild(slot);
+        }
 
-      if (currentSession?.authenticated) {
-        slot.innerHTML = "";
+        if (currentSession?.authenticated) {
+          slot.innerHTML = "";
 
-        const chip = document.createElement("span");
-        chip.className = "nav-user-chip";
-        chip.title = currentSession.user.email;
-        chip.innerHTML =
-          `<i class="fas fa-user-circle"></i><span></span>`;
-        chip.querySelector("span").textContent =
-          currentSession.user.name;
+          const chip = document.createElement("span");
+          chip.className = "nav-user-chip";
+          chip.title = currentSession.user.email;
+          chip.innerHTML =
+            `<i class="fas fa-user-circle"></i><span></span>`;
+          chip.querySelector("span").textContent =
+            currentSession.user.name;
 
-        const btn = document.createElement("button");
-        btn.className = "nav-auth-link";
-        btn.type = "button";
-        btn.setAttribute("data-auth-logout", "");
-        btn.innerHTML =
-          `<i class="fas fa-right-from-bracket"></i> Logout`;
+          const btn = document.createElement("button");
+          btn.className = "nav-auth-link";
+          btn.type = "button";
+          btn.setAttribute("data-auth-logout", "");
+          btn.innerHTML =
+            `<i class="fas fa-right-from-bracket"></i> Logout`;
 
-        slot.append(chip, btn);
-      } else {
-        slot.innerHTML = `
-          <a class="nav-auth-link" href="${authUrl("/login")}">
-            <i class="fas fa-right-to-bracket"></i>
-            Login
-          </a>
-          <a class="nav-auth-link nav-auth-primary" href="${authUrl("/signup")}">
-            Sign Up
-          </a>
-        `;
-      }
-    });
+          slot.append(chip, btn);
+        } else {
+          slot.innerHTML = `
+            <a class="nav-auth-link" href="${authUrl("/login")}">
+              <i class="fas fa-right-to-bracket"></i>
+              Login
+            </a>
+            <a class="nav-auth-link nav-auth-primary" href="${authUrl("/signup")}">
+              Sign Up
+            </a>
+          `;
+        }
+      });
+    }
+
+    if (document.querySelector(".nav-links")) {
+      inject();
+    } else {
+      const observer = new MutationObserver(() => {
+        if (document.querySelector(".nav-links")) {
+          observer.disconnect();
+          inject();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
   }
 
   function wireLogout() {
@@ -152,7 +166,7 @@
 
       if (location.protocol !== "file:") {
         try {
-          const response = await fetch(apiUrl("/api/logout"), {
+          const response = await fetch("/api/logout", {
             method: "POST",
             credentials: "include",
           });

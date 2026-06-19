@@ -6,7 +6,7 @@
     <title>LeetCode Metric Sync Dashboard</title>
     <link rel="stylesheet" href="leetcode.css">
 </head>
-<body>
+<body data-page="leetcode">
 
     <main class="leetcode-dashboard-wrapper">
         
@@ -81,5 +81,10 @@
     </main>
 
     <script src="leetcode.js"></script>
+
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
 </body>
 </html>

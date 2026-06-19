@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="challenge-mode">
+<body class="challenge-mode" data-page="reverse-complexity">
     <!-- Loading Screen -->
     <div id="loading-screen" class="hidden">
         <div class="loader">
@@ -22,18 +22,7 @@
     </div>
 
     <!-- Navigation Bar (Shared with index.html) -->
-    <nav class="navbar">
-        <div class="nav-logo">
-            <span class="logo-text">∞</span>
-            <span class="logo-title">Algo Infinity Verse</span>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="index.html#topics" class="nav-link">Topics</a></li>
-            <li class="nav-item"><a href="index.html#quiz" class="nav-link">Quizzes</a></li>
-            <li class="nav-item"><a href="index.html#dashboard" class="nav-link">Dashboard</a></li>
-        </ul>
-    </nav>
+    <div id="navbar-placeholder"></div>
 
     <main class="challenge-container">
         <header class="challenge-header card-glass">
@@ -100,5 +89,10 @@
     <!-- Scripts -->
     <script src="script.js"></script> <!-- Reuses addXP and userProgress logic -->
     <script src="reverse-complexity.js"></script>
+
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
 </body>
 </html>

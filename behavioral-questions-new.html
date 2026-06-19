@@ -13,18 +13,8 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="behavioral-questions.css" />
 </head>
-<body>
-    <nav class="navbar">
-        <div class="nav-logo">
-            <span class="logo-text">∞</span>
-            <span class="logo-title">Algo Infinity Verse</span>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link active" style="color: var(--beh-primary);">Behavioral</a></li>
-            <li class="nav-item"><a href="index.html#interview" class="nav-link">Interview Prep</a></li>
-        </ul>
-    </nav>
+<body data-page="behavioral-questions-new">
+    <div id="navbar-placeholder"></div>
 
     <!-- Hero Section -->
     <section class="hero beh-hero">
@@ -85,5 +75,10 @@
     <!-- External Scripts -->
     <script src="script.js"></script>
     <script src="behavioral-questions.js"></script>
+
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
 </body>
 </html>

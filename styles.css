@@ -505,8 +505,13 @@ body {
   transition: all 0.2s ease;
   z-index: 100;
   pointer-events: none;
-  max-height: 65vh; 
+  max-height: 65vh;
   overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.dropdown-menu::-webkit-scrollbar {
+  display: none;
 }
 
 .dropdown-menu-end {
@@ -3741,22 +3746,22 @@ section[id] {
 }
 .footer {
   background: var(--dark-surface);
-  padding: 4rem 2rem 2rem;
+  padding: 2.5rem 2rem 1.5rem;
   margin-top: 4rem;
   border-top: 1px solid var(--glass-border);
 }
 
 .footer-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
-  margin-bottom: 3rem;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .footer-section h3 {
   font-family: "Orbitron", sans-serif;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
   background: var(--gradient-1);
   -webkit-background-clip: text;
   background-clip: text;
@@ -3764,15 +3769,16 @@ section[id] {
 }
 
 .footer-section h4 {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
   color: var(--accent);
 }
 
 .footer-section p {
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 1rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .social-links {
@@ -3781,8 +3787,8 @@ section[id] {
 }
 
 .social-links a {
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -3790,6 +3796,7 @@ section[id] {
   align-items: center;
   justify-content: center;
   color: var(--text-secondary);
+  text-decoration: none;
   transition: all 0.3s ease;
 }
 
@@ -3804,7 +3811,7 @@ section[id] {
 }
 
 .footer-section ul li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 
 .footer-section ul li a {
@@ -3886,9 +3893,27 @@ section[id] {
 
 .footer-bottom {
   text-align: center;
-  padding-top: 2rem;
+  padding-top: 1.25rem;
   border-top: 1px solid var(--glass-border);
   color: var(--text-secondary);
+}
+
+.footer-bottom-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.footer-bottom-links a {
+  color: var(--primary-light);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.3s ease;
+}
+
+.footer-bottom-links a:hover {
+  color: var(--accent);
 }
 
 /* ===== QUIZ SECTION ===== */
@@ -4692,7 +4717,7 @@ section[id] {
   }
 
   .footer-content {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     text-align: center;
   }
 
@@ -4779,6 +4804,10 @@ section[id] {
 
   .section-title {
     font-size: 2rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
   }
 }
 

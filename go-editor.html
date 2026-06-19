@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body>
+<body data-page="go-editor">
 
 <section class="hero go-hero">
   <div class="hero-content">
@@ -65,5 +65,10 @@
 </section>
 
 <script src="go-editor.js"></script>
+
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
 </body>
 </html>
