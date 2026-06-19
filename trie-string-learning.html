@@ -13,18 +13,8 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="trie-string-learning.css" />
 </head>
-<body>
-    <nav class="navbar">
-        <div class="nav-logo">
-            <span class="logo-text">∞</span>
-            <span class="logo-title">Algo Infinity Verse</span>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li class="nav-item"><a href="`#home`" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="`#string-learning`" class="nav-link active" style="color: var(--string-primary);">Learn Strings</a></li>
-            <li class="nav-item"><a href="`#practice`" class="nav-link">Practice</a></li>
-        </ul>
-    </nav>
+<body data-page="trie-string-learning">
+    <div id="navbar-placeholder"></div>
 
     <section id="home" class="hero">
         <div class="hero-content">
@@ -348,5 +338,10 @@
     <!-- External Scripts -->
     <script src="script.js"></script>
     <script src="trie-string-learning.js"></script>
+
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
 </body>
 </html>

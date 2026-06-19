@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   </head>
-  <body>
+  <body data-page="dry-run-simulator">
     <div id="loading-screen">
       <div class="loader">
         <div class="infinity-loader">∞</div>
@@ -41,7 +41,6 @@
             <a href="index.html#roadmap" class="dropdown-item" role="menuitem">Learning Roadmap</a>
             <a href="algorithm-timeline.html" class="dropdown-item" role="menuitem">Algorithm Timeline</a>
             <a href="concept-bridge.html" class="dropdown-item" role="menuitem">Concept Bridge Trainer</a>
-          <a href="problem-solving-framework.html" class="dropdown-item" role="menuitem">Problem Solving Framework</a>
             <a href="python-learning.html" class="dropdown-item" role="menuitem">Learn Python</a>
             <a href="linkedlist-learning.html" class="dropdown-item active" role="menuitem">Learn Linked Lists</a>
             <a href="javascript-learning.html" class="dropdown-item" role="menuitem">Learn JavaScript</a>
@@ -95,6 +94,7 @@
         <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
       </div>
     </nav>
+    <div id="navbar-placeholder"></div>
 
     <!-- Hero -->
     <section class="hero visualizer-hero drs-hero">
@@ -367,33 +367,14 @@
 </section>
 
 
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-section">
-            <h3>∞ Algo Infinity Verse</h3>
-            <p>Your ultimate destination for mastering DSA and acing technical interviews.</p>
-            <div class="social-links">
-              <a href="#"><i class="fa-brands fa-github"></i></a>
-              <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-            </div>
-          </div>
-          <div class="footer-section">
-            <h4>Visualizers</h4>
-            <ul>
-              <li><a href="sorting-visualizer.html">Sorting Visualizer</a></li>
-              <li><a href="graph-visualizer.html">Graph Visualizer</a></li>
-              <li><a href="dry-run-simulator.html">Dry Run Simulator</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; 2026 Algo Infinity Verse. Crafted with 💜 for learners worldwide.</p>
-        </div>
-      </div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script src="./auth.js"></script>
     <script src="./script.js"></script>
     <script src="./dry-run-simulator.js"></script>
-  </body>
+  
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
+</body>

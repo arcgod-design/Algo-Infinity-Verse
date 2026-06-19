@@ -80,4 +80,5 @@ export function getFirebaseInitializationError() {
 export const COLLECTIONS = {
   USERS: "users",
   SESSIONS: "sessions",
+  QUIZ_RESULTS: "quizResults",
 };

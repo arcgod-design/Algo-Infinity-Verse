@@ -88,16 +88,24 @@
   }
 
   async function signOut() {
-    const firebase = await initializeFirebaseAuth();
-    if (firebase && firebase.auth.currentUser) {
-      await firebase.auth.signOut();
+    try {
+      const firebase = await initializeFirebaseAuth();
+      if (firebase && firebase.auth.currentUser) {
+        await firebase.auth.signOut();
+      }
+    } catch (error) {
+      console.warn("[firebase-client] Firebase sign-out failed; clearing server session.", error);
     }
 
     if (location.protocol !== "file:") {
-      await fetch("/api/logout", {
+      const response = await fetch("/api/logout", {
         method: "POST",
         credentials: "include",
       });
+
+      if (!response.ok) {
+        throw new Error("Server logout failed.");
+      }
     }
   }
 

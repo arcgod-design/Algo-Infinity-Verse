@@ -12,5 +12,10 @@ export default async function handler(req, res) {
     appId: process.env.FIREBASE_APP_ID || "",
   };
 
+  const requiredKeys = ["apiKey", "authDomain", "projectId", "appId"];
+  if (requiredKeys.some((key) => !config[key])) {
+    return res.status(503).json({ error: "Firebase is not configured." });
+  }
+
   return res.status(200).json(config);
 }

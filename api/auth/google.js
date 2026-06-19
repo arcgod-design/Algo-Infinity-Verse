@@ -1,7 +1,6 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
-import crypto from "crypto";
 
 let db = null;
 let useFirestore = false;
@@ -39,7 +38,10 @@ const SESSION_COOKIE = "aiv_session";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 function sessionSecret() {
-  return process.env.SESSION_SECRET || "dev-only-change-me-with-SESSION_SECRET-before-deploying";
+  if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET is required before issuing session cookies.");
+  }
+  return process.env.SESSION_SECRET;
 }
 
 function sign(v) {
@@ -94,14 +96,6 @@ async function getUserByEmail(email) {
   return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
 }
 
-async function createUser(userData) {
-  if (!useFirestore) {
-    throw new Error("Firestore unavailable");
-  }
-  const docRef = await db.collection("users").add(userData);
-  return { id: docRef.id, ...userData };
-}
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -121,13 +115,19 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Invalid or expired Google token." });
     }
 
-    const { email, name, picture } = decoded;
+    const provider = decoded.firebase?.sign_in_provider;
+    const email = String(decoded.email || "").trim().toLowerCase();
+    if (provider !== "google.com" || !email || decoded.email_verified !== true) {
+      return res.status(401).json({ error: "Invalid or expired Google token." });
+    }
+
+    const { name, picture } = decoded;
+    const uid = decoded.uid;
 
     let user = await getUserByEmail(email);
 
     if (!user) {
       const newUser = {
-        id: crypto.randomUUID(),
         name: name || email.split("@")[0],
         email,
         avatar: picture || "🚀",
@@ -136,7 +136,13 @@ export default async function handler(req, res) {
         authProvider: "google",
         createdAt: new Date().toISOString(),
       };
-      user = await createUser(newUser);
+
+      if (useFirestore) {
+        await db.collection("users").doc(uid).set(newUser);
+        user = { id: uid, ...newUser };
+      } else {
+        user = { id: uid, ...newUser };
+      }
     }
 
     const token = createSessionToken(user);

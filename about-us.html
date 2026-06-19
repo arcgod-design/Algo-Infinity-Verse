@@ -137,28 +137,10 @@
   </style>
 </head>
 
-<body>
+<body data-page="about-us">
 
 <!-- NAVBAR -->
-<nav class="navbar">
-  <div class="nav-logo">
-    <span class="logo-text">∞</span>
-    <span class="logo-title">Algo Infinity Verse</span>
-  </div>
-
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="about-us.html" class="active">About Us</a></li>
-    <li><a href="community.html">Community</a></li>
-            <li><a href="problem-solving-framework.html">Problem Solving Framework</a></li>
-    <li><a href="support-page/index.html">Support</a></li>
-    <li><a href="algorithm-timeline.html">Timeline</a></li>
-  </ul>
-
-  <button id="darkModeToggle" class="dark-mode-btn" aria-label="Toggle dark mode">
-    <i class="fas fa-moon"></i>
-  </button>
-</nav>
+<div id="navbar-placeholder"></div>
 
 <!-- HERO -->
 <section class="hero about-hero">
@@ -402,18 +384,15 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-bottom">
-      <p>
-        © 2024 Algo Infinity Verse. Crafted with 💜 for learners worldwide.
-      </p>
-    </div>
-  </div>
-</footer>
+<div id="footer-placeholder"></div>
 
 <script src="script.js"></script>
 <script src="theme.js"></script>
 
+
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
 </body>
 </html>

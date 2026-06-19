@@ -1,4 +1,41 @@
 
+function getPartialsBase() {
+  const scripts = document.getElementsByTagName('script');
+  for (let s of scripts) {
+    if (s.src && s.src.includes('script.js')) {
+      const idx = s.src.lastIndexOf('/');
+      return s.src.substring(0, idx) + '/partials';
+    }
+  }
+  return 'partials';
+}
+
+async function loadPartial(id, url) {
+  try {
+    const base = getPartialsBase();
+    const filename = url.replace(/^\/?partials\//, '');
+    const fetchUrl = base + '/' + filename;
+    const resp = await fetch(fetchUrl);
+    if (!resp.ok) throw new Error('Failed to load ' + url);
+    const html = await resp.text();
+    document.getElementById(id).innerHTML = html;
+    handleActiveNav();
+  } catch (e) {
+    console.warn('Could not load partial:', url);
+  }
+}
+
+function handleActiveNav() {
+  const currentPage = document.body.dataset.page;
+  if (!currentPage) return;
+
+  const pageRegex = new RegExp('/' + currentPage + '\\.html(?:#|$)');
+  document.querySelectorAll('.dropdown-item').forEach(link => {
+    const href = link.getAttribute('href');
+    link.classList.toggle('active', href && pageRegex.test(href));
+  });
+}
+
 document.addEventListener("submit", function (e) {
   e.preventDefault();
   e.stopPropagation();
@@ -2104,12 +2141,16 @@ function initLoadingScreen() {
 }
 
 // ===== NAVBAR =====
+let navbarInitialized = false;
 function initNavbar() {
   const menuToggle = document.getElementById("menuToggle");
   const navLinks = document.getElementById("navLinks");
+  if (!menuToggle || !navLinks) return;
+  if (navbarInitialized) return;
+  navbarInitialized = true;
 
   let overlay = document.querySelector(".nav-overlay");
-  if (!overlay && menuToggle && navLinks) {
+  if (!overlay) {
     overlay = document.createElement("div");
     overlay.className = "nav-overlay";
     document.body.appendChild(overlay);
@@ -2133,18 +2174,16 @@ function initNavbar() {
     toggleMenu(false);
   };
 
-  if (menuToggle && navLinks) {
-    menuToggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleMenu();
-    });
+  menuToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
 
-    if (overlay) overlay.addEventListener("click", closeMenu);
+  overlay.addEventListener("click", closeMenu);
 
-    navLinks.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", closeMenu);
-    });
-  }
+  navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
 
   const dropdownToggles = document.querySelectorAll(".dropdown-toggle");
   const isMobile = () => window.matchMedia("(max-width: 1024px)").matches;

@@ -24,6 +24,7 @@
 
 
 <body>
+<body data-page="stack-queue-visualizer">
 
   <!-- Loading Screen -->
   <div id="loading-screen">
@@ -147,6 +148,7 @@
       </button>
     </div>
   </nav>
+  <div id="navbar-placeholder"></div>
 
 <section class="hero">
   <div class="container">
@@ -302,6 +304,7 @@
       </div>
     </div>
   </footer>
+  <div id="footer-placeholder"></div>
 
   <script>
     // FIX: script.js's DOMContentLoaded handler calls initDarkMode(), but that
@@ -372,5 +375,10 @@
   <script src="./script.js"></script>
   <script src="stack-queue-visualizer.js"></script>
 
+
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
 </body>
 </html>

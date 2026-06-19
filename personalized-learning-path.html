@@ -4,20 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Personalized Learning Path Generator | Algo Infinity Verse</title>
+    <meta name="description" content="Generate a customized DSA learning roadmap for Beginner, Placement, or FAANG preparation. Track your progress, set daily goals, and celebrate milestones." />
+
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="personalized-learning-path.css" />
-    
+
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
   </head>
   <body>
+
     <!-- Loading Screen -->
     <div id="loading-screen">
       <div class="loader">
@@ -34,21 +36,25 @@
       <i class="fas fa-circle-chevron-up"></i>
     </button>
 
+    <!-- Toast Container -->
+    <div id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
     <!-- Navigation Bar -->
-    <nav class="navbar">
-      <div class="nav-logo">
-        <span class="logo-text">∞</span>
-        <span class="logo-title">Algo Infinity Verse</span>
+    <div id="navbar-placeholder"></div>
+
+    <!-- Hero -->
+    <section class="hero learning-path-hero">
+      <div class="hero-background">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
       </div>
       <ul class="nav-links" id="navLinks">
         <li class="nav-item">
           <a href="index.html#home" class="nav-link">Home</a>
         </li>
         <li class="nav-item has-dropdown">
-          <button class="nav-link dropdown-toggle"
-            aria-haspopup="menu"
-            aria-expanded="false"
-          >
+          <button class="nav-link dropdown-toggle" aria-haspopup="menu" aria-expanded="false">
             <span>Learn</span>
             <i class="fas fa-chevron-down dropdown-icon"></i>
           </button>
@@ -59,7 +65,7 @@
             <a href="index.html#roadmap" class="dropdown-item" role="menuitem">Learning Roadmap</a>
             <a href="algorithm-timeline.html" class="dropdown-item" role="menuitem">Algorithm Timeline</a>
             <a href="concept-bridge.html" class="dropdown-item" role="menuitem">Concept Bridge Trainer</a>
-          <a href="problem-solving-framework.html" class="dropdown-item" role="menuitem">Problem Solving Framework</a>
+            <a href="problem-solving-framework.html" class="dropdown-item" role="menuitem">Problem Solving Framework</a>
             <a href="think-aloud-judge.html" class="dropdown-item" role="menuitem">Think-Aloud AI Judge</a>
             <a href="linkedlist-learning.html" class="dropdown-item" role="menuitem">Learn Linked Lists</a>
             <a href="python-learning.html" class="dropdown-item" role="menuitem">Learn Python</a>
@@ -77,18 +83,9 @@
             <a href="sliding-window-learning.html" class="dropdown-item" role="menuitem">Learn Sliding Window</a>
             <a href="prefix-sum-learning.html" class="dropdown-item" role="menuitem">Learn Prefix Sum</a>
             <a href="recursion-learning.html" class="dropdown-item" role="menuitem">Learn Recursion</a>
-            <a href="powerbi-learning.html" class="dropdown-item" role="menuitem">Learn Power BI</a>
-            <a href="php-learning.html" class="dropdown-item" role="menuitem">Learn PHP</a>
-            <a href="oop-learning.html" class="dropdown-item" role="menuitem">Learn OOP</a>
-            <a href="computer-architecture.html" class="dropdown-item" role="menuitem">Learn Architecture</a>
             <a href="trees-learning.html" class="dropdown-item" role="menuitem">Learn Trees</a>
-            <a href="tree-visualizer.html" class="dropdown-item" role="menuitem">Tree Visualizer</a>
-            <a href="tree-traversal.html" class="dropdown-item" role="menuitem">Tree Traversal</a>
-            <a href="binary-search.html" class="dropdown-item" role="menuitem">Learn Binary Search</a>
-            <a href="shortest-path-learning.html" class="dropdown-item" role="menuitem">Learn Shortest Path</a>
-            <a href="divide-and-conquer-learning.html" class="dropdown-item" role="menuitem">Learn Divide &amp; Conquer</a>
-            <a href="matrix-learning.html" class="dropdown-item" role="menuitem">Learn Matrix</a>
             <a href="graph-learning.html" class="dropdown-item" role="menuitem">Learn Graph</a>
+            <a href="dp-learning.html" class="dropdown-item" role="menuitem">Learn Dynamic Programming</a>
             <a href="sorting-visualizer.html" class="dropdown-item" role="menuitem">Sorting Visualizer</a>
             <a href="graph-visualizer.html" class="dropdown-item" role="menuitem">Graph Visualizer</a>
             <a href="pathfinding-visualizer.html" class="dropdown-item" role="menuitem">Pathfinding Visualizer</a>
@@ -98,385 +95,338 @@
           </div>
         </li>
         <li class="nav-item has-dropdown">
-          <button class="nav-link dropdown-toggle"
-            aria-haspopup="menu"
-            aria-expanded="false"
-          >
+          <button class="nav-link dropdown-toggle" aria-haspopup="menu" aria-expanded="false">
             <span>Interview</span>
             <i class="fas fa-chevron-down dropdown-icon"></i>
           </button>
           <div class="dropdown-menu" role="menu">
-            <a href="index.html#interview" class="dropdown-item" role="menuitem"
-              >Interview Prep</a
-            >
-            <a href="cheat-sheets.html" class="dropdown-item" role="menuitem"
-              >DSA Cheat Sheets</a
-            >
-            <a href="system-design.html" class="dropdown-item" role="menuitem"
-              >System Design</a
-            >
-            <a href="behavioral-questions.html"
-   class="dropdown-item"
-   role="menuitem">
-   Behavioral Questions
-</a>
-            <a href="company-interview.html" 
-            class="dropdown-item" 
-            role="menuitem"
-            >Company Question Bank</a
-            >
+            <a href="index.html#interview" class="dropdown-item" role="menuitem">Interview Prep</a>
+            <a href="cheat-sheets.html" class="dropdown-item" role="menuitem">DSA Cheat Sheets</a>
+            <a href="system-design.html" class="dropdown-item" role="menuitem">System Design</a>
+            <a href="behavioral-questions.html" class="dropdown-item" role="menuitem">Behavioral Questions</a>
+            <a href="company-interview.html" class="dropdown-item" role="menuitem">Company Question Bank</a>
           </div>
         </li>
         <li class="nav-item has-dropdown">
-          <button class="nav-link dropdown-toggle"
-            aria-haspopup="menu"
-            aria-expanded="false"
-          >
+          <button class="nav-link dropdown-toggle" aria-haspopup="menu" aria-expanded="false">
             <span>Community</span>
             <i class="fas fa-chevron-down dropdown-icon"></i>
           </button>
           <div class="dropdown-menu" role="menu">
-            <a href="community.html" class="dropdown-item" role="menuitem"
-              >Discussions</a
-            >
-            <a href="index.html#dashboard" class="dropdown-item" role="menuitem"
-              >Leaderboard</a
-            >
-            <a href="support-page/index.html"
-              class="dropdown-item"
-              role="menuitem"
-              >Support</a
-            >
-            <a href="feedback.html" class="dropdown-item" role="menuitem"
-              >Feedback</a
-            >
+            <a href="community.html" class="dropdown-item" role="menuitem">Discussions</a>
+            <a href="index.html#dashboard" class="dropdown-item" role="menuitem">Leaderboard</a>
+            <a href="support-page/index.html" class="dropdown-item" role="menuitem">Support</a>
+            <a href="feedback.html" class="dropdown-item" role="menuitem">Feedback</a>
           </div>
         </li>
         <li class="nav-item has-dropdown nav-profile-dropdown">
-          <button class="nav-link dropdown-toggle"
-            aria-haspopup="menu"
-            aria-expanded="false"
-          >
+          <button class="nav-link dropdown-toggle" aria-haspopup="menu" aria-expanded="false">
             <span>Profile</span>
             <i class="fas fa-chevron-down dropdown-icon"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end" role="menu">
-            <a href="index.html#dashboard"
-              class="dropdown-item"
-              role="menuitem"
-            >
-              <i class="fas fa-tachometer-alt"></i>
-              Dashboard
+            <a href="index.html#dashboard" class="dropdown-item" role="menuitem">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
             <a href="index.html#profile" class="dropdown-item" role="menuitem">
-              <i class="fas fa-user"></i>
-              My Profile
+              <i class="fas fa-user"></i> My Profile
             </a>
             <a href="resume.html" class="dropdown-item" role="menuitem">
-              <i class="fas fa-file-alt"></i>
-              Coding Resume
+              <i class="fas fa-file-alt"></i> Coding Resume
             </a>
             <div class="dropdown-divider"></div>
-            <a href="login.html"
-              class="dropdown-item nav-auth-link"
-              role="menuitem"
-              id="navLoginBtn"
-            >
-              <i class="fas fa-sign-in-alt"></i>
-              Sign In
+            <a href="login.html" class="dropdown-item nav-auth-link" role="menuitem" id="navLoginBtn">
+              <i class="fas fa-sign-in-alt"></i> Sign In
             </a>
-            <a href="signup.html"
-              class="dropdown-item nav-auth-link"
-              role="menuitem"
-              id="navSignupBtn"
-            >
-              <i class="fas fa-user-plus"></i>
-              Sign Up
+            <a href="signup.html" class="dropdown-item nav-auth-link" role="menuitem" id="navSignupBtn">
+              <i class="fas fa-user-plus"></i> Sign Up
             </a>
           </div>
         </li>
         <li class="nav-item nav-cta desktop-only">
           <a href="index.html#practice" class="btn btn-primary nav-cta-btn" aria-label="Start learning practice problems">
-            <i class="fas fa-rocket"></i>
-            Start Learning
+            <i class="fas fa-rocket"></i> Start Learning
           </a>
         </li>
       </ul>
       <div class="nav-buttons">
-        <button
-          id="darkModeToggle"
-          class="dark-mode-btn"
-          aria-label="Toggle dark mode"
-        >
+        <button id="darkModeToggle" class="dark-mode-btn" aria-label="Toggle dark mode">
           <i class="fas fa-moon"></i>
         </button>
-        <button
-          id="menuToggle"
-          class="menu-toggle"
-          aria-label="Toggle navigation menu"
-          aria-expanded="false"
-        >
+        <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
           <i class="fas fa-bars"></i>
         </button>
       </div>
     </nav>
 
-   <!-- Hero -->
-<section class="hero learning-path-hero">
-  <div class="hero-background">
-    <div class="stars"></div>
-    <div class="stars2"></div>
-    <div class="stars3"></div>
-  </div>
-
-  <div class="hero-content">
-    <h1 class="hero-title">
-      <span class="title-line">Plan Your Journey</span>
-      <span class="main-title">Personalized Learning Path Generator</span>
-      <span class="subtitle">Build Your Roadmap To Success</span>
-    </h1>
-
-    <p class="section-subtitle">
-      Generate customized learning paths for Beginner, Placement,
-      and FAANG preparation while tracking your progress.
-    </p>
-
-    <div class="hero-buttons">
-      <a href="#generator" class="btn btn-primary">
-        Generate Path
-      </a>
-
-      <a href="#progress" class="btn btn-secondary">
-        Track Progress
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- Stats -->
-<section class="section">
-  <div class="container">
-    <div class="hero-stats">
-      <div class="stat-box">
-        <span class="stat-number">3</span>
-<span class="stat-label">Learning Tracks</span>
+    <!-- Hero -->
+    <section class="hero learning-path-hero">
+      <div class="hero-background">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
       </div>
-
-      <div class="stat-box">
-        <span class="stat-number">21+</span>
-<span class="stat-label">Topics Included</span>
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="title-line">Plan Your Journey</span>
+          <span class="main-title">Personalized Learning Path</span>
+          <span class="subtitle">Build Your Roadmap To Success</span>
+        </h1>
+        <p class="section-subtitle">
+          Generate a customized step-by-step roadmap for Beginner, Placement, or FAANG preparation.
+          Track your daily progress, earn streaks, and reach your goals faster.
+        </p>
+        <div class="hero-buttons">
+          <a href="#goalSelector" class="btn btn-primary">
+            <i class="fas fa-map-signs"></i> Get My Path
+          </a>
+          <a href="#roadmapSection" class="btn btn-secondary">
+            <i class="fas fa-chart-line"></i> View Progress
+          </a>
+        </div>
       </div>
+    </section>
 
-      <div class="stat-box">
-        <span class="stat-number">100%</span>
-<span class="stat-label">Track Progress</span>
+    <!-- Stats -->
+    <section class="section" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
+      <div class="container">
+        <div class="hero-stats">
+          <div class="stat-box">
+            <span class="stat-number">3</span>
+            <span class="stat-label">Learning Tracks</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">26+</span>
+            <span class="stat-label">Curated Topics</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Progress Tracked</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">∞</span>
+            <span class="stat-label">Learning Potential</span>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- Features -->
-<section class="section">
-  <div class="container">
-    <h2 class="section-title">Learning Path Features</h2>
-
-    <div class="tips-grid">
-      <div class="tip-card">
-        <h3>Beginner → Advanced</h3>
-        <p>Step-by-step roadmap for mastering DSA.</p>
+    <!-- Features -->
+    <section class="section" style="padding-top: 2rem;">
+      <div class="container">
+        <h2 class="section-title">What You Get</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <span class="feature-icon">🗺️</span>
+            <h3>Visual Roadmap</h3>
+            <p>Step-by-step interactive timeline with progress indicators and direct links to resources.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">📅</span>
+            <h3>ETA Calculator</h3>
+            <p>Set your daily study hours and get a realistic estimated completion date.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🔥</span>
+            <h3>Streak Tracking</h3>
+            <p>Build momentum with daily streaks that keep you accountable and motivated.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🏆</span>
+            <h3>Milestone Rewards</h3>
+            <p>Celebrate completing 25%, 50%, 75%, and 100% of your chosen path.</p>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="tip-card">
-        <h3>Placement Preparation</h3>
-        <p>Company-focused interview preparation path.</p>
+    <!-- Goal Selector -->
+    <section id="goalSelector" class="goal-selector-section">
+      <div class="container">
+        <h2 class="section-title">Choose Your Goal</h2>
+
+        <!-- Goal Cards -->
+        <div class="goal-cards" role="radiogroup" aria-label="Select learning goal">
+          <div class="goal-card" data-goal="beginner" role="radio" aria-checked="false" tabindex="0">
+            <span class="goal-card-icon">🌱</span>
+            <h3>Beginner → Advanced</h3>
+            <p>Master DSA from scratch with a structured, beginner-friendly roadmap covering all core topics.</p>
+            <span class="goal-topics-count">9 Topics · ~80h</span>
+          </div>
+          <div class="goal-card" data-goal="placement" role="radio" aria-checked="false" tabindex="0">
+            <span class="goal-card-icon">💼</span>
+            <h3>Placement Preparation</h3>
+            <p>Company-focused prep covering CS fundamentals, OOP, DBMS, and targeted DSA practice.</p>
+            <span class="goal-topics-count">8 Topics · ~84h</span>
+          </div>
+          <div class="goal-card" data-goal="faang" role="radio" aria-checked="false" tabindex="0">
+            <span class="goal-card-icon">🚀</span>
+            <h3>FAANG Preparation</h3>
+            <p>Advanced roadmap for top-tier companies — complex algorithms, system design, and mock rounds.</p>
+            <span class="goal-topics-count">9 Topics · ~130h</span>
+          </div>
+        </div>
+
+        <!-- Daily Goal -->
+        <div class="daily-goal-row">
+          <label for="dailyHoursInput">Daily study goal:</label>
+          <div class="daily-input-wrap">
+            <input
+              type="number"
+              id="dailyHoursInput"
+              min="0.5"
+              max="16"
+              step="0.5"
+              value="2"
+              aria-label="Daily study hours"
+            />
+            <span>hours / day</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="generate-actions">
+          <button id="generateBtn" class="btn btn-primary">
+            <i class="fas fa-route"></i> Generate My Roadmap
+          </button>
+        </div>
       </div>
+    </section>
 
-      <div class="tip-card">
-        <h3>FAANG Preparation</h3>
-        <p>Advanced roadmap for top product companies.</p>
+    <!-- Roadmap & Progress -->
+    <section id="roadmapSection" class="section">
+      <div class="container">
+        <h2 class="section-title">Your Learning Roadmap</h2>
+
+        <!-- Progress Dashboard -->
+        <div class="progress-dashboard" id="progressDashboard">
+          <!-- SVG Ring -->
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring-svg" viewBox="0 0 140 140" aria-hidden="true">
+              <defs>
+                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7c3aed" />
+                  <stop offset="100%" stop-color="#06b6d4" />
+                </linearGradient>
+              </defs>
+              <circle class="progress-ring-bg" cx="70" cy="70" r="56" />
+              <circle class="progress-ring-fill" cx="70" cy="70" r="56" />
+            </svg>
+            <div class="progress-ring-label">
+              <span class="progress-ring-pct">0%</span>
+              <span class="progress-ring-sub">Complete</span>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="progress-stats">
+            <div class="progress-stat-row">
+              <div class="progress-stat">
+                <span class="progress-stat-value" id="statDone">0</span>
+                <span class="progress-stat-label">Completed</span>
+              </div>
+              <div class="progress-stat">
+                <span class="progress-stat-value" id="statTotal">—</span>
+                <span class="progress-stat-label">Total Topics</span>
+              </div>
+              <div class="progress-stat">
+                <span class="progress-stat-value" id="statRemaining">—</span>
+                <span class="progress-stat-label">Remaining</span>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+              <div class="streak-badge">
+                🔥 <span id="streakCount">0</span> day streak
+              </div>
+              <div class="eta-badge">
+                📅 ETA: <strong id="statEta" style="margin-left: 0.25rem;">—</strong>
+              </div>
+            </div>
+
+            <div class="dashboard-controls">
+              <button id="resetBtn" class="btn btn-danger">
+                <i class="fas fa-redo"></i> Reset Path
+              </button>
+              <button id="printBtn" class="btn btn-ghost">
+                <i class="fas fa-print"></i> Export
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Roadmap Timeline -->
+        <div id="roadmapTimeline" class="roadmap-timeline" role="list" aria-label="Learning path steps">
+          <!-- Empty state -->
+          <div class="roadmap-empty">
+            <span class="empty-icon">🗺️</span>
+            <p>Select a learning goal above and click <strong>Generate My Roadmap</strong> to get started!</p>
+          </div>
+        </div>
+
       </div>
+    </section>
 
-      <div class="tip-card">
-        <h3>Progress Tracking</h3>
-        <p>Track milestones and completed topics.</p>
+    <!-- How It Works -->
+    <section class="section" style="padding-top: 2rem;">
+      <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="how-it-works-grid">
+          <div class="how-step">
+            <div class="how-step-num">1</div>
+            <h3>Pick Your Goal</h3>
+            <p>Choose from Beginner, Placement, or FAANG preparation tracks.</p>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">2</div>
+            <h3>Set Daily Hours</h3>
+            <p>Tell us how many hours per day you can study to get your ETA.</p>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">3</div>
+            <h3>Follow the Roadmap</h3>
+            <p>Study each topic in order with direct links to learning resources.</p>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">4</div>
+            <h3>Track & Celebrate</h3>
+            <p>Check off topics, build streaks, and earn milestone rewards.</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- Generator -->
-<section id="generator" class="section">
-  <div class="container">
-    <h2 class="section-title">Generate Learning Path</h2>
-
-    <select id="goalSelect" class="problem-input">
-      <option value="">Select Goal</option>
-      <option value="beginner">Beginner → Advanced</option>
-      <option value="placement">Placement Preparation</option>
-      <option value="faang">FAANG Preparation</option>
-    </select>
-
-    <button id="generateBtn" class="btn btn-primary">
-      Generate Path
-    </button>
-  </div>
-</section>
-
-<!-- Roadmap -->
-<section id="progress" class="section">
-  <div class="container">
-    <h2 class="section-title">Your Learning Roadmap</h2>
-
-    <div id="roadmapContainer" class="tips-grid"></div>
-
-    <div class="tip-card">
-      <h3>Progress</h3>
-      <p id="progressText" role="status" aria-live="polite">0% Completed</p>
-    </div>
-  </div>
-</section>
-
-<!-- How It Works -->
-<section class="section">
-  <div class="container">
-    <h2 class="section-title">How It Works</h2>
-
-    <div class="tips-grid">
-      <div class="tip-card">
-        <h3>1</h3>
-        <p>Select Goal</p>
-      </div>
-
-      <div class="tip-card">
-        <h3>2</h3>
-        <p>Generate Roadmap</p>
-      </div>
-
-      <div class="tip-card">
-        <h3>3</h3>
-        <p>Complete Topics</p>
-      </div>
-
-      <div class="tip-card">
-        <h3>4</h3>
-        <p>Track Progress</p>
-      </div>
-    </div>
-  </div>
-</section>
-      
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
-        <div class="footer-content">
-          <div class="footer-section">
-            <h3>∞ Algo Infinity Verse</h3>
-            <p>
-              Your ultimate destination for mastering Data Structures &
-              Algorithms and acing technical interviews.
-            </p>
-            <div class="social-links">
-              <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-              <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-              <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-              <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            </div>
+        <h2 class="section-title">How It Works</h2>
+        <div class="how-it-works-grid">
+          <div class="how-step">
+            <div class="how-step-num">1</div>
+            <h3>Pick Your Goal</h3>
+            <p>Choose from Beginner, Placement, or FAANG preparation tracks.</p>
           </div>
-          <div class="footer-section">
-            <h4>Quick Links</h4>
-            <ul>
-              <li><a href="index.html#topics">DSA Topics</a></li>
-              <li><a href="index.html#practice">Practice Problems</a></li>
-              <li><a href="index.html#roadmap">Learning Roadmap</a></li>
-              <li><a href="index.html#interview">Interview Prep</a></li>
-            </ul>
+          <div class="how-step">
+            <div class="how-step-num">2</div>
+            <h3>Set Daily Hours</h3>
+            <p>Tell us how many hours per day you can study to get your ETA.</p>
           </div>
           <div class="footer-section">
             <h4>Resources</h4>
             <ul>
-              <li><a href="#">Documentation</a></li>
-              <li><a href="#">Blog</a></li>
+              <li><a href="blog.html">Blog</a></li>
               <li><a href="community.html">Community</a></li>
               <li><a href="cheat-sheets.html">DSA Cheat Sheets</a></li>
-            <li><a href="problem-solving-framework.html">Problem Solving Framework</a></li>
+              <li><a href="problem-solving-framework.html">Problem Solving Framework</a></li>
               <li><a href="array-learning.html">Learn Arrays</a></li>
-              <li><a href="python-learning.html">Learn Python</a></li>
-              <li><a href="javascript-learning.html">Learn JavaScript</a></li>
-              <li><a href="java-learning.html">Learn Java</a></li>
-              <li><a href="cplusplus-learning.html">Learn C++</a></li>
-              <li><a href="c-learning.html">Learn C</a></li>
-              <li><a href="sql-learning.html">Learn SQL</a></li>
-              <li><a href="dbms-learning.html">Learn DBMS</a></li>
-              <li>
-                <a href="oop-learning.html">Learn OOP</a>
-              </li>
-              <li><a href="php-learning.html">Learn PHP</a></li>
-              <li>
-                <a href="sliding-window-learning.html">Learn Sliding Window</a>
-              </li>
-              <li><a href="prefix-sum-learning.html">Learn Prefix Sum</a></li>
-              <li>
-                <a href="divide-and-conquer-learning.html"
-                  >Learn Divide &amp; Conquer</a
-                >
-              </li>
-              <li>
-                <a href="bit-manipulation-learning.html"
-                  >Learn Bit Manipulation</a
-                >
-              </li>
-
-              <li><a href="computer-architecture.html">Learn Architecture</a></li>
-<li><a href="os-learning.html">Learn OS</a></li>
-
-              <li>
-  <a href="behavioral-questions.html">Behavioral Questions</a>
-</li>
-
-<li>
-  <a href="interview-experience.html">Interview Experiences</a>
-</li>
-              <li><a href="tree-traversal.html">Tree Traversal</a></li>
-              <li><a href="sorting-visualizer.html">Sorting Visualizer</a></li>
-              <li><a href="graph-visualizer.html">Graph Visualizer</a></li>
-<li><a href="pathfinding-visualizer.html">Pathfinding Visualizer</a></li>
-<li><a href="recursion-tree-visualizer.html">Recursion Tree Visualizer</a></li>
-<li><a href="complexity-calculator.html">Complexity Calculator</a></li>
+              <li><a href="dp-learning.html">Learn Dynamic Programming</a></li>
+              <li><a href="graph-learning.html">Learn Graphs</a></li>
+              <li><a href="behavioral-questions.html">Behavioral Questions</a></li>
               <li><a href="resume.html">Coding Resume</a></li>
-              <li><a href="support-page/index.html">Support</a></li>
               <li><a href="feedback.html">Feedback</a></li>
-              <li><a href="about-us.html">About us</a></li>
+              <li><a href="about-us.html">About Us</a></li>
               <li><a href="privacy-policy.html">Privacy</a></li>
             </ul>
-          </div>
-          <div class="footer-section">
-            <h4>Quick Questions</h4>
-            <div class="footer-questions">
-              <button
-                class="footer-question"
-                data-question="What is the time complexity of this problem?"
-              >
-                Time Complexity
-              </button>
-              <button
-                class="footer-question"
-                data-question="Can you give me a hint for this problem?"
-              >
-                Hint
-              </button>
-              <button
-                class="footer-question"
-                data-question="What approach should I use?"
-              >
-                Approach
-              </button>
-              <button
-                class="footer-question"
-                data-question="Are there any edge cases I should consider?"
-              >
-                Edge Cases
-              </button>
-            </div>
           </div>
           <div class="footer-section">
             <h4>Newsletter</h4>
@@ -495,28 +445,24 @@
               <button type="submit" aria-label="Subscribe to newsletter">
                 <i class="fas fa-paper-plane"></i>
               </button>
-              <span
-                class="newsletter-error"
-                id="newsletterError"
-                role="alert"
-                aria-live="polite"
-              ></span>
+              <span class="newsletter-error" id="newsletterError" role="alert" aria-live="polite"></span>
             </form>
           </div>
         </div>
         <div class="footer-bottom">
-          <p>
-            &copy; 2024 Algo Infinity Verse. Crafted with 💜 for learners
-            worldwide.
-          </p>
+          <p>&copy; 2024 Algo Infinity Verse. Crafted with 💜 for learners worldwide.</p>
         </div>
       </div>
-    </footer>
+    </section>
 
-    
-    
-    <!-- Back To Top Button -->
-    
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
     <script src="personalized-learning-path.js" defer></script>
-  </body>
+  
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
+</body>
 </html>

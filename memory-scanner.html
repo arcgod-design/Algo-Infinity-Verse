@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="styles.css" />
   <script src="theme.js"></script>
 </head>
-<body>
+<body data-page="memory-scanner">
   <main class="memory-scanner-container">
     <header class="memory-header">
       <h1><i class="fas fa-brain"></i> AI Code Memory Scanner</h1>
@@ -60,5 +60,10 @@
   </main>
 
   <script src="memory-scanner.js"></script>
+
+  <script>
+    loadPartial('navbar-placeholder', '/partials/navbar.html');
+    loadPartial('footer-placeholder', '/partials/footer.html');
+  </script>
 </body>
 </html>

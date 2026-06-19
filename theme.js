@@ -6,13 +6,11 @@
     document.body.classList.add("light-mode");
   }
 
-  // ── 2. Everything else runs after DOM is ready ──
+  // ── 2. Everything else runs after the toggle is in the DOM ──
   function initTheme() {
-
     const toggles = document.querySelectorAll("#darkModeToggle");
     if (!toggles.length) return;
 
-    // Sync all toggle button icons to match current theme
     function syncIcons() {
       const isLight = document.body.classList.contains("light-mode");
       toggles.forEach(function (toggle) {
@@ -28,7 +26,6 @@
       });
     }
 
-    // Sync navbar background to match current theme + scroll position
     function syncNavbar() {
       const navbar = document.querySelector(".navbar");
       if (!navbar) return;
@@ -39,13 +36,9 @@
         : ("rgba(10, 10, 26, " + (scrolled ? "0.95" : "0.85") + ")");
     }
 
-    // Apply icons on page load
     syncIcons();
-
-    // Apply navbar color on page load
     syncNavbar();
 
-    // Handle toggle click
     toggles.forEach(function (toggle) {
       toggle.addEventListener("click", function () {
         document.body.classList.toggle("light-mode");
@@ -56,15 +49,27 @@
       });
     });
 
-    // Keep navbar in sync on scroll
     window.addEventListener("scroll", syncNavbar);
   }
 
-  // Run after DOM is ready
+  function waitForToggle() {
+    if (document.querySelector("#darkModeToggle")) {
+      initTheme();
+    } else {
+      const observer = new MutationObserver(function () {
+        if (document.querySelector("#darkModeToggle")) {
+          observer.disconnect();
+          initTheme();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initTheme);
+    document.addEventListener("DOMContentLoaded", waitForToggle);
   } else {
-    initTheme();
+    waitForToggle();
   }
 
 })();
