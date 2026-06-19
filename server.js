@@ -789,7 +789,8 @@ async function handleApi(req, res, pathname) {
 
     try {
       const url = new URL(req.url, `http://${req.headers.host}`);
-      const limit = Math.min(parseInt(url.searchParams.get("limit") || "20", 10), 100);
+      const parsedLimit = parseInt(url.searchParams.get("limit") || "20", 10);
+      const limit = Math.min(Number.isNaN(parsedLimit) ? 20 : parsedLimit, 100);
       const topic = url.searchParams.get("topic");
 
       let query = db
