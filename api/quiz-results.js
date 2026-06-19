@@ -108,7 +108,15 @@ export async function saveQuizResult(req, res) {
   let payload;
   try {
     const chunks = [];
-    for await (const chunk of req) chunks.push(chunk);
+    let totalSize = 0;
+    const MAX_BODY_SIZE = 1024 * 1024; // 1MB
+    for await (const chunk of req) {
+      chunks.push(chunk);
+      totalSize += chunk.length;
+      if (totalSize > MAX_BODY_SIZE) {
+        return { status: 413, body: { error: "Request body too large." } };
+      }
+    }
     const raw = Buffer.concat(chunks).toString();
     payload = JSON.parse(raw);
   } catch {
