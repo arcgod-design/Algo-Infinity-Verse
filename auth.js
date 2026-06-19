@@ -150,25 +150,74 @@
       event.preventDefault();
       logoutButton.disabled = true;
 
-      if (location.protocol !== "file:") {
-        try {
-          const response = await fetch(apiUrl("/api/logout"), {
+      try {
+        if (window.firebaseAuth) {
+          await window.firebaseAuth.signOut();
+        } else if (location.protocol !== "file:") {
+          const response = await fetch("/api/logout", {
             method: "POST",
             credentials: "include",
           });
 
           if (!response.ok)
             throw new Error("Logout failed.");
-        } catch (error) {
-          console.warn("Logout failed", error);
-          logoutButton.disabled = false;
-          return;
         }
+      } catch (error) {
+        console.warn("Logout failed", error);
+        logoutButton.disabled = false;
+        return;
       }
 
       location.href = authUrl("/login");
-    }); // ✅ closes addEventListener
-  } // ✅ closes wireLogout
+    });
+  }
+
+  function wireGoogleSignIn() {
+    document.addEventListener("click", async (event) => {
+      const googleBtn = event.target.closest(
+        "[data-auth-google]"
+      );
+      if (!googleBtn) return;
+
+      event.preventDefault();
+
+      if (!window.firebaseAuth) {
+        setFormMessage(
+          document.querySelector("[data-auth-form]"),
+          "Google Sign-In is not configured.",
+          "error"
+        );
+        return;
+      }
+
+      googleBtn.dataset.loading = "true";
+      googleBtn.disabled = true;
+
+      const formMessage = document.querySelector(
+        "[data-auth-form] [data-auth-message]"
+      );
+      if (formMessage) {
+        formMessage.textContent = "Opening Google sign-in...";
+        formMessage.className = "auth-message info";
+      }
+
+      try {
+        await window.firebaseAuth.signInWithGoogle();
+        location.href = getNextDestination();
+      } catch (error) {
+        console.error("Google sign-in failed:", error);
+        const msg =
+          error.code === "auth/popup-closed-by-user"
+            ? "Sign-in popup was closed. Please try again."
+            : error.message || "Google sign-in failed.";
+        const form = document.querySelector("[data-auth-form]");
+        setFormMessage(form, msg, "error");
+      } finally {
+        googleBtn.dataset.loading = "false";
+        googleBtn.disabled = false;
+      }
+    });
+  }
 
   function passwordStrength(password) {
     let score = 0;
@@ -402,41 +451,43 @@
         authReady = true;
         window.algoAuth = currentSession;
 
-        renderAuthNav();
-        wireLogout();
-        wireAuthForm();
-        updateProfileNames(currentSession.user);
-        guardPrivateHash();
-
-        window.addEventListener(
-          "hashchange",
-          guardPrivateHash
-        );
-        return;
-      }
-
-      currentSession = await getSession();
-      authReady = true;
-      window.algoAuth = currentSession;
-
-      if (
-        currentSession.authenticated &&
-        isAuthPage()
-      ) {
-        location.href = getNextDestination();
-        return;
-      }
-
       renderAuthNav();
       wireLogout();
+      wireGoogleSignIn();
       wireAuthForm();
       updateProfileNames(currentSession.user);
+      guardPrivateHash();
 
       window.addEventListener(
         "hashchange",
         guardPrivateHash
       );
-      guardPrivateHash();
+      return;
+    }
+
+    currentSession = await getSession();
+    authReady = true;
+    window.algoAuth = currentSession;
+
+    if (
+      currentSession.authenticated &&
+      isAuthPage()
+    ) {
+      location.href = getNextDestination();
+      return;
+    }
+
+    renderAuthNav();
+    wireLogout();
+    wireGoogleSignIn();
+    wireAuthForm();
+    updateProfileNames(currentSession.user);
+
+    window.addEventListener(
+      "hashchange",
+      guardPrivateHash
+    );
+    guardPrivateHash();
     }
   );
 })();

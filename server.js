@@ -475,6 +475,74 @@ async function handleApi(req, res, pathname) {
     return sendJson(res, 200, { authenticated: Boolean(session), user: session });
   }
 
+  if (pathname === "/api/firebase-config" && req.method === "GET") {
+    const config = {
+      apiKey: process.env.FIREBASE_API_KEY || "",
+      authDomain: process.env.FIREBASE_AUTH_DOMAIN || "",
+      projectId: process.env.FIREBASE_PROJECT_ID || "",
+      storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "",
+      messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
+      appId: process.env.FIREBASE_APP_ID || "",
+    };
+    return sendJson(res, 200, config);
+  }
+
+  if (pathname === "/api/auth/google" && req.method === "POST") {
+    let payload;
+    try {
+      payload = await readJsonBody(req);
+    } catch {
+      return sendJson(res, 400, { error: "Invalid request body." });
+    }
+
+    const { idToken } = payload;
+    if (!idToken) {
+      return sendJson(res, 400, { error: "ID token is required." });
+    }
+
+    try {
+      const { default: admin } = await import("firebase-admin/app");
+      const { getAuth } = await import("firebase-admin/auth");
+
+      let decoded;
+      try {
+        decoded = await getAuth().verifyIdToken(idToken);
+      } catch (verifyError) {
+        console.error("[auth/google] Token verification failed:", verifyError.message);
+        return sendJson(res, 401, { error: "Invalid or expired Google token." });
+      }
+
+      const { email, name, picture, uid } = decoded;
+
+      let user = await getUserByEmail(email);
+
+      if (!user) {
+        user = {
+          id: crypto.randomUUID(),
+          name: name || email.split("@")[0],
+          email,
+          avatar: picture || "🚀",
+          xp: 0,
+          level: 1,
+          authProvider: "google",
+          createdAt: new Date().toISOString(),
+        };
+        await createUser(user);
+      }
+
+      const token = createSessionToken(user);
+      return sendJson(
+        res,
+        200,
+        { user: { id: user.id, name: user.name, email: user.email } },
+        { "Set-Cookie": sessionCookie(token, req) },
+      );
+    } catch (error) {
+      console.error("[auth/google] Error:", error);
+      return sendJson(res, 500, { error: "Google authentication failed." });
+    }
+  }
+
   if (pathname === "/api/signup" && req.method === "POST") {
     // ── Rate limit check ─────────────────────────────────────────────────────
     const clientId = getClientIdentifier(req);
@@ -802,6 +870,29 @@ function resolveStaticPath(pathname) {
   return filePath;
 }
 
+function getFirebaseClientConfig() {
+  const config = {
+    apiKey: process.env.FIREBASE_API_KEY || "",
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN || "",
+    projectId: process.env.FIREBASE_PROJECT_ID || "",
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "",
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
+    appId: process.env.FIREBASE_APP_ID || "",
+  };
+  if (!config.apiKey) return null;
+  return config;
+}
+
+function injectFirebaseConfig(htmlContent) {
+  const config = getFirebaseClientConfig();
+  if (!config) return htmlContent;
+  const script = `<script>window.__FIREBASE_CONFIG__=${JSON.stringify(config)};</script>`;
+  if (htmlContent.includes("</head>")) {
+    return htmlContent.replace("</head>", `${script}</head>`);
+  }
+  return script + htmlContent;
+}
+
 async function serveStatic(req, res, pathname) {
   const filePath = resolveStaticPath(pathname);
   if (!filePath) {
@@ -813,7 +904,10 @@ async function serveStatic(req, res, pathname) {
     const stat = await fs.stat(filePath);
     const target = stat.isDirectory() ? path.join(filePath, "index.html") : filePath;
     const ext = path.extname(target);
-    const content = await fs.readFile(target);
+    let content = await fs.readFile(target);
+    if (ext === ".html") {
+      content = Buffer.from(injectFirebaseConfig(content.toString()));
+    }
     res.writeHead(200, {
       "Content-Type": mimeTypes[ext] || "application/octet-stream",
       "X-Content-Type-Options": "nosniff",

@@ -189,6 +189,7 @@
     "#authGateModal",
     ".auth-gate-modal-content",
     ".interview-card a.card-btn",
+    "[data-auth-google]",
   ];
 
   // Main click interceptor
