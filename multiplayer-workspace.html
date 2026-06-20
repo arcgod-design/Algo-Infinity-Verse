@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multiplayer Workspace | Algo Infinity Verse</title>
+    <meta name="description" content="Collaborate on algorithms in real-time with peers." />
+    
+    <link href="[https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap](https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap)" rel="stylesheet" />
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)" />
+    
+    <!-- CodeMirror Core and Theme -->
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css](https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css)">
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css](https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css)">
+    
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="multiplayer-workspace.css" />
+</head>
+<body class="workspace-body">
+    
+    <!-- Navbar -->
+    <nav class="navbar workspace-nav">
+        <div class="nav-logo">
+            <span class="logo-text">∞</span>
+            <span class="logo-title">Algo Infinity Verse</span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link active" style="color: var(--multi-primary);">Technical Interviews</a></li>
+            <li class="nav-item"><a href="index.html#practice" class="nav-link">Practice</a></li>
+        </ul>
+    </nav>
+
+    <!-- Toolbar: Room Info & Participants -->
+    <div class="workspace-toolbar">
+        <div class="toolbar-left">
+            <div class="room-status">
+                <div class="pulse-dot"></div>
+                <span id="connectionStatus">Connected</span>
+            </div>
+            <div class="room-link-container">
+                <span class="room-label">Room ID:</span>
+                <code id="roomIdDisplay">...</code>
+                <button id="btnCopyLink" class="btn-icon" title="Copy Invite Link"><i class="fas fa-link"></i> Copy Link</button>
+            </div>
+        </div>
+        <div class="toolbar-right">
+            <span class="participants-label">Participants:</span>
+            <div class="participants-list" id="participantsList">
+                <div class="avatar my-avatar" title="You (Host)">You</div>
+                <!-- Remote participants added by JS -->
+            </div>
+            <button class="btn btn-primary btn-sm" id="btnEndSession">End Session</button>
+        </div>
+    </div>
+
+    <!-- Main Workspace Area -->
+    <main class="workspace-main">
+        
+        <!-- Left Panel: Problem & Chat -->
+        <div class="panel-left">
+            <div class="panel-header">
+                <h3><i class="fas fa-file-code"></i> Problem Description</h3>
+                <select class="problem-selector" id="problemSelector">
+                    <option value="twosum">Two Sum</option>
+                    <option value="lru">LRU Cache</option>
+                    <option value="islands">Number of Islands</option>
+                </select>
+            </div>
+            <div class="panel-content problem-content">
+                <h2 id="probTitle">Two Sum</h2>
+                <div class="prob-tags">
+                    <span class="tag tag-easy">Easy</span>
+                    <span class="tag">Arrays</span>
+                    <span class="tag">Hash Table</span>
+                </div>
+                <p id="probDesc">
+                    Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers such that they add up to <code>target</code>.<br><br>
+                    You may assume that each input would have exactly one solution, and you may not use the same element twice.
+                </p>
+                <div class="test-cases">
+                    <h4>Example 1:</h4>
+                    <pre><strong>Input:</strong> nums = [2,7,11,15], target = 9
+<strong>Output:</strong> [0,1]
+<strong>Explanation:</strong> Because nums[0] + nums[1] == 9, we return [0, 1].</pre>
+                </div>
+            </div>
+
+            <!-- Mini Chat Overlay -->
+            <div class="chat-container">
+                <div class="chat-header"><i class="fas fa-comments"></i> Session Chat</div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="msg system">Room created. Waiting for peers...</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Type a message...">
+                    <button id="btnSendChat"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Code Editor & Console -->
+        <div class="panel-right">
+            <div class="editor-header">
+                <div class="editor-tabs">
+                    <button class="editor-tab active">solution.js</button>
+                </div>
+                <div class="editor-controls">
+                    <select class="lang-selector">
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="cpp">C++</option>
+                    </select>
+                    <button class="btn btn-success btn-sm" id="btnRunCode"><i class="fas fa-play"></i> Run Code</button>
+                </div>
+            </div>
+            
+            <div class="editor-wrapper" id="editorContainer">
+                <!-- CodeMirror injects here -->
+            </div>
+
+            <div class="console-panel">
+                <div class="console-header">
+                    <span><i class="fas fa-terminal"></i> Console Output</span>
+                    <button class="btn-icon" id="btnClearConsole"><i class="fas fa-eraser"></i></button>
+                </div>
+                <div class="console-content" id="consoleOutput">
+                    > Ready to execute...
+                </div>
+            </div>
+        </div>
+
+    </main>
+    
+    <!-- CodeMirror Scripts -->
+    <script src="[https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js](https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js)"></script>
+    <script src="[https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js](https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js)"></script>
+    <!-- App Scripts -->
+    <script src="multiplayer-workspace.js"></script>
+</body>
+</html>
