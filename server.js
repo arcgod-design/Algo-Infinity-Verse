@@ -19,6 +19,7 @@ const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, "data");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const MEMORY_FILE = path.join(DATA_DIR, "memory.json");
+const AUDITS_FILE = path.join(DATA_DIR, "audits_history.json");
 const SESSION_COOKIE = "aiv_session";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 const PBKDF2_ITERATIONS = 210000;
@@ -301,6 +302,26 @@ async function readUsers() {
 async function writeUsers(users) {
   await ensureUserStore();
   await fs.writeFile(USERS_FILE, `${JSON.stringify(users, null, 2)}\n`);
+}
+
+async function ensureAuditsStore() {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  try {
+    await fs.access(AUDITS_FILE);
+  } catch {
+    await fs.writeFile(AUDITS_FILE, "[]\n");
+  }
+}
+
+async function readAudits() {
+  await ensureAuditsStore();
+  const raw = await fs.readFile(AUDITS_FILE, "utf8");
+  return JSON.parse(raw || "[]");
+}
+
+async function writeAudits(audits) {
+  await ensureAuditsStore();
+  await fs.writeFile(AUDITS_FILE, `${JSON.stringify(audits, null, 2)}\n`);
 }
 
 // ── Memory Scanner (Spaced Repetition, SM-2) ─────────────────────────────────
@@ -1010,6 +1031,109 @@ if (
       return sendJson(res, 500, {
         error: "Failed to save interview experience.",
       });
+    }
+  }
+
+  if (pathname === "/api/audit/history" && req.method === "POST") {
+    const session = getSession(req);
+    if (!session) return sendJson(res, 401, { error: "Login required." });
+
+    try {
+      const payload = await readJsonBody(req);
+      const auditData = {
+        auditId: crypto.randomUUID(),
+        userId: session.sub,
+        repoUrl: payload.repoUrl || "unknown",
+        timestamp: new Date().toISOString(),
+        overallScore: Number(payload.overallScore) || 0,
+        categoryScores: payload.categoryScores || {},
+        issuesCount: Number(payload.issuesCount) || 0,
+        recommendations: payload.recommendations || []
+      };
+
+      if (useFirestore) {
+        await db.collection(COLLECTIONS.AUDITS_HISTORY).doc(auditData.auditId).set(auditData);
+      } else {
+        const audits = await readAudits();
+        audits.push(auditData);
+        await writeAudits(audits);
+      }
+
+      return sendJson(res, 201, { success: true, auditId: auditData.auditId });
+    } catch (err) {
+      console.error("Error saving audit history:", err);
+      return sendJson(res, 500, { error: "Failed to save audit history." });
+    }
+  }
+
+  if (pathname === "/api/audit/history" && req.method === "GET") {
+    const session = getSession(req);
+    if (!session) return sendJson(res, 401, { error: "Login required." });
+
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const repoUrl = url.searchParams.get("repoUrl");
+    const limit = Number(url.searchParams.get("limit")) || 20;
+
+    try {
+      let history = [];
+      if (useFirestore) {
+        let query = db.collection(COLLECTIONS.AUDITS_HISTORY)
+          .where("userId", "==", session.sub);
+        
+        if (repoUrl) {
+          query = query.where("repoUrl", "==", repoUrl);
+        }
+        
+        const snapshot = await query.orderBy("timestamp", "desc").limit(limit).get();
+        history = snapshot.docs.map(doc => doc.data());
+      } else {
+        const allAudits = await readAudits();
+        history = allAudits.filter(a => a.userId === session.sub);
+        if (repoUrl) {
+          history = history.filter(a => a.repoUrl === repoUrl);
+        }
+        history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        history = history.slice(0, limit);
+      }
+
+      return sendJson(res, 200, history);
+    } catch (err) {
+      console.error("Error fetching audit history:", err);
+      return sendJson(res, 500, { error: "Failed to fetch audit history." });
+    }
+  }
+
+  if (pathname === "/api/audit/trends" && req.method === "GET") {
+    const session = getSession(req);
+    if (!session) return sendJson(res, 401, { error: "Login required." });
+
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const repoUrl = url.searchParams.get("repoUrl");
+
+    try {
+      let history = [];
+      if (useFirestore) {
+        let query = db.collection(COLLECTIONS.AUDITS_HISTORY)
+          .where("userId", "==", session.sub);
+        if (repoUrl) query = query.where("repoUrl", "==", repoUrl);
+        const snapshot = await query.orderBy("timestamp", "asc").get();
+        history = snapshot.docs.map(doc => doc.data());
+      } else {
+        const allAudits = await readAudits();
+        history = allAudits.filter(a => a.userId === session.sub);
+        if (repoUrl) history = history.filter(a => a.repoUrl === repoUrl);
+        history.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      }
+
+      const trends = history.map(a => ({
+        timestamp: a.timestamp,
+        overallScore: a.overallScore
+      }));
+
+      return sendJson(res, 200, trends);
+    } catch (err) {
+      console.error("Error fetching audit trends:", err);
+      return sendJson(res, 500, { error: "Failed to fetch audit trends." });
     }
   }
 
