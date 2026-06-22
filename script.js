@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // PARTIAL LOADER
 // ============================================
 function getPartialsBase() {
@@ -1120,6 +1120,7 @@ const advancedRoadmapSteps = [
 ];
 
 let roadmapTabsInitialized = false;
+let roadmapStagesInitialized = false;
 let currentQuizAnswers = {};
 
 /* Temporarily disabled because roadmapAdvancedTab is not present in the current HTML structure.*/
@@ -1154,6 +1155,27 @@ function initRoadmap() {
   //renderAdvancedRoadmap();
   const progressBar = document.getElementById("roadmapProgress");
   const stages = document.querySelectorAll(".stage");
+  if (!roadmapStagesInitialized) {
+    stages.forEach((stage) => {
+      stage.style.cursor = "pointer";
+
+      stage.addEventListener("click", () => {
+        const level = stage.dataset.level;
+
+        if (level === "beginner") {
+          document.getElementById("roadmapBasicTab")?.click();
+        } else if (level === "intermediate") {
+          document.getElementById("roadmapOverviewTab")?.click();
+        } else if (level === "advanced") {
+          document
+            .querySelector(".roadmap-container")
+            ?.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    });
+
+    roadmapStagesInitialized = true;
+  }
   if (progressBar && stages.length >= 3) {
     const progress = Math.min((userProgress.completedProblems.length / practiceProblems.length) * 100, 100);
     setTimeout(() => {
@@ -2248,3 +2270,4 @@ async function runPerl() {
   } catch (err) { if (output) output.textContent = "Error: " + err.message; }
   isRunning = false;
 }
+
