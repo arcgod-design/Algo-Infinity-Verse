@@ -27,7 +27,12 @@ function initFirebase() {
         credential: cert({ projectId, clientEmail, privateKey }),
       });
     } else {
-      adminApp = initializeApp({ projectId });
+      initError = new Error(
+        "Firebase Admin requires FIREBASE_CLIENT_EMAIL and FIREBASE_PRIVATE_KEY " +
+        "environment variables to verify ID tokens. Project-only init cannot verify tokens."
+      );
+      console.error(initError.message);
+      return;
     }
     try {
       db = getFirestore(adminApp);

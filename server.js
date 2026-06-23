@@ -603,7 +603,9 @@ async function handleApi(req, res, pathname) {
         if (clientEmail && privateKey) {
           initializeApp({ credential: cert({ projectId, clientEmail, privateKey }) });
         } else {
-          initializeApp({ projectId });
+          return sendJson(res, 500, {
+            error: "Firebase Admin requires FIREBASE_CLIENT_EMAIL and FIREBASE_PRIVATE_KEY environment variables to verify ID tokens.",
+          });
         }
       }
 
