@@ -972,6 +972,15 @@ body {
         padding: 0.5rem 0.625rem;
         font-size: 0.85rem;
     }
+
+    .quiz-modal-content {
+        max-width: 95%;
+        max-height: 95vh;
+    }
+
+    .quiz-problem-panel {
+        padding: 1.25rem;
+    }
 }
 
 /* Active state for current page */
@@ -3566,6 +3575,7 @@ section[id] {
     display: flex;
     min-height: 500px;
     height: 100%;
+    overflow-x: hidden;
 }
 
 .quiz-problem-panel {
@@ -3575,6 +3585,8 @@ section[id] {
     background: var(--dark-bg);
     min-width: 0;
     overflow-y: auto;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .quiz-editor-panel {

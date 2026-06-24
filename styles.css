@@ -879,6 +879,26 @@ body[data-page="signup"] .auth-switch {
     padding: 0.5rem 0.625rem;
     font-size: 0.85rem;
   }
+
+  /* Practice modal: reduce max-width and padding on tablets */
+  .quiz-modal-content {
+    max-width: 95%;
+    max-height: 95vh;
+  }
+
+  .quiz-problem-panel {
+    padding: 1.25rem;
+  }
+
+  .code-textarea {
+    font-size: 13px;
+    left: 35px;
+    width: calc(100% - 35px);
+  }
+
+  .line-numbers {
+    width: 35px;
+  }
 }
 
 /* Active state for current page */
@@ -3530,6 +3550,7 @@ section[id] {
   display: flex;
   min-height: 500px;
   height: 100%;
+  overflow-x: hidden;
 }
 
 .quiz-problem-panel {
@@ -3539,6 +3560,8 @@ section[id] {
   background: var(--dark-bg);
   min-width: 0;
   overflow-y: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .quiz-editor-panel {
@@ -3680,12 +3703,13 @@ section[id] {
   outline: none;
   resize: none;
   tab-size: 4;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: auto;
   white-space: pre !important;
   word-wrap: normal !important;
-  overflow-x: auto;
   z-index: 2;
   box-sizing: border-box;
+  max-width: 100%;
 }
 
 .code-textarea::placeholder {
@@ -4240,6 +4264,8 @@ section[id] {
   background: var(--dark-bg);
   border-right: 1px solid var(--glass-border);
   overflow-y: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .quiz-container {
@@ -7395,11 +7421,14 @@ html.light-mode .nav-auth-link:hover {
   .quiz-actions {
     padding: 0.6rem 0.75rem;
     gap: 0.4rem;
+    flex-wrap: wrap;
   }
 
   .quiz-actions .btn {
     font-size: 0.78rem;
     padding: 0.5rem 0.5rem;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .modal-close,
