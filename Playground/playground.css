@@ -3586,7 +3586,6 @@ section[id] {
     min-width: 0;
     overflow-y: auto;
     overflow-wrap: break-word;
-    word-break: break-word;
 }
 
 .quiz-editor-panel {

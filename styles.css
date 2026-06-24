@@ -3561,7 +3561,6 @@ section[id] {
   min-width: 0;
   overflow-y: auto;
   overflow-wrap: break-word;
-  word-break: break-word;
 }
 
 .quiz-editor-panel {
@@ -3706,7 +3705,7 @@ section[id] {
   overflow-x: auto;
   overflow-y: auto;
   white-space: pre !important;
-  word-wrap: normal !important;
+  overflow-wrap: normal !important;
   z-index: 2;
   box-sizing: border-box;
   max-width: 100%;
@@ -3737,7 +3736,7 @@ section[id] {
   overflow: hidden !important;
   z-index: 3;
   white-space: pre !important;
-  word-wrap: normal !important;
+  overflow-wrap: normal !important;
   box-sizing: border-box;
 }
 
@@ -4265,7 +4264,6 @@ section[id] {
   border-right: 1px solid var(--glass-border);
   overflow-y: auto;
   overflow-wrap: break-word;
-  word-break: break-word;
 }
 
 .quiz-container {
