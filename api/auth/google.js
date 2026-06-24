@@ -47,7 +47,7 @@ async function verifyGoogleIdToken(idToken) {
     const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`);
     if (!response.ok) return null;
     const data = await response.json();
-    if (data.aud !== process.env.FIREBASE_API_KEY) return null;
+    if (data.aud !== process.env.FIREBASE_PROJECT_ID) return null;
     if (data.iss !== `https://securetoken.google.com/${process.env.FIREBASE_PROJECT_ID}`) return null;
     return {
       uid: data.sub,
@@ -80,8 +80,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing idToken" });
     }
 
-    if (!process.env.FIREBASE_API_KEY || !process.env.FIREBASE_PROJECT_ID) {
-      return res.status(500).json({ error: "Firebase is not configured. Set FIREBASE_API_KEY and FIREBASE_PROJECT_ID environment variables." });
+    if (!process.env.FIREBASE_PROJECT_ID) {
+      return res.status(500).json({ error: "Firebase is not configured. Set FIREBASE_PROJECT_ID environment variable." });
     }
 
     let decoded;

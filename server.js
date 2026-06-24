@@ -610,8 +610,8 @@ async function handleApi(req, res, pathname) {
   }
 
   if (pathname === "/api/auth/google" && req.method === "POST") {
-    if (!process.env.FIREBASE_API_KEY || !process.env.FIREBASE_PROJECT_ID) {
-      return sendJson(res, 500, { error: "Firebase is not configured for authentication. Set FIREBASE_API_KEY and FIREBASE_PROJECT_ID environment variables." });
+    if (!process.env.FIREBASE_PROJECT_ID) {
+      return sendJson(res, 500, { error: "Firebase is not configured for authentication. Set FIREBASE_PROJECT_ID environment variable." });
     }
 
     try {
@@ -626,7 +626,7 @@ async function handleApi(req, res, pathname) {
         const tokenResponse = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`);
         if (!tokenResponse.ok) throw new Error("Token verification failed");
         const tokenData = await tokenResponse.json();
-        if (tokenData.aud !== process.env.FIREBASE_API_KEY) throw new Error("Invalid audience");
+        if (tokenData.aud !== process.env.FIREBASE_PROJECT_ID) throw new Error("Invalid audience");
         if (tokenData.iss !== `https://securetoken.google.com/${process.env.FIREBASE_PROJECT_ID}`) throw new Error("Invalid issuer");
         decoded = {
           uid: tokenData.sub,
