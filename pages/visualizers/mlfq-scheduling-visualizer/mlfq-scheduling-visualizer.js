@@ -7,6 +7,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  import { runSimulation } from '../../common/engine/simulator.js';
   const el = {
     queueCount: document.getElementById('queueCount'),
     agingThreshold: document.getElementById('agingThreshold'),
@@ -267,17 +268,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================
   // MLFQ Simulation Engine
   // =========================
-  function buildProcessesById(processes) {
-    const map = new Map();
-    processes.forEach((p) => map.set(p.id, p));
-    return map;
-  }
-
   function cloneProcesses(processes) {
     return processes.map((p) => ({ ...p }));
   }
 
-  function generateScheduleTrace({ processes, queueCount, quantumPerQueue, agingThreshold }) {
+  // The simulation engine has been moved to a shared module. This function is deprecated and removed.
+  // Use runSimulation from '../../common/engine/simulator.js' instead.
+
     const procs = cloneProcesses(processes).map((p) => {
       return {
         id: p.id,
