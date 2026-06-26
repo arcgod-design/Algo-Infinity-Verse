@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Code Execution Trace Visualizer</title>
     <link rel="stylesheet" href="style.css" />
+    <!-- Client-side PDF Generation Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <!-- Theme Initialization Script -->
     <script>
@@ -96,6 +98,12 @@
         </div>
     </div>
 
+    <!-- Topic Completion Certificates Dashboard -->
+<div id="certificates-dashboard" class="dashboard-container" style="margin-top: 30px;">
+  <div class="dashboard-header">
+    <div>
+      <h2>Your Learning Achievements</h2>
+      <p>Download verifiable completion certificates for finished roadmaps.</p>
     <!-- Interview Readiness Dashboard Container -->
 <div id="readiness-dashboard" class="dashboard-container">
   <div class="dashboard-header">
@@ -124,6 +132,12 @@
   </div>
 
   <div class="feedback-layout">
+    <div class="shadow-box" style="grid-column: span 2;">
+      <h3>Completion History & Certificates</h3>
+      <ul id="certificates-list" style="list-style: none; padding: 0; margin-top: 15px;">
+        <!-- Dynamic rows will be injected here -->
+        <li style="color: #666; font-size: 14px;">Loading your learning tracks...</li>
+      </ul>
     <div class="feedback-section shadow-box">
       <h3>Improvement Suggestions</h3>
       <ul id="suggestions-list"></ul>
