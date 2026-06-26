@@ -305,8 +305,8 @@ const practiceProblems = [
   { id: 2, title: "Valid Parentheses", difficulty: "easy", tags: ["Strings", "Stack"], acceptance: "40.2%", category: "strings", description: "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.", constraints: ["1 ≤ s.length ≤ 10⁴", "s consists of parentheses only '()[]{}'"], followUp: "Can you solve it in O(n) time and O(n) space?", functionName: "isValid", params: ["brackets"], guide: "brackets: string of '()', '{}', '[]' characters\nreturns: true if every opening bracket has a matching closing bracket in the correct order, false otherwise", testCases: [{ input: ["()"], expected: true }, { input: ["()[]{}"], expected: true }, { input: ["(]"], expected: false }, { input: ["([)]"], expected: false }, { input: ["{[]}"], expected: true }] },
   { id: 3, title: "Merge Two Sorted Lists", difficulty: "easy", tags: ["Linked List", "Recursion"], acceptance: "58.5%", category: "linkedlist", description: "Given two sorted arrays list1 and list2, merge them into one sorted array.", constraints: ["0 ≤ list1.length, list2.length ≤ 50", "-100 ≤ list1[i], list2[i] ≤ 100"], followUp: "Can you solve it iteratively using O(1) extra space, and also recursively?", functionName: "mergeLists", params: ["list1", "list2"], guide: "list1: first sorted array of integers\nlist2: second sorted array of integers\nreturns: a new sorted array containing all elements from both lists in ascending order", testCases: [{ input: [[1,2,4], [1,3,4]], expected: [1,1,2,3,4,4] }, { input: [[], []], expected: [] }, { input: [[], [0]], expected: [0] }] },
   { id: 4, title: "Maximum Subarray", difficulty: "medium", tags: ["Arrays", "Divide & Conquer"], acceptance: "46.2%", category: "arrays", description: "Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum.", constraints: ["1 ≤ nums.length ≤ 10⁵", "-10⁴ ≤ nums[i] ≤ 10⁴"], followUp: "Can you solve it in O(n) time using Kadane's Algorithm?", functionName: "maxSubArray", testCases: [{ input: [[-2,1,-3,4,-1,2,1,-5,4]], expected: 6 }, { input: [[1]], expected: 1 }, { input: [[5,4,-1,7,8]], expected: 23 }, { input: [[-1]], expected: -1 }] },
-  { id: 5, title: "LRU Cache", difficulty: "medium", tags: ["Design", "Hash Table"], acceptance: "37.5%", category: "arrays", description: "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.", constraints: ["1 ≤ capacity ≤ 3000", "0 ≤ key, value ≤ 10⁴", "At most 2 × 10⁵ calls"], followUp: "Can you implement both get and put in O(1) time complexity?", functionName: "LRUCache", params: ["capacity"], guide: "capacity: maximum number of items the cache can hold\nImplement get(key) and put(key, value) methods that both run in O(1) average time.", testCases: [{ input: [2], expected: null }] },
-  { id: 6, title: "Clone Graph", difficulty: "medium", tags: ["Graphs", "DFS", "BFS"], acceptance: "43.2%", category: "graphs", description: "Given a reference to a node in a connected undirected graph, return a deep copy (clone) of the graph.", constraints: ["The number of nodes in the graph is in the range [0, 100]", "1 ≤ Node.val ≤ 100", "Node.val is unique for each node"], followUp: "Can you solve it using both BFS and DFS approaches?" },
+  { id: 5, title: "LRU Cache", difficulty: "medium", tags: ["Design", "Hash Table"], acceptance: "37.5%", category: "arrays", description: "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.", constraints: ["1 ≤ capacity ≤ 3000", "0 ≤ key, value ≤ 10⁴", "At most 2 × 10⁵ calls"], followUp: "Can you implement both get and put in O(1) time complexity?" },
+  { id: 6, title: "Clone Graph", difficulty: "medium", tags: ["Graphs", "DFS", "BFS"], acceptance: "43.2%", category: "graphs", description: "Given an adjacency list representing a connected undirected graph, return a deep copy (clone) of the graph as an adjacency list.", constraints: ["0 ≤ adjList.length ≤ 100", "1 ≤ adjList[i][j] ≤ 100", "Each node's value is 1-indexed (node i+1 corresponds to adjList[i])"], followUp: "Can you solve it using both BFS and DFS approaches?", functionName: "cloneGraph", params: ["adjList"], guide: "adjList: 2D array where adjList[i] lists the neighbors of node i+1 (1-indexed)\nreturns: a deep copy of the adjacency list representing the cloned graph", testCases: [ { input: [[[2,4],[1,3],[2,4],[1,3]]], expected: [[2,4],[1,3],[2,4],[1,3]] }, { input: [[[]]], expected: [[]] }, { input: [[]], expected: [] } ] },
   { id: 7, title: "Longest Increasing Subsequence", difficulty: "hard", tags: ["DP", "Binary Search"], acceptance: "42.1%", category: "dp", description: "Given an integer array nums, return the length of the longest strictly increasing subsequence.", constraints: ["1 ≤ nums.length ≤ 2500", "-10⁴ ≤ nums[i] ≤ 10⁴"], followUp: "Can you improve from O(n²) DP to O(n log n) using binary search?", functionName: "lengthOfLIS", testCases: [{ input: [[10,9,2,5,3,7,101,18]], expected: 4 }, { input: [[0,1,0,3,2,3]], expected: 4 }, { input: [[7,7,7,7,7,7,7]], expected: 1 }] },
   { id: 8, title: "Word Ladder", difficulty: "hard", tags: ["Graphs", "BFS"], acceptance: "31.4%", category: "graphs", description: "Given two words, beginWord and endWord, and a dictionary wordList, return the number of words in the shortest transformation sequence.", constraints: ["1 ≤ beginWord.length ≤ 10", "endWord.length == beginWord.length", "1 ≤ wordList.length ≤ 5000"], followUp: "Can you find ALL shortest transformation sequences?" },
   { id: 9, title: "Trapping Rain Water", difficulty: "hard", tags: ["Arrays", "Two Pointers"], acceptance: "48.7%", category: "arrays", description: "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.", constraints: ["1 ≤ height.length ≤ 2 × 10⁴", "0 ≤ height[i] ≤ 10⁵"], followUp: "Can you solve it in O(n) time and O(1) space using the two-pointer technique?", functionName: "trap", testCases: [{ input: [[0,1,0,2,1,0,1,3,2,1,2,1]], expected: 6 }, { input: [[4,2,0,3,2,5]], expected: 9 }] },
@@ -2289,8 +2289,11 @@ function openQuizEditor(problem) {
 function mapType(jt, lang) {
   const m = {
     'int[]':  { java: 'int[]', cpp: 'vector<int>', c: 'int*', swift: '[Int]' },
+    'int[][]': { java: 'int[][]', cpp: 'vector<vector<int>>', c: 'int**', swift: '[[Int]]' },
     'string[]': { java: 'String[]', cpp: 'vector<string>', c: 'char**', swift: '[String]' },
+    'string[][]': { java: 'String[][]', cpp: 'vector<vector<string>>', c: 'char***', swift: '[[String]]' },
     'bool[]': { java: 'boolean[]', cpp: 'vector<bool>', c: 'int*', swift: '[Bool]' },
+    'bool[][]': { java: 'boolean[][]', cpp: 'vector<vector<bool>>', c: 'int**', swift: '[[Bool]]' },
     'int':    { java: 'int', cpp: 'int', c: 'int', swift: 'Int' },
     'string': { java: 'String', cpp: 'string', c: 'char*', swift: 'String' },
     'bool':   { java: 'boolean', cpp: 'bool', c: 'int', swift: 'Bool' },
@@ -2347,8 +2350,11 @@ function getDefaultCode(lang, problem) {
         if (lang === 'cpp') return t + ' ' + p;
         if (lang === 'c') {
           const origJt = tc?.input ? j2t(tc.input[i]) : null;
+          const is2d = origJt === 'int[][]';
           const isArray = origJt && origJt.endsWith('[]');
-          return t + ' ' + p + (isArray ? ', int ' + p + 'Size' : '');
+          if (is2d) return t + ' ' + p + ', int* ' + p + 'Sizes, int ' + p + 'Size';
+          if (isArray) return t + ' ' + p + ', int ' + p + 'Size';
+          return t + ' ' + p;
         }
         if (lang === 'java') return t + ' ' + p;
         if (lang === 'swift') return '_ ' + p + ': ' + t;
@@ -2375,7 +2381,7 @@ function getDefaultCode(lang, problem) {
 }
 
 function generateExamples(problem) {
-  const examples = { 1: `<strong>Example 1:</strong><br>Input: nums = [2,7,11,15], target = 9<br>Output: [0,1]<br><br><strong>Follow-up:</strong> Can you solve it in O(n) using a Hash Map?`, 2: `<strong>Example 1:</strong><br>Input: s = "()"<br>Output: true<br><br><strong>Follow-up:</strong> Can you solve it in O(n) using a Stack?`, 3: `<strong>Example 1:</strong><br>Input: list1 = [1,2,4], list2 = [1,3,4]<br>Output: [1,1,2,3,4,4]<br><br><strong>Follow-up:</strong> Can you solve it both iteratively and recursively?`, 4: `<strong>Example 1:</strong><br>Input: nums = [-2,1,-3,4,-1,2,1,-5,4]<br>Output: 6<br><br><strong>Follow-up:</strong> Can you solve it using Kadane's Algorithm in O(n)?`, 5: `<strong>Example 1:</strong><br>Input: capacity = 2, operations = [put(1,1), put(2,2), get(1)]<br>Output: [null, null, 1]<br><br><strong>Follow-up:</strong> Can you implement get and put each in O(1) average time?` };
+  const examples = { 1: `<strong>Example 1:</strong><br>Input: nums = [2,7,11,15], target = 9<br>Output: [0,1]<br><br><strong>Follow-up:</strong> Can you solve it in O(n) using a Hash Map?`, 2: `<strong>Example 1:</strong><br>Input: s = "()"<br>Output: true<br><br><strong>Follow-up:</strong> Can you solve it in O(n) using a Stack?`, 3: `<strong>Example 1:</strong><br>Input: list1 = [1,2,4], list2 = [1,3,4]<br>Output: [1,1,2,3,4,4]<br><br><strong>Follow-up:</strong> Can you solve it both iteratively and recursively?`, 4: `<strong>Example 1:</strong><br>Input: nums = [-2,1,-3,4,-1,2,1,-5,4]<br>Output: 6<br><br><strong>Follow-up:</strong> Can you solve it using Kadane's Algorithm in O(n)?`, 6: `<strong>Example 1:</strong><br>Input: adjList = [[2,4],[1,3],[2,4],[1,3]]<br>Output: [[2,4],[1,3],[2,4],[1,3]]<br><br><strong>Follow-up:</strong> Can you solve it using both BFS and DFS approaches?` };
   return examples[problem.id] || "<strong>Example:</strong><br>Solve this problem";
 }
 
@@ -2462,10 +2468,8 @@ function j2t(v) {
   if (Array.isArray(v)) {
     if (v.length === 0) return 'int[]';
     const inner = j2t(v[0]);
-    if (inner === 'int') return 'int[]';
-    if (inner === 'string') return 'string[]';
-    if (inner === 'bool') return 'bool[]';
-    return 'int[]';
+    if (inner === 'null') return 'int[]';
+    return inner + '[]';
   }
   if (typeof v === 'number') return 'int';
   if (typeof v === 'string') return 'string';
@@ -2496,12 +2500,23 @@ function genCppHarness(code, fn, tcs, isClass) {
     let callArgs = '';
     for (let j = 0; j < inTypes.length; j++) {
       if (j > 0) callArgs += ', ';
-      if (inTypes[j] === 'int[]') callArgs += 'vector<int>{' + tcs[i].input[j].map(x => x === null || x === undefined ? 0 : x).join(',') + '}';
+      if (inTypes[j] === 'int[]') callArgs += 'vector<int>{' + tcs[i].input[j].map(x => x).join(',') + '}';
+      else if (inTypes[j] === 'int[][]') callArgs += 'vector<vector<int>>{' + tcs[i].input[j].map(row => '{' + row.join(',') + '}').join(',') + '}';
       else callArgs += valToLit(tcs[i].input[j], inTypes[j]);
     }
-    if (isClass) {
-      s += '    ' + fn + ' __r(' + callArgs + ');\n';
-      s += '    cout << "{\\"index\\":' + i + ',\\"ran\\":true,\\"passed\\":true,\\"actual\\":\\"instance\\"}" << flush;\n';
+    s += '    auto __r = ' + fn + '(' + callArgs + ');\n';
+    s += '    cout << "{\\"index\\":' + i + ',\\"ran\\":true,\\"passed\\":";\n';
+    let compExpr = '';
+    if (outType === 'int[]') {
+      compExpr = '(__r == vector<int>{' + tcs[i].expected.map(x => x).join(',') + '} ? "true" : "false")';
+    } else if (outType === 'int[][]') {
+      compExpr = '(__r == vector<vector<int>>{' + tcs[i].expected.map(row => '{' + row.join(',') + '}').join(',') + '} ? "true" : "false")';
+    } else if (outType === 'int') {
+      compExpr = '(__r == ' + valToLit(tcs[i].expected, outType) + ' ? "true" : "false")';
+    } else if (outType === 'string') {
+      compExpr = '(__r == ' + valToLit(tcs[i].expected, outType) + ' ? "true" : "false")';
+    } else if (outType === 'bool') {
+      compExpr = '(__r == ' + valToLit(tcs[i].expected, outType) + ' ? "true" : "false")';
     } else {
       s += '    auto __r = ' + fn + '(' + callArgs + ');\n';
       s += '    cout << "{\\"index\\":' + i + ',\\"ran\\":true,\\"passed\\":";\n';
@@ -2532,19 +2547,16 @@ function genCppHarness(code, fn, tcs, isClass) {
 function genJavaHarness(code, fn, tcs, isClass) {
   const outType = j2t(tcs[0].expected);
   const inTypes = tcs[0].input.map(v => j2t(v));
-  const javaType = outType === 'int[]' ? 'int[]' : outType === 'string' ? 'String' : outType === 'bool' ? 'boolean' : 'int';
+  const javaType = outType === 'int[]' ? 'int[]' : outType === 'int[][]' ? 'int[][]' : outType === 'string' ? 'String' : outType === 'bool' ? 'boolean' : 'int';
   let s = code + '\n\nclass Main {\n';
-  if (isClass) {
-    s += '  static String __j(Object v) { return v == null ? "null" : "\\"instance\\""; }\n';
-  } else {
-    if (outType === 'int[]') {
-      s += '  static String __j(int[] v) {\n    if (v == null) return "null";\n    StringBuilder sb = new StringBuilder("[");\n    for (int i = 0; i < v.length; i++) { if (i > 0) sb.append(","); sb.append(v[i]); }\n    sb.append("]");\n    return sb.toString();\n  }\n';
-      s += '  static boolean __eq(int[] a, int[] b) {\n    if (a == null && b == null) return true;\n    if (a == null || b == null || a.length != b.length) return false;\n    for (int i = 0; i < a.length; i++) if (a[i] != b[i]) return false;\n    return true;\n  }\n';
-    } else {
-      s += '  static String __j(boolean v) { return String.valueOf(v); }\n';
-      s += '  static String __j(int v) { return String.valueOf(v); }\n';
-      s += '  static String __j(String v) { return v == null ? "null" : "\\"" + v + "\\""; }\n';
-    }
+  s += '  static String __j(boolean v) { return String.valueOf(v); }\n';
+  s += '  static String __j(int v) { return String.valueOf(v); }\n';
+  s += '  static String __j(String v) { return v == null ? "null" : "\\"" + v + "\\""; }\n';
+  s += '  static String __j(int[] v) {\n    if (v == null) return "null";\n    StringBuilder sb = new StringBuilder("[");\n    for (int i = 0; i < v.length; i++) { if (i > 0) sb.append(","); sb.append(v[i]); }\n    sb.append("]");\n    return sb.toString();\n  }\n';
+  s += '  static boolean __eq(int[] a, int[] b) {\n    if (a == null && b == null) return true;\n    if (a == null || b == null || a.length != b.length) return false;\n    for (int i = 0; i < a.length; i++) if (a[i] != b[i]) return false;\n    return true;\n  }\n';
+  if (outType === 'int[][]') {
+    s += '  static String __j(int[][] v) {\n    if (v == null) return "null";\n    StringBuilder sb = new StringBuilder("[");\n    for (int i = 0; i < v.length; i++) { if (i > 0) sb.append(","); sb.append(__j(v[i])); }\n    sb.append("]");\n    return sb.toString();\n  }\n';
+    s += '  static boolean __eq(int[][] a, int[][] b) {\n    if (a == null && b == null) return true;\n    if (a == null || b == null || a.length != b.length) return false;\n    for (int i = 0; i < a.length; i++) if (!__eq(a[i], b[i])) return false;\n    return true;\n  }\n';
   }
   s += '  public static void main(String[] args) {\n    StringBuilder __res = new StringBuilder("[");\n';
   for (let i = 0; i < tcs.length; i++) {
@@ -2553,12 +2565,15 @@ function genJavaHarness(code, fn, tcs, isClass) {
     let callArgs = '';
     for (let j = 0; j < inTypes.length; j++) {
       if (j > 0) callArgs += ', ';
-      if (inTypes[j] === 'int[]') callArgs += 'new int[]{' + tcs[i].input[j].map(x => x === null || x === undefined ? 0 : x).join(',') + '}';
+      if (inTypes[j] === 'int[]') callArgs += 'new int[]{' + tcs[i].input[j].map(x => x).join(',') + '}';
+      else if (inTypes[j] === 'int[][]') callArgs += 'new int[][]{' + tcs[i].input[j].map(row => '{' + row.join(',') + '}').join(',') + '}';
       else callArgs += valToLit(tcs[i].input[j], inTypes[j]);
     }
-    if (isClass) {
-      s += '      ' + fn + ' __r = new ' + fn + '(' + callArgs + ');\n';
-      s += '      __res.append("{\\"index\\":' + i + ',\\"ran\\":true,\\"passed\\":true,\\"actual\\":" + __j(__r) + "}");\n';
+    s += '      ' + javaType + ' __r = new Solution().' + fn + '(' + callArgs + ');\n';
+    if (outType === 'int[]') {
+      s += '      boolean __p = __eq(__r, new int[]{' + tcs[i].expected.map(x => x).join(',') + '});\n';
+    } else if (outType === 'int[][]') {
+      s += '      boolean __p = __eq(__r, new int[][]{' + tcs[i].expected.map(row => '{' + row.join(',') + '}').join(',') + '});\n';
     } else {
       s += '      ' + javaType + ' __r = new Solution().' + fn + '(' + callArgs + ');\n';
       if (outType === 'int[]') {
@@ -2585,6 +2600,10 @@ function genCHarness(code, fn, tcs, isClass) {
     s += 'void __j(int* v, int n, char* buf) {\n  if (v == NULL) { strcpy(buf, "null"); return; }\n  buf[0] = \'[\'; int pos = 1;\n  for (int i = 0; i < n; i++) { if (i > 0) buf[pos++] = \',\'; pos += sprintf(buf + pos, "%d", v[i]); }\n  buf[pos++] = \']\'; buf[pos] = 0;\n}\n';
     s += 'int __eq(int* a, int* b, int n) {\n  if (a == NULL && b == NULL) return 1;\n  if (a == NULL || b == NULL) return 0;\n  for (int i = 0; i < n; i++) if (a[i] != b[i]) return 0;\n  return 1;\n}\n';
   }
+  if (outType === 'int[][]') {
+    s += 'void __j(int** v, int* sizes, int n, char* buf) {\n  if (v == NULL) { strcpy(buf, "null"); return; }\n  buf[0] = \'[\'; int pos = 1;\n  for (int i = 0; i < n; i++) {\n    if (i > 0) buf[pos++] = \',\';\n    buf[pos++] = \'[\';\n    for (int j = 0; j < sizes[i]; j++) {\n      if (j > 0) buf[pos++] = \',\';\n      pos += sprintf(buf + pos, "%d", v[i][j]);\n    }\n    buf[pos++] = \']\';\n  }\n  buf[pos++] = \']\'; buf[pos] = 0;\n}\n';
+    s += 'int __eq(int** a, int* aSizes, int aLen, int** b, int* bSizes, int bLen) {\n  if (a == NULL && b == NULL) return 1;\n  if (a == NULL || b == NULL || aLen != bLen) return 0;\n  for (int i = 0; i < aLen; i++) {\n    if (aSizes[i] == 0 && bSizes[i] == 0) continue;\n    if (a[i] == NULL || b[i] == NULL || aSizes[i] != bSizes[i]) return 0;\n    for (int j = 0; j < aSizes[i]; j++) if (a[i][j] != b[i][j]) return 0;\n  }\n  return 1;\n}\n';
+  }
   s += 'int main() {\n  printf("__RESULT__:[");\n';
   for (let i = 0; i < tcs.length; i++) {
     if (i > 0) s += '  printf(",");\n';
@@ -2594,7 +2613,16 @@ function genCHarness(code, fn, tcs, isClass) {
       if (j > 0) callArgs += ', ';
       if (inTypes[j] === 'int[]') {
         const arr = tcs[i].input[j];
-        callArgs += '(int[]){' + arr.map(x => x === null || x === undefined ? 0 : x).join(',') + '}, ' + arr.length;
+        callArgs += '(int[]){' + arr.map(x => x).join(',') + '}, ' + arr.length;
+      } else if (inTypes[j] === 'int[][]') {
+        const arr = tcs[i].input[j];
+        if (arr.length === 0) {
+          callArgs += 'NULL, NULL, 0';
+        } else {
+          const rows = arr.map(row => row.length === 0 ? 'NULL' : '(int[]){' + row.join(',') + '}').join(',');
+          const sizes = arr.map(row => row.length).join(',');
+          callArgs += '(int*[]){' + rows + '}, (int[]){' + sizes + '}, ' + arr.length;
+        }
       } else callArgs += valToLit(tcs[i].input[j], inTypes[j]);
     }
     if (isClass) {
@@ -2605,7 +2633,19 @@ function genCHarness(code, fn, tcs, isClass) {
       s += '  int* __r = ' + fn + '(' + callArgs + ');\n';
       s += '  int __p = __eq(__r, (int[]){' + tcs[i].expected.map(x => x === null || x === undefined ? 0 : x).join(',') + '}, ' + expLen + ');\n';
       s += '  printf(__p ? "true" : "false");\n  printf(",\\"actual\\":");\n  char __buf[256]; __j(__r, ' + expLen + ', __buf); printf("%s", __buf);\n';
-      s += '  printf("}");\n';
+    } else if (outType === 'int[][]') {
+      const exp2d = tcs[i].expected;
+      const expLen = exp2d.length;
+      s += '  int** __r = ' + fn + '(' + callArgs + ');\n';
+      if (expLen === 0) {
+        s += '  int __p = 1;\n';
+        s += '  printf("true");\n  printf(",\\"actual\\":[]");\n';
+      } else {
+        const expRows = exp2d.map(row => row.length === 0 ? 'NULL' : '(int[]){' + row.join(',') + '}').join(',');
+        const expSizes = exp2d.map(row => row.length).join(',');
+        s += '  int __p = __eq(__r, (int[]){' + expSizes + '}, ' + expLen + ', (int*[]){' + expRows + '}, (int[]){' + expSizes + '}, ' + expLen + ');\n';
+        s += '  printf(__p ? "true" : "false");\n  printf(",\\"actual\\":");\n  char __buf[1024]; __j(__r, (int[]){' + expSizes + '}, ' + expLen + ', __buf); printf("%s", __buf);\n';
+      }
     } else {
       const cType = outType === 'string' ? 'char*' : 'int';
       s += '  printf("{\\"index\\":' + i + ',\\"ran\\":true,\\"passed\\":");\n';
@@ -2630,11 +2670,13 @@ function genCHarness(code, fn, tcs, isClass) {
 
 function genSwiftHarness(code, fn, tcs, isClass) {
   const outType = j2t(tcs[0].expected);
+  const inTypes = tcs[0].input.map(v => j2t(v));
   let s = 'import Foundation\n\n';
   s += code + '\n\n';
-  if (isClass) {
-    s += 'func __j(_ v: Any) -> String { return "\\"instance\\"" }\n';
-  } else if (outType === 'int[]') {
+  s += 'func __j(_ v: Int) -> String { return String(v) }\n';
+  s += 'func __j(_ v: Bool) -> String { return v ? "true" : "false" }\n';
+  s += 'func __j(_ v: String) -> String { return "\\"\\(v)\\"" }\n';
+  if (outType === 'int[]' || outType === 'int[][]') {
     s += 'func __j(_ v: [Int]) -> String {\n  if v.isEmpty { return "[]" }\n  return "[" + v.map(String.init).joined(separator: ",") + "]"\n}\n';
   } else if (outType === 'int') {
     s += 'func __j(_ v: Int) -> String { return String(v) }\n';
@@ -2643,20 +2685,25 @@ function genSwiftHarness(code, fn, tcs, isClass) {
   } else if (outType === 'string') {
     s += 'func __j(_ v: String) -> String { return "\\"\\(v)\\"" }\n';
   }
+  if (outType === 'int[][]') {
+    s += 'func __j(_ v: [[Int]]) -> String {\n  return "[" + v.map { __j($0) }.joined(separator: ",") + "]"\n}\n';
+  }
   s += 'var __res = "["\n';
   for (let i = 0; i < tcs.length; i++) {
     if (i > 0) s += '__res += ","\n';
     s += 'do {\n';
     let callArgs = '';
-    const inTypes = tcs[i].input.map(v => j2t(v));
     for (let j = 0; j < inTypes.length; j++) {
       if (j > 0) callArgs += ', ';
-      if (inTypes[j] === 'int[]') callArgs += '[' + tcs[i].input[j].map(x => x === null || x === undefined ? 0 : x).join(',') + '] as [Int]';
+      if (inTypes[j] === 'int[]') callArgs += '[' + tcs[i].input[j].map(x => x).join(',') + '] as [Int]';
+      else if (inTypes[j] === 'int[][]') callArgs += '[' + tcs[i].input[j].map(row => '[' + row.join(',') + ']').join(',') + '] as [[Int]]';
       else callArgs += valToLit(tcs[i].input[j], inTypes[j]);
     }
-    if (isClass) {
-      s += '  let __r = ' + fn + '(' + callArgs + ')\n';
-      s += '  __res += "{\\"index\\":' + i + ',\\"ran\\":true,\\"passed\\":true,\\"actual\\":" + __j(__r) + "}"\n';
+    s += '  let __r = ' + fn + '(' + callArgs + ')\n';
+    if (outType === 'int[]') {
+      s += '  let __p = __r == [' + tcs[i].expected.map(x => x).join(',') + ']\n';
+    } else if (outType === 'int[][]') {
+      s += '  let __p = __r == [' + tcs[i].expected.map(row => '[' + row.join(',') + ']').join(',') + ']\n';
     } else {
       s += '  let __r = ' + fn + '(' + callArgs + ')\n';
       if (outType === 'int[]') {
