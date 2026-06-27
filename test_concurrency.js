@@ -1,5 +1,24 @@
 import { processInBatches } from './backend/utils/concurrency.js';
 import { fetchBlobsConcurrently } from './backend/repository-analyzer/graphqlFetcher.js';
+import IORedis from 'ioredis';
+import { Worker } from 'bullmq';
+import fs from 'fs/promises';
+import path from 'path';
+
+// Override IORedis and Worker connection attempts before importing server.js
+IORedis.prototype.connect = function() {
+  return Promise.resolve();
+};
+
+Worker.prototype.run = function() {
+  return Promise.resolve();
+};
+
+// Set test environment so server.js doesn't boot immediately
+process.env.NODE_ENV = 'test';
+
+const { server } = await import('./server.js');
+const { createAccessToken } = await import('./backend/services/auth.service.js');
 
 async function testConcurrencyUtility() {
   console.log("=== Testing Concurrency Utility ===");
@@ -88,11 +107,87 @@ async function testGraphQLFetcher() {
   console.log(`Execution time: ${duration}ms`);
 }
 
+async function testMemoryStoreConcurrency() {
+  console.log("=== Testing Memory Store Concurrency ===");
+  
+  // 1. Generate token
+  const token = createAccessToken({ id: "test_concurrency_user", name: "Concurrency Tester", email: "test@example.com" });
+
+  // 2. Start server
+  const listenPromise = new Promise((resolve) => {
+    server.listen(0, '127.0.0.1', () => {
+      resolve(server.address().port);
+    });
+  });
+  const port = await listenPromise;
+  const url = `http://127.0.0.1:${port}/api/memory/log`;
+  console.log(`Server started on port ${port}`);
+
+  // 3. Setup initial state in MEMORY_FILE
+  const DATA_DIR = path.join(process.cwd(), "data");
+  const MEMORY_FILE = path.join(DATA_DIR, "memory.json");
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  // Clean memory file
+  await fs.writeFile(MEMORY_FILE, JSON.stringify({}));
+
+  // 4. Send multiple concurrent updates
+  const topics = ["React", "Vue", "Angular", "Svelte", "Solid", "Next.js", "Nuxt.js", "Gatsby", "Vite", "Webpack"];
+  
+  const requests = topics.map(topic => {
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Cookie": `aiv_session=${token}`
+      },
+      body: JSON.stringify({ topic, quality: 4 })
+    }).then(async r => {
+      const text = await r.text();
+      if (!r.ok) {
+        throw new Error(`Request failed with status ${r.status}: ${text}`);
+      }
+      return JSON.parse(text);
+    });
+  });
+
+  await Promise.all(requests);
+  console.log("All concurrent requests completed.");
+
+  // 5. Read MEMORY_FILE and verify it has all topics
+  const raw = await fs.readFile(MEMORY_FILE, "utf8");
+  const store = JSON.parse(raw);
+  
+  const userCards = store["test_concurrency_user"];
+  if (!userCards) {
+    throw new Error("No cards found for test user in memory store!");
+  }
+
+  const savedTopics = Object.keys(userCards);
+  console.log("Saved topics in store:", savedTopics);
+
+  for (const topic of topics) {
+    if (!userCards[topic]) {
+      throw new Error(`Topic '${topic}' was lost during concurrent updates!`);
+    }
+  }
+
+  console.log("✓ Concurrency test passed: All concurrent updates successfully merged and saved!");
+
+  // 6. Close server
+  await new Promise((resolve) => server.close(resolve));
+  
+  // 7. Cleanup memory file
+  try {
+    await fs.rm(MEMORY_FILE, { force: true });
+  } catch {}
+}
+
 async function runTests() {
   try {
     await testConcurrencyUtility();
     await testEdgeCases();
     await testGraphQLFetcher();
+    await testMemoryStoreConcurrency();
     console.log("\nAll concurrency tests passed successfully!");
   } catch (err) {
     console.error("Test failed:", err);
