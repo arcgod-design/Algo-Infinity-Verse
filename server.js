@@ -1559,6 +1559,8 @@ if (pathname === "/api/forgot-password" && req.method === "POST") {
     }
   }
 
+
+
   if (pathname === "/api/user/profile" && req.method === "GET") {
     const session = getSession(req);
     

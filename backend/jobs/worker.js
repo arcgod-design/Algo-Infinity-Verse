@@ -5,6 +5,7 @@ import { VCSFactory } from '../vcs/VCSFactory.js';
 import { batchStore, redisAvailable } from './queue.js';
 
 let auditWorker = null;
+
 const conn = redisAvailable
   ? new IORedis(process.env.REDIS_URL || 'redis://127.0.0.1:6379', {
       maxRetriesPerRequest: null,
@@ -53,6 +54,7 @@ if (conn) {
     console.warn('Worker Redis Connection Error:', err.message);
   });
 
+  // Event listeners for tracking batch progress
   auditWorker.on('completed', (job, result) => {
     const { batchId } = job.data;
     const batch = batchStore.get(batchId);
