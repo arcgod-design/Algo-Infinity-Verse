@@ -2876,6 +2876,22 @@ async function serveStatic(req, res, pathname) {
     const fileStat = await fs.stat(target);
     const ext = path.extname(target);
 
+    // ── Server-side auth gate ────────────────────────────────────────────────
+    // A page may declare that it requires authentication with
+    // <meta name="auth-required" content="true">. Enforce it here so access is
+    // controlled by the server regardless of which URL reached the file — the
+    // client-side gate (auth-gate.js) is cosmetic only. Read the HTML once and
+    // reuse it below to avoid a second read.
+    let htmlContent = null;
+    if (ext === ".html") {
+      htmlContent = await fs.readFile(target, "utf-8");
+      const requiresAuth =
+        /<meta\b(?=[^>]*\sname\s*=\s*["']auth-required["'])(?=[^>]*\scontent\s*=\s*["']true["'])[^>]*>/i.test(htmlContent);
+      if (requiresAuth && !getSession(req)) {
+        return redirect(res, `/login?next=${encodeURIComponent(pathname)}`);
+      }
+    }
+
     // ETag generation based on file size and mtime
     const mtimeMs = fileStat.mtime.getTime();
     const size = fileStat.size;
@@ -2900,15 +2916,15 @@ async function serveStatic(req, res, pathname) {
       return res.end();
     }
 
-    let content = await fs.readFile(target);
+    let content;
 
     if (ext === ".html") {
       // Generate a dynamic nonce for CSP script elements
       const nonce = crypto.randomBytes(16).toString("base64");
-      
-      // Inject nonce into script tags in the HTML content
-      let htmlStr = content.toString("utf-8");
-      htmlStr = htmlStr.replace(/<script(\s|>)/gi, `<script nonce="${nonce}"$1`);
+
+      // Inject nonce into script tags in the HTML content (htmlContent was read
+      // by the auth gate above).
+      const htmlStr = htmlContent.replace(/<script(\s|>)/gi, `<script nonce="${nonce}"$1`);
       content = Buffer.from(htmlStr, "utf-8");
 
       headers["Content-Security-Policy"] = 
@@ -2921,6 +2937,8 @@ async function serveStatic(req, res, pathname) {
         `frame-src 'self' https://*.firebaseapp.com; ` +
         `object-src 'none'; ` +
         `base-uri 'self';`;
+    } else {
+      content = await fs.readFile(target);
     }
 
     headers["Content-Type"] = mimeTypes[ext] || "application/octet-stream";
