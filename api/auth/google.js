@@ -44,46 +44,22 @@ function sessionCookie(token) {
 }
 
 async function verifyGoogleIdToken(idToken) {
-  const apiKey = process.env.FIREBASE_API_KEY;
-  if (!apiKey) {
-    console.error("[google-auth] FIREBASE_API_KEY not configured");
-    return null;
-  }
-
   try {
-    const response = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(apiKey)}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
-      }
-    );
-
-    if (!response.ok) {
-      const text = await response.text();
-      console.error("[google-auth] lookup HTTP error:", response.status, text);
-      return null;
-    }
-
-    const data = await response.json();
-
-    if (!data.users || data.users.length === 0) {
-      console.error("[google-auth] no users in lookup response");
-      return null;
-    }
-
-    const user = data.users[0];
-    console.log("[google-auth] lookup success for:", user.email);
+    // Cryptographically verify the Google ID token with the Firebase Admin SDK.
+    // verifyIdToken checks the RS256 signature against Google's public keys and
+    // validates the aud (project id), iss (securetoken.google.com/<project>) and
+    // exp claims — far stronger than the previous Identity Toolkit REST lookup.
+    const { getAuth } = await import("firebase-admin/auth");
+    const t = await getAuth().verifyIdToken(idToken);
     return {
-      uid: user.localId,
-      email: user.email,
-      name: user.displayName || user.email,
-      picture: user.photoUrl || null,
-      emailVerified: user.emailVerified === true,
+      uid: t.uid,
+      email: t.email,
+      name: t.name || t.email,
+      picture: t.picture || null,
+      emailVerified: t.email_verified === true,
     };
   } catch (err) {
-    console.error("[google-auth] lookup exception:", err);
+    console.error("[google-auth] verifyIdToken failed:", err.message);
     return null;
   }
 }
@@ -121,9 +97,31 @@ export default async function handler(req, res) {
     const cleanEmail = (email || "").toLowerCase().trim();
     const displayName = name || cleanEmail.split("@")[0] || "Learner";
 
+    // Enforce a Google-verified email so the email-based matching below is safe.
+    if (!cleanEmail) {
+      return res.status(400).json({ error: "Google token has no email." });
+    }
+    if (!decoded.emailVerified) {
+      return res.status(403).json({ error: "Google account email is not verified." });
+    }
+
     let user = null;
     const allUsers = await readUsers();
-    user = allUsers.find(u => u.firebaseUid === uid) || allUsers.find(u => u.email === cleanEmail);
+    user = allUsers.find(u => u.firebaseUid === uid);
+    if (!user) {
+      const byEmail = allUsers.find(u => u.email === cleanEmail);
+      if (byEmail) {
+        // Only link to an account that is itself Google-provisioned; never
+        // silently merge a Google login into a password account (takeover risk).
+        const isGoogleAccount = byEmail.authProvider === "google" || !!byEmail.firebaseUid;
+        if (!isGoogleAccount) {
+          return res.status(409).json({
+            error: "An account with this email already exists. Please sign in with your password.",
+          });
+        }
+        user = byEmail;
+      }
+    }
 
     if (user) {
       user.name = displayName;

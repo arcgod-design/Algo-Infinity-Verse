@@ -1371,37 +1371,33 @@ if (pathname === "/api/session" && req.method === "GET") {
 
       let decoded;
       try {
-        const apiKey = process.env.FIREBASE_API_KEY;
-        if (!apiKey) throw new Error("FIREBASE_API_KEY not configured");
-
-        const tokenResponse = await fetch(
-          `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(apiKey)}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ idToken }),
-          }
-        );
-
-        if (!tokenResponse.ok) {
-          const errText = await tokenResponse.text();
-          throw new Error(`Lookup failed: ${tokenResponse.status} ${errText}`);
-        }
-
-        const tokenData = await tokenResponse.json();
-        if (!tokenData.users || tokenData.users.length === 0) throw new Error("No user found for token");
-
-        const u = tokenData.users[0];
+        // Cryptographically verify the Google ID token with the Firebase Admin
+        // SDK. verifyIdToken checks the RS256 signature against Google's public
+        // keys and validates the aud (project id), iss
+        // (securetoken.google.com/<project>) and exp claims — far stronger than
+        // the previous Identity Toolkit REST lookup with the public API key.
+        const { getAuth } = await import("firebase-admin/auth");
+        const decodedToken = await getAuth().verifyIdToken(idToken);
         decoded = {
-          uid: u.localId,
-          email: u.email,
-          name: u.displayName || u.email,
-          picture: u.photoUrl || null,
-          emailVerified: u.emailVerified === true,
+          uid: decodedToken.uid,
+          email: decodedToken.email,
+          name: decodedToken.name || decodedToken.email,
+          picture: decodedToken.picture || null,
+          emailVerified: decodedToken.email_verified === true,
         };
       } catch (verifyError) {
         console.error("Token verification failed:", verifyError.message);
         return sendJson(res, 401, { error: "Invalid token" });
+      }
+
+      // Enforce a Google-verified email. Only an email Google itself has
+      // verified is trusted, which is what makes the email-based account
+      // matching below safe from takeover.
+      if (!decoded.email) {
+        return sendJson(res, 400, { error: "Google token has no email." });
+      }
+      if (!decoded.emailVerified) {
+        return sendJson(res, 403, { error: "Google account email is not verified." });
       }
 
       const { uid, email, name, picture } = decoded;
@@ -1426,7 +1422,18 @@ if (pathname === "/api/session" && req.method === "GET") {
           .limit(1)
           .get();
         if (!emailSnapshot.empty) {
-          user = { ...emailSnapshot.docs[0].data(), id: emailSnapshot.docs[0].id };
+          const existing = { ...emailSnapshot.docs[0].data(), id: emailSnapshot.docs[0].id };
+          // Only link to an account that is itself Google-provisioned. Silently
+          // merging a Google login into a password account would let anyone with
+          // a matching Google address take it over (local signups are not
+          // email-verified), so require the user to sign in with their password.
+          const isGoogleAccount = existing.authProvider === "google" || !!existing.firebaseUid;
+          if (!isGoogleAccount) {
+            return sendJson(res, 409, {
+              error: "An account with this email already exists. Please sign in with your password.",
+            });
+          }
+          user = existing;
         }
       }
 
