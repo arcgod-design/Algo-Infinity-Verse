@@ -549,18 +549,12 @@ export function initQuiz({ containerId, questions, duration = 60 }) {
 }
 
 // --- EXPORT FUNCTIONS ---
-export { 
-  startQuizTimer, 
-  stopQuizTimer, 
-  resetQuizTimer, 
-  updateTimerDisplay,
-  getTimerStatus,
-  animateScore,
-  animateScoreStepBased,
-  animateXP,
-  triggerCelebration,
-  createConfetti
-};
+// initQuiz is already exported inline above. The quiz timer/score/animation
+// helpers (startQuizTimer, animateScore, etc.) are declared inside initQuiz()
+// as closures and cannot be re-exported here — listing them produced a static
+// "Export 'animateScore' is not defined in module" SyntaxError that blocked the
+// whole module. Export only the module-scope getTimerStatus.
+export { getTimerStatus };
 
 function getTimerStatus() {
   return {
