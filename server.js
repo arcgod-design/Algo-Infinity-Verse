@@ -2370,7 +2370,13 @@ if (pathname === "/api/forgot-password" && req.method === "POST") {
     try { payload = await readJsonBody(req); } catch { return sendJson(res, 400, { error: "Invalid JSON." }); }
 
     const existing = payload.existing || { repetitions: 0, easeFactor: 2.5, interval: 0 };
-    const quality = parseInt(payload.quality) !== undefined ? parseInt(payload.quality) : 3;
+    // parseInt() returns NaN (never undefined) for missing/non-numeric input,
+    // so guard with Number.isInteger and fall back to the SM-2 default of 3,
+    // clamped to the valid quality range (0-5) — otherwise applySM2 persists NaN.
+    const parsedQuality = Number.parseInt(payload.quality, 10);
+    const quality = Number.isInteger(parsedQuality)
+      ? Math.max(0, Math.min(5, parsedQuality))
+      : 3;
     const updated = applySM2(existing, quality);
     updated.problemId = parseInt(problemId) || 0;
 
