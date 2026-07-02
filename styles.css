@@ -7280,7 +7280,7 @@ html.light-mode .dropdown-menu {
 }
 
 /* OUTPUT HEADER */
-.output-header {
+.perl-output-card .output-header {
   display: flex;
   justify-content: space-between;
   color: #fff;
