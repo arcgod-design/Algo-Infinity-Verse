@@ -23,7 +23,7 @@
 </head>
 <body data-page="b-tree-visualizer">
   <div id="loading-screen"><div class="loader"><div class="infinity-loader">∞</div><h2>Algo Infinity Verse</h2><div class="loading-bar"><div class="loading-progress"></div></div></div></div>
-  <button id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn"><i class="fas fa-circle-chevron-up"></i></button>
+  <button type="button" id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn"><i class="fas fa-circle-chevron-up"></i></button>
   <div id="navbar-placeholder"></div>
 
   <section id="home" class="hero visualizer-hero bt-hero">
@@ -55,15 +55,15 @@
           <div class="input-row"><input type="number" id="btSearchKey" placeholder="e.g., 17" /></div>
         </div>
         <div class="button-grid bt-action-grid">
-          <button class="btn-vis btn-insert" id="btInsertBtn"><i class="fas fa-plus"></i> Insert</button>
-          <button class="btn-vis btn-search" id="btSearchBtn"><i class="fas fa-search"></i> Search</button>
+          <button type="button" class="btn-vis btn-insert" id="btInsertBtn"><i class="fas fa-plus"></i> Insert</button>
+          <button type="button" class="btn-vis btn-search" id="btSearchBtn"><i class="fas fa-search"></i> Search</button>
         </div>
         <div class="button-grid bt-playback-grid">
-          <button class="btn-vis" id="btPrevBtn" disabled><i class="fas fa-step-backward"></i> Previous</button>
-          <button class="btn-vis" id="btNextBtn" disabled><i class="fas fa-step-forward"></i> Next</button>
-          <button class="btn-vis" id="btPlayBtn" disabled><i class="fas fa-play"></i> Play</button>
-          <button class="btn-vis" id="btPauseBtn" disabled><i class="fas fa-pause"></i> Pause</button>
-          <button class="btn-vis btn-danger" id="btResetBtn"><i class="fas fa-undo"></i> Reset</button>
+          <button type="button" class="btn-vis" id="btPrevBtn" disabled><i class="fas fa-step-backward"></i> Previous</button>
+          <button type="button" class="btn-vis" id="btNextBtn" disabled><i class="fas fa-step-forward"></i> Next</button>
+          <button type="button" class="btn-vis" id="btPlayBtn" disabled><i class="fas fa-play"></i> Play</button>
+          <button type="button" class="btn-vis" id="btPauseBtn" disabled><i class="fas fa-pause"></i> Pause</button>
+          <button type="button" class="btn-vis btn-danger" id="btResetBtn"><i class="fas fa-undo"></i> Reset</button>
         </div>
         <div class="status-box" id="btStatusBox" aria-live="polite">Insert a key or search for one to begin.</div>
         <div class="explanation-box">

@@ -88,12 +88,12 @@
   </div>
 
   <!-- Scroll to Top Button -->
-  <button id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
+  <button type="button" id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
     <i class="fas fa-circle-chevron-up"></i>
   </button>
 
   <!-- Back to Top Button -->
-  <button id="backToTop" class="back-to-top" aria-label="Back to top" title="Scroll back to top">
+  <button type="button" id="backToTop" class="back-to-top" aria-label="Back to top" title="Scroll back to top">
     <svg class="progress-ring" viewBox="0 0 44 44" aria-hidden="true">
       <circle class="progress-ring-bg" cx="22" cy="22" r="20" />
       <circle class="progress-ring-fill" cx="22" cy="22" r="20" />
@@ -102,7 +102,7 @@
   </button>
 
   <!-- ===== KEYBOARD SHORTCUTS BUTTON ===== -->
-  <button id="shortcutsToggle" class="shortcuts-toggle-btn" aria-label="Keyboard shortcuts"
+  <button type="button" id="shortcutsToggle" class="shortcuts-toggle-btn" aria-label="Keyboard shortcuts"
     title="Keyboard Shortcuts (Press ?)">
     <i class="fas fa-keyboard"></i>
     <span>Shortcuts</span>
@@ -117,7 +117,7 @@
         <h3 id="shortcutsModalTitle">
           <i class="fas fa-keyboard"></i> Keyboard Shortcuts
         </h3>
-        <button class="modal-close" id="shortcutsModalClose" aria-label="Close shortcuts">
+        <button type="button" class="modal-close" id="shortcutsModalClose" aria-label="Close shortcuts">
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -248,7 +248,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" id="shortcutsModalCloseBtn">
+        <button type="button" class="btn btn-secondary" id="shortcutsModalCloseBtn">
           Close <kbd>Esc</kbd>
         </button>
       </div>
@@ -336,7 +336,7 @@
   <!-- Auth Gate Modal -->
   <div class="modal" id="authGateModal" role="dialog" aria-modal="true" aria-labelledby="authGateTitle">
     <div class="modal-content auth-gate-modal-content">
-      <button class="modal-close" id="authGateModalClose" aria-label="Close">
+      <button type="button" class="modal-close" id="authGateModalClose" aria-label="Close">
         &times;
       </button>
       <div class="auth-gate-icon">
@@ -371,7 +371,7 @@
         </button>
       </div>
       <p class="auth-gate-dismiss">
-        <button class="auth-gate-dismiss-btn" id="authGateDismiss">
+        <button type="button" class="auth-gate-dismiss-btn" id="authGateDismiss">
           Maybe later
         </button>
       </p>

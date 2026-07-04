@@ -88,7 +88,7 @@
                         <input type="range" id="cgroupLimit" min="128" max="2048" value="512" step="128">
                         <div class="range-val"><span id="cgroupLimitVal">512</span> MB</div>
                     </div>
-                    <button class="btn btn-primary w-100" id="btnCreateContainer">
+                    <button type="button" class="btn btn-primary w-100" id="btnCreateContainer">
                         <code>docker run -m <span id="btnMemVal">512</span>m</code>
                     </button>
                 </div>
@@ -100,8 +100,8 @@
                     <div class="input-group mt-2">
                         <label>Spawn Process inside Namespace</label>
                         <div class="action-grid">
-                            <button class="btn btn-outline" id="btnSpawnNginx"><code>nginx</code></button>
-                            <button class="btn btn-outline" id="btnSpawnNode"><code>node app.js</code></button>
+                            <button type="button" class="btn btn-outline" id="btnSpawnNginx"><code>nginx</code></button>
+                            <button type="button" class="btn btn-outline" id="btnSpawnNode"><code>node app.js</code></button>
                         </div>
                     </div>
 
@@ -109,12 +109,12 @@
                         <label>Allocate Memory (Simulate Load)</label>
                         <p class="desc-text" style="font-size: 0.75rem; margin-top:0;">Push RAM past the cgroup limit to trigger the OOM Killer.</p>
                         <div class="action-grid">
-                            <button class="btn btn-warning" id="btnAlloc50">+50 MB</button>
-                            <button class="btn btn-danger" id="btnAlloc200">+200 MB</button>
+                            <button type="button" class="btn btn-warning" id="btnAlloc50">+50 MB</button>
+                            <button type="button" class="btn btn-danger" id="btnAlloc200">+200 MB</button>
                         </div>
                     </div>
                     
-                    <button class="btn btn-outline-danger w-100 mt-3" id="btnKillContainer">
+                    <button type="button" class="btn btn-outline-danger w-100 mt-3" id="btnKillContainer">
                         <code>docker rm -f</code>
                     </button>
                 </div>

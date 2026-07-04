@@ -137,7 +137,7 @@
       const container = document.getElementById('profileContainer');
 
       if (info.notFound) {
-        container.innerHTML = '<div class="profile-card"><h2>Contributor not found</h2><button onclick="window.location.href=\'/contributors/index.html\'" class="btn btn-secondary">Back to Contributors</button></div>';
+        container.innerHTML = '<div class="profile-card"><h2>Contributor not found</h2><button type="button" onclick="window.location.href=\'/contributors/index.html\'" class="btn btn-secondary">Back to Contributors</button></div>';
         return;
       }
 
@@ -151,7 +151,7 @@
         '</div>' +
         '<div class="profile-buttons">' +
           '<a href="' + info.profile + '" target="_blank" rel="noopener" class="btn btn-primary">View GitHub Profile</a>' +
-          '<button onclick="window.location.href=\'/contributors/index.html\'" class="btn btn-secondary">Back</button>' +
+          '<button type="button" onclick="window.location.href=\'/contributors/index.html\'" class="btn btn-secondary">Back</button>' +
         '</div>' +
       '</div>';
     }
@@ -186,7 +186,7 @@
           }
           msg = 'GitHub API rate limit reached and no local fallback found.';
         }
-        container.innerHTML = '<div class="profile-card"><p class="error-text">' + msg + '</p><button onclick="window.location.href=\'/contributors/index.html\'" class="btn btn-secondary">Back</button></div>';
+        container.innerHTML = '<div class="profile-card"><p class="error-text">' + msg + '</p><button type="button" onclick="window.location.href=\'/contributors/index.html\'" class="btn btn-secondary">Back</button></div>';
       }
     })();
   </script>

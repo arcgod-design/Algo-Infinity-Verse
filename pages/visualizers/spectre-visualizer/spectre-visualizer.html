@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <button id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
+    <button type="button" id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
       <i class="fas fa-circle-chevron-up"></i>
     </button>
 
@@ -48,22 +48,22 @@
 
         <!-- Stage navigator -->
         <div class="sv-stage-nav">
-          <button class="sv-stage-btn active" data-stage="0">
+          <button type="button" class="sv-stage-btn active" data-stage="0">
             <span class="sv-stage-num">01</span>
             <span class="sv-stage-label">Speculative Execution</span>
           </button>
           <div class="sv-stage-connector"></div>
-          <button class="sv-stage-btn" data-stage="1">
+          <button type="button" class="sv-stage-btn" data-stage="1">
             <span class="sv-stage-num">02</span>
             <span class="sv-stage-label">Train the Predictor</span>
           </button>
           <div class="sv-stage-connector"></div>
-          <button class="sv-stage-btn" data-stage="2">
+          <button type="button" class="sv-stage-btn" data-stage="2">
             <span class="sv-stage-num">03</span>
             <span class="sv-stage-label">Speculative OOB Read</span>
           </button>
           <div class="sv-stage-connector"></div>
-          <button class="sv-stage-btn" data-stage="3">
+          <button type="button" class="sv-stage-btn" data-stage="3">
             <span class="sv-stage-num">04</span>
             <span class="sv-stage-label">Cache Timing Leak</span>
           </button>
@@ -104,9 +104,9 @@
                 <div class="sv-visual-title">CPU Pipeline</div>
                 <canvas id="svCanvas0" class="sv-canvas"></canvas>
                 <div class="sv-playback-row">
-                  <button class="sv-pb-btn" id="svPrev0" disabled><i class="fas fa-backward-step"></i></button>
-                  <button class="sv-pb-btn sv-pb-play" id="svPlay0"><i class="fas fa-play"></i></button>
-                  <button class="sv-pb-btn" id="svNext0"><i class="fas fa-forward-step"></i></button>
+                  <button type="button" class="sv-pb-btn" id="svPrev0" disabled><i class="fas fa-backward-step"></i></button>
+                  <button type="button" class="sv-pb-btn sv-pb-play" id="svPlay0"><i class="fas fa-play"></i></button>
+                  <button type="button" class="sv-pb-btn" id="svNext0"><i class="fas fa-forward-step"></i></button>
                   <span class="sv-pb-label" id="svLabel0">Click Play to begin</span>
                 </div>
                 <div class="sv-state-panel">
@@ -147,7 +147,7 @@
                 <div class="sv-train-tracker">
                   <div class="sv-train-title">Training Iterations</div>
                   <div class="sv-train-boxes" id="svTrainBoxes"></div>
-                  <button class="btn sv-btn-primary sv-train-btn" id="svTrainBtn">
+                  <button type="button" class="btn sv-btn-primary sv-train-btn" id="svTrainBtn">
                     <i class="fas fa-play"></i> Train Predictor (5 in-bounds calls)
                   </button>
                   <div class="sv-train-status" id="svTrainStatus">Predictor state: <span id="svPredState">Untrained (neutral)</span></div>
@@ -197,7 +197,7 @@
                   </div>
                 </div>
 
-                <button class="btn sv-btn-primary sv-oob-btn" id="svOobBtn">
+                <button type="button" class="btn sv-btn-primary sv-oob-btn" id="svOobBtn">
                   <i class="fas fa-bolt"></i> Execute Attack Step
                 </button>
 
@@ -224,7 +224,7 @@
                 <p class="sv-exp-text">The attacker now has no architectural evidence of anything. But one cache line from array2 is hot. The attacker <strong>times</strong> access to <code>array2[i × 512]</code> for every possible byte value i=0..255. The one that hits the cache answers in ~5 cycles instead of ~200 cycles. That i is the secret byte.</p>
 
                 <div class="sv-timing-controls">
-                  <button class="btn sv-btn-primary sv-timing-btn" id="svTimingBtn">
+                  <button type="button" class="btn sv-btn-primary sv-timing-btn" id="svTimingBtn">
                     <i class="fas fa-stopwatch"></i> Measure All 256 Cache Lines
                   </button>
                   <div class="sv-secret-picker">
@@ -258,7 +258,7 @@
 
         <!-- Stage progress / prev-next -->
         <div class="sv-nav-row">
-          <button class="btn btn-secondary sv-prev-btn" id="svPrevStage" disabled>
+          <button type="button" class="btn btn-secondary sv-prev-btn" id="svPrevStage" disabled>
             <i class="fas fa-chevron-left"></i> Previous
           </button>
           <div class="sv-stage-dots">
@@ -267,7 +267,7 @@
             <span class="sv-dot" data-stage="2"></span>
             <span class="sv-dot" data-stage="3"></span>
           </div>
-          <button class="btn sv-btn-primary sv-next-btn" id="svNextStage">
+          <button type="button" class="btn sv-btn-primary sv-next-btn" id="svNextStage">
             Next <i class="fas fa-chevron-right"></i>
           </button>
         </div>

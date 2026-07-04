@@ -43,10 +43,10 @@
                     <h4><i class="fas fa-plus-circle"></i> Memory Allocation</h4>
                     <p class="desc-text" style="font-size: 0.75rem;">New objects are always allocated in the <strong>Eden Space</strong>.</p>
                     <div class="action-grid">
-                        <button class="btn btn-primary" id="btnAllocate">
+                        <button type="button" class="btn btn-primary" id="btnAllocate">
                             <i class="fas fa-box"></i> Allocate Object
                         </button>
-                        <button class="btn btn-outline" id="btnAllocBatch">
+                        <button type="button" class="btn btn-outline" id="btnAllocBatch">
                             <i class="fas fa-boxes"></i> Allocate Batch (x4)
                         </button>
                     </div>
@@ -56,10 +56,10 @@
                     <h4><i class="fas fa-broom"></i> Manual GC Triggers</h4>
                     <p class="desc-text" style="font-size: 0.75rem;">GC normally runs automatically when spaces fill up, but you can force it here.</p>
                     <div class="action-grid">
-                        <button class="btn btn-warning" id="btnMinorGC">
+                        <button type="button" class="btn btn-warning" id="btnMinorGC">
                             <i class="fas fa-recycle"></i> Minor GC (Scavenger)
                         </button>
-                        <button class="btn btn-danger" id="btnMajorGC">
+                        <button type="button" class="btn btn-danger" id="btnMajorGC">
                             <i class="fas fa-dumpster-fire"></i> Major GC (Mark-Compact)
                         </button>
                     </div>

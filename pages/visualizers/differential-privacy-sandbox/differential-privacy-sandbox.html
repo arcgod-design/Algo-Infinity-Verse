@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <button id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
+    <button type="button" id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
       <i class="fas fa-circle-chevron-up"></i>
     </button>
 
@@ -59,7 +59,7 @@
                   <option value="salary">Salary ($k)</option>
                   <option value="health">Health Flag (0/1)</option>
                 </select>
-                <button class="dp-btn-sm" id="dpShuffleBtn">
+                <button type="button" class="dp-btn-sm" id="dpShuffleBtn">
                   <i class="fas fa-shuffle"></i> Regenerate
                 </button>
               </div>
@@ -116,10 +116,10 @@
                 <label class="dp-threshold-label">Threshold:</label>
                 <input type="number" id="dpThreshold" class="dp-thresh-input" value="50" min="0" aria-label="Threshold" />
               </div>
-              <button class="btn dp-btn-primary dp-query-btn" id="dpQueryBtn">
+              <button type="button" class="btn dp-btn-primary dp-query-btn" id="dpQueryBtn">
                 <i class="fas fa-bolt"></i> Query Once (with DP noise)
               </button>
-              <button class="btn btn-secondary dp-query-btn" id="dpQuery100Btn">
+              <button type="button" class="btn btn-secondary dp-query-btn" id="dpQuery100Btn">
                 <i class="fas fa-redo"></i> Query 100× (budget composition)
               </button>
             </div>
@@ -177,7 +177,7 @@
           <div class="dp-attacker-controls">
             <span class="dp-att-label">Target individual:</span>
             <select id="dpTargetPerson" class="dp-select" aria-label="Target person"></select>
-            <button class="btn dp-btn-primary dp-att-btn" id="dpAttackBtn">
+            <button type="button" class="btn dp-btn-primary dp-att-btn" id="dpAttackBtn">
               <i class="fas fa-crosshairs"></i> Run Attack Demo
             </button>
           </div>

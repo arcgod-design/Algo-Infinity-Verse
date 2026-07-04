@@ -549,7 +549,7 @@
             toast.className = `message-box ${type}`;
             toast.innerHTML = `
                 <span>${message}</span>
-                <button class="message-close" onclick="this.parentElement.remove()">&times;</button>
+                <button type="button" class="message-close" onclick="this.parentElement.remove()">&times;</button>
             `;
             document.body.appendChild(toast);
             

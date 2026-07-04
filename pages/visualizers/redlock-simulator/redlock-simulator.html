@@ -43,10 +43,10 @@
                 </div>
 
                 <div class="action-grid mt-3">
-                    <button class="btn btn-primary w-100" id="btnLockA">
+                    <button type="button" class="btn btn-primary w-100" id="btnLockA">
                         <i class="fas fa-key"></i> Request Lock
                     </button>
-                    <button class="btn btn-outline w-100" id="btnUnlockA" disabled>
+                    <button type="button" class="btn btn-outline w-100" id="btnUnlockA" disabled>
                         <i class="fas fa-unlock"></i> Release Lock
                     </button>
                 </div>
@@ -54,7 +54,7 @@
                 <div class="chaos-box mt-3">
                     <h4><i class="fas fa-skull-crossbones"></i> Client Chaos</h4>
                     <p>Simulate a heavy Garbage Collection (GC) pause. The client freezes, but real time (and node TTLs) continue to pass.</p>
-                    <button class="btn btn-warning w-100" id="btnPauseA">Trigger 6s GC Pause</button>
+                    <button type="button" class="btn btn-warning w-100" id="btnPauseA">Trigger 6s GC Pause</button>
                 </div>
 
                 <div class="client-logs" id="logsA">
@@ -84,8 +84,8 @@
                         <div class="node-state" id="state-0">FREE</div>
                         <div class="ttl-bar-bg"><div class="ttl-bar-fill" id="ttl-0"></div></div>
                         <div class="node-controls">
-                            <button class="btn-icon" data-action="toggle" data-node="0" title="Toggle Power"><i class="fas fa-power-off"></i></button>
-                            <button class="btn-icon" data-action="drift" data-node="0" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
+                            <button type="button" class="btn-icon" data-action="toggle" data-node="0" title="Toggle Power"><i class="fas fa-power-off"></i></button>
+                            <button type="button" class="btn-icon" data-action="drift" data-node="0" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
                         </div>
                         <div class="drift-warning hidden" id="drift-0">Clock Drift Active</div>
                     </div>
@@ -95,8 +95,8 @@
                         <div class="node-state" id="state-1">FREE</div>
                         <div class="ttl-bar-bg"><div class="ttl-bar-fill" id="ttl-1"></div></div>
                         <div class="node-controls">
-                            <button class="btn-icon" data-action="toggle" data-node="1" title="Toggle Power"><i class="fas fa-power-off"></i></button>
-                            <button class="btn-icon" data-action="drift" data-node="1" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
+                            <button type="button" class="btn-icon" data-action="toggle" data-node="1" title="Toggle Power"><i class="fas fa-power-off"></i></button>
+                            <button type="button" class="btn-icon" data-action="drift" data-node="1" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
                         </div>
                         <div class="drift-warning hidden" id="drift-1">Clock Drift Active</div>
                     </div>
@@ -106,8 +106,8 @@
                         <div class="node-state" id="state-2">FREE</div>
                         <div class="ttl-bar-bg"><div class="ttl-bar-fill" id="ttl-2"></div></div>
                         <div class="node-controls">
-                            <button class="btn-icon" data-action="toggle" data-node="2" title="Toggle Power"><i class="fas fa-power-off"></i></button>
-                            <button class="btn-icon" data-action="drift" data-node="2" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
+                            <button type="button" class="btn-icon" data-action="toggle" data-node="2" title="Toggle Power"><i class="fas fa-power-off"></i></button>
+                            <button type="button" class="btn-icon" data-action="drift" data-node="2" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
                         </div>
                         <div class="drift-warning hidden" id="drift-2">Clock Drift Active</div>
                     </div>
@@ -117,8 +117,8 @@
                         <div class="node-state" id="state-3">FREE</div>
                         <div class="ttl-bar-bg"><div class="ttl-bar-fill" id="ttl-3"></div></div>
                         <div class="node-controls">
-                            <button class="btn-icon" data-action="toggle" data-node="3" title="Toggle Power"><i class="fas fa-power-off"></i></button>
-                            <button class="btn-icon" data-action="drift" data-node="3" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
+                            <button type="button" class="btn-icon" data-action="toggle" data-node="3" title="Toggle Power"><i class="fas fa-power-off"></i></button>
+                            <button type="button" class="btn-icon" data-action="drift" data-node="3" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
                         </div>
                         <div class="drift-warning hidden" id="drift-3">Clock Drift Active</div>
                     </div>
@@ -128,8 +128,8 @@
                         <div class="node-state" id="state-4">FREE</div>
                         <div class="ttl-bar-bg"><div class="ttl-bar-fill" id="ttl-4"></div></div>
                         <div class="node-controls">
-                            <button class="btn-icon" data-action="toggle" data-node="4" title="Toggle Power"><i class="fas fa-power-off"></i></button>
-                            <button class="btn-icon" data-action="drift" data-node="4" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
+                            <button type="button" class="btn-icon" data-action="toggle" data-node="4" title="Toggle Power"><i class="fas fa-power-off"></i></button>
+                            <button type="button" class="btn-icon" data-action="drift" data-node="4" title="Simulate Clock Drift (5x Time)"><i class="fas fa-fast-forward"></i></button>
                         </div>
                         <div class="drift-warning hidden" id="drift-4">Clock Drift Active</div>
                     </div>
@@ -164,10 +164,10 @@
                 </div>
 
                 <div class="action-grid mt-3">
-                    <button class="btn btn-primary w-100" id="btnLockB">
+                    <button type="button" class="btn btn-primary w-100" id="btnLockB">
                         <i class="fas fa-key"></i> Request Lock
                     </button>
-                    <button class="btn btn-outline w-100" id="btnUnlockB" disabled>
+                    <button type="button" class="btn btn-outline w-100" id="btnUnlockB" disabled>
                         <i class="fas fa-unlock"></i> Release Lock
                     </button>
                 </div>
@@ -175,7 +175,7 @@
                 <div class="chaos-box mt-3">
                     <h4><i class="fas fa-skull-crossbones"></i> Client Chaos</h4>
                     <p>Simulate a heavy Garbage Collection (GC) pause. The client freezes, but real time (and node TTLs) continue to pass.</p>
-                    <button class="btn btn-warning w-100" id="btnPauseB">Trigger 6s GC Pause</button>
+                    <button type="button" class="btn btn-warning w-100" id="btnPauseB">Trigger 6s GC Pause</button>
                 </div>
 
                 <div class="client-logs" id="logsB">

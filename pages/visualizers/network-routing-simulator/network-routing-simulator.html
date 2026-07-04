@@ -31,10 +31,10 @@
                 </p>
 
                 <div class="action-tools">
-                    <button class="tool-btn active" data-tool="select" title="Select & Drag nodes"><i class="fas fa-mouse-pointer"></i> Select</button>
-                    <button class="tool-btn" data-tool="add-node" title="Click empty space to add a router"><i class="fas fa-server"></i> Add Router</button>
-                    <button class="tool-btn" data-tool="add-link" title="Click two routers to connect them"><i class="fas fa-project-diagram"></i> Add Link</button>
-                    <button class="tool-btn danger" data-tool="delete" title="Click node or link to delete"><i class="fas fa-trash-alt"></i> Delete</button>
+                    <button type="button" class="tool-btn active" data-tool="select" title="Select & Drag nodes"><i class="fas fa-mouse-pointer"></i> Select</button>
+                    <button type="button" class="tool-btn" data-tool="add-node" title="Click empty space to add a router"><i class="fas fa-server"></i> Add Router</button>
+                    <button type="button" class="tool-btn" data-tool="add-link" title="Click two routers to connect them"><i class="fas fa-project-diagram"></i> Add Link</button>
+                    <button type="button" class="tool-btn danger" data-tool="delete" title="Click node or link to delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </div>
 
                 <div class="packet-controls">
@@ -43,13 +43,13 @@
                         <select id="sourceSelect" aria-label="Source router"><option value="">Source</option></select>
                         <i class="fas fa-arrow-right"></i>
                         <select id="destSelect" aria-label="Destination router"><option value="">Destination</option></select>
-                        <button id="sendPacketBtn" class="btn btn-primary btn-sm" disabled>Send</button>
+                        <button type="button" id="sendPacketBtn" class="btn btn-primary btn-sm" disabled>Send</button>
                     </div>
                 </div>
 
                 <div class="global-actions">
-                    <button id="randomizeWeightsBtn" class="btn btn-secondary btn-sm"><i class="fas fa-dice"></i> Randomize Costs</button>
-                    <button id="clearNetBtn" class="btn btn-secondary btn-sm"><i class="fas fa-broom"></i> Clear</button>
+                    <button type="button" id="randomizeWeightsBtn" class="btn btn-secondary btn-sm"><i class="fas fa-dice"></i> Randomize Costs</button>
+                    <button type="button" id="clearNetBtn" class="btn btn-secondary btn-sm"><i class="fas fa-broom"></i> Clear</button>
                 </div>
             </div>
 
@@ -92,8 +92,8 @@
                 <label for="linkCostInput">Set Link Cost:</label>
                 <input type="number" id="linkCostInput" min="1" max="999" value="10">
                 <div class="ctx-buttons">
-                    <button id="ctxSaveBtn" class="btn btn-primary btn-sm">Save</button>
-                    <button id="ctxCancelBtn" class="btn btn-secondary btn-sm">Cancel</button>
+                    <button type="button" id="ctxSaveBtn" class="btn btn-primary btn-sm">Save</button>
+                    <button type="button" id="ctxCancelBtn" class="btn btn-secondary btn-sm">Cancel</button>
                 </div>
             </div>
         </div>

@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <button id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
+    <button type="button" id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
       <i class="fas fa-circle-chevron-up"></i>
     </button>
 
@@ -59,7 +59,7 @@
                 <option value="delete">Delete</option>
               </select>
               <input type="number" id="pdOpValue" class="pd-val-input" value="50" min="1" max="99" aria-label="Value" placeholder="val" />
-              <button class="pd-op-btn" id="pdOpBtn">
+              <button type="button" class="pd-op-btn" id="pdOpBtn">
                 <i class="fas fa-plus"></i> Execute
               </button>
             </div>
@@ -67,9 +67,9 @@
             <div class="pd-presets">
               <div class="pd-presets-label">Quick presets:</div>
               <div class="pd-preset-chips">
-                <button class="pd-preset-chip" data-seq="[30,50,20,70,40,60,10,80]">Classic BST</button>
-                <button class="pd-preset-chip" data-seq="[50,25,75,12,37,62,87]">Balanced</button>
-                <button class="pd-preset-chip" data-seq="[10,20,30,40,50]">Degenerate</button>
+                <button type="button" class="pd-preset-chip" data-seq="[30,50,20,70,40,60,10,80]">Classic BST</button>
+                <button type="button" class="pd-preset-chip" data-seq="[50,25,75,12,37,62,87]">Balanced</button>
+                <button type="button" class="pd-preset-chip" data-seq="[10,20,30,40,50]">Degenerate</button>
               </div>
             </div>
           </div>
@@ -92,10 +92,10 @@
                 <option value="">—</option>
               </select>
             </div>
-            <button class="pd-compare-btn" id="pdCompareBtn">
+            <button type="button" class="pd-compare-btn" id="pdCompareBtn">
               <i class="fas fa-arrows-left-right"></i> Show Shared Nodes
             </button>
-            <button class="pd-compare-clear-btn" id="pdCompareClearBtn">
+            <button type="button" class="pd-compare-clear-btn" id="pdCompareClearBtn">
               Clear Compare
             </button>
           </div>

@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <button id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
+    <button type="button" id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
       <i class="fas fa-circle-chevron-up"></i>
     </button>
 
@@ -49,7 +49,7 @@
           <div class="sg-row">
             <span class="sg-row-label">Nodes</span>
             <input type="number" id="sgNodeCount" class="sg-num-input" value="10" min="4" max="16" aria-label="Node count" />
-            <button class="sg-ctrl-btn" id="sgGenerateBtn"><i class="fas fa-shuffle"></i> Generate</button>
+            <button type="button" class="sg-ctrl-btn" id="sgGenerateBtn"><i class="fas fa-shuffle"></i> Generate</button>
             <span class="sg-row-label" style="margin-left:0.5rem">MV bits</span>
             <select id="sgMvBits" class="sg-select" aria-label="Membership vector bits">
               <option value="3">3 bits (8 groups max)</option>
@@ -60,9 +60,9 @@
           <div class="sg-row">
             <span class="sg-row-label">Tool</span>
             <div class="sg-tool-btns">
-              <button class="sg-tool-btn active" data-tool="search"><i class="fas fa-magnifying-glass"></i> Search from node</button>
-              <button class="sg-tool-btn" data-tool="kill"><i class="fas fa-skull"></i> Kill node</button>
-              <button class="sg-tool-btn" data-tool="revive"><i class="fas fa-heart-pulse"></i> Revive node</button>
+              <button type="button" class="sg-tool-btn active" data-tool="search"><i class="fas fa-magnifying-glass"></i> Search from node</button>
+              <button type="button" class="sg-tool-btn" data-tool="kill"><i class="fas fa-skull"></i> Kill node</button>
+              <button type="button" class="sg-tool-btn" data-tool="revive"><i class="fas fa-heart-pulse"></i> Revive node</button>
             </div>
           </div>
 
@@ -73,7 +73,7 @@
           </div>
 
           <div class="sg-row">
-            <button class="btn sg-btn-primary sg-reset-btn" id="sgResetSearchBtn"><i class="fas fa-undo"></i> Reset Highlights</button>
+            <button type="button" class="btn sg-btn-primary sg-reset-btn" id="sgResetSearchBtn"><i class="fas fa-undo"></i> Reset Highlights</button>
           </div>
         </div>
 

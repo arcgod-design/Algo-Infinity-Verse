@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <button id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
+    <button type="button" id="scrollTopBtn" aria-label="Scroll to top" class="scroll-top-btn">
       <i class="fas fa-circle-chevron-up"></i>
     </button>
 
@@ -60,18 +60,18 @@
           <div class="cra-ctrl-row">
             <span class="cra-ctrl-label">Presets</span>
             <div class="cra-preset-btns">
-              <button class="cra-preset-btn" data-preset="temporal">Temporal Locality</button>
-              <button class="cra-preset-btn" data-preset="scan">Sequential Scan</button>
-              <button class="cra-preset-btn" data-preset="frequency">Frequency Skew</button>
-              <button class="cra-preset-btn" data-preset="workingset">Working Set Shift</button>
-              <button class="cra-preset-btn" data-preset="thrash">LRU Thrash</button>
+              <button type="button" class="cra-preset-btn" data-preset="temporal">Temporal Locality</button>
+              <button type="button" class="cra-preset-btn" data-preset="scan">Sequential Scan</button>
+              <button type="button" class="cra-preset-btn" data-preset="frequency">Frequency Skew</button>
+              <button type="button" class="cra-preset-btn" data-preset="workingset">Working Set Shift</button>
+              <button type="button" class="cra-preset-btn" data-preset="thrash">LRU Thrash</button>
             </div>
           </div>
 
           <div class="cra-ctrl-row">
-            <button class="btn cra-btn-primary cra-run-btn" id="craRunBtn"><i class="fas fa-play"></i> Run All</button>
-            <button class="btn btn-secondary cra-step-btn" id="craStepBtn" disabled><i class="fas fa-step-forward"></i> Step</button>
-            <button class="btn btn-secondary cra-reset-btn" id="craResetBtn"><i class="fas fa-undo"></i> Reset</button>
+            <button type="button" class="btn cra-btn-primary cra-run-btn" id="craRunBtn"><i class="fas fa-play"></i> Run All</button>
+            <button type="button" class="btn btn-secondary cra-step-btn" id="craStepBtn" disabled><i class="fas fa-step-forward"></i> Step</button>
+            <button type="button" class="btn btn-secondary cra-reset-btn" id="craResetBtn"><i class="fas fa-undo"></i> Reset</button>
             <div class="cra-speed-row">
               <span class="cra-ctrl-label">Speed</span>
               <input type="range" id="craSpeed" class="cra-range cra-range-sm" min="1" max="5" value="3" aria-label="Speed" />

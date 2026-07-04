@@ -86,14 +86,14 @@
                     </select>
                   </div>
                   <div class="editor-actions">
-                    <button
+                    <button type="button"
                       class="editor-btn"
                       onclick="insertSnippet('function')"
                       title="Insert function"
                     >
                       <i class="fas fa-code"></i><span class="btn-text"> Function</span>
                     </button>
-                    <button
+                    <button type="button"
                       class="editor-btn"
                       onclick="formatCode()"
                       title="Format code"
@@ -103,7 +103,7 @@
                     <button class="editor-btn" id="aiInterviewerToggle" type="button" onclick="toggleAiInterviewer()" title="Invite AI Interviewer" aria-pressed="false" style="color: #10b981; border: 1px solid #10b981;">
                       <i class="fas fa-user-tie"></i><span class="btn-text"> AI Interviewer</span>
                     </button>
-                    <button
+                    <button type="button"
                       class="editor-btn"
                       onclick="toggleLineComment()"
                       title="Toggle comment"
@@ -159,10 +159,10 @@
         <div class="quiz-modal-footer">
           <div class="quiz-actions" style="display:flex; justify-content:flex-end; align-items:center; width:100%; gap: 1rem; flex-wrap: wrap;">
             <div style="display:flex; gap:0.5rem; margin-left: auto;">
-              <button class="btn btn-outline" id="quizRunBtn">
+              <button type="button" class="btn btn-outline" id="quizRunBtn">
                 <i class="fas fa-play"></i> Run
               </button>
-              <button class="btn btn-primary" id="quizSubmitBtn">
+              <button type="button" class="btn btn-primary" id="quizSubmitBtn">
                 <i class="fas fa-paper-plane"></i> Submit
               </button>
             </div>

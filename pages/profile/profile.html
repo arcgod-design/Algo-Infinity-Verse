@@ -161,7 +161,7 @@
         
         <!-- === BACK BUTTON === -->
         <div class="profile-nav">
-            <button class="back-btn" id="profileBackBtn" aria-label="Back to Dashboard">
+            <button type="button" class="back-btn" id="profileBackBtn" aria-label="Back to Dashboard">
                 <i class="fas fa-arrow-left"></i>
                 <span>Back to Dashboard</span>
             </button>
@@ -209,7 +209,7 @@
                     <span class="badge"><i class="fas fa-star"></i> <span id="userXP">0</span> XP</span>
                 </div>
             </div>
-            <button class="profile-edit-btn" id="profilePageEditBtn" title="Edit Profile" aria-label="Edit Profile">
+            <button type="button" class="profile-edit-btn" id="profilePageEditBtn" title="Edit Profile" aria-label="Edit Profile">
                 <i class="fas fa-pen"></i>
             </button>
         </header>
@@ -233,10 +233,10 @@
             <div class="theme-selector-container">
                 <label>Select Card Theme:</label>
                 <div class="theme-buttons">
-                    <button class="theme-btn active" data-theme="cyberpunk">Cyberpunk Neon</button>
-                    <button class="theme-btn" data-theme="cosmic">Cosmic Aurora</button>
-                    <button class="theme-btn" data-theme="obsidian">Dark Obsidian</button>
-                    <button class="theme-btn" data-theme="emerald">Emerald Forest</button>
+                    <button type="button" class="theme-btn active" data-theme="cyberpunk">Cyberpunk Neon</button>
+                    <button type="button" class="theme-btn" data-theme="cosmic">Cosmic Aurora</button>
+                    <button type="button" class="theme-btn" data-theme="obsidian">Dark Obsidian</button>
+                    <button type="button" class="theme-btn" data-theme="emerald">Emerald Forest</button>
                 </div>
             </div>
 
@@ -299,8 +299,8 @@
             </div>
 
             <div class="card-download-actions">
-                <button id="downloadPngBtn" class="btn btn-primary"><i class="fas fa-file-image"></i> Export PNG</button>
-                <button id="downloadPdfBtn" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Export PDF</button>
+                <button type="button" id="downloadPngBtn" class="btn btn-primary"><i class="fas fa-file-image"></i> Export PNG</button>
+                <button type="button" id="downloadPdfBtn" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Export PDF</button>
             </div>
         </section>
 
@@ -343,9 +343,9 @@
 
             <!-- Pagination Controls -->
             <div class="pagination-controls hidden" id="profilePagination">
-                <button class="pagination-btn" id="prevPageBtn" disabled><i class="fas fa-chevron-left"></i> Prev</button>
+                <button type="button" class="pagination-btn" id="prevPageBtn" disabled><i class="fas fa-chevron-left"></i> Prev</button>
                 <span class="pagination-info" id="pageInfo">Page 1 of 1</span>
-                <button class="pagination-btn" id="nextPageBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button type="button" class="pagination-btn" id="nextPageBtn">Next <i class="fas fa-chevron-right"></i></button>
             </div>
         </section>
 
@@ -356,7 +356,7 @@
       <div class="modal-content profile-edit-modal">
         <div class="modal-header">
           <h3>Edit Profile</h3>
-          <button
+          <button type="button"
             class="modal-close"
             id="profileModalClose"
             aria-label="Close edit profile modal"
@@ -403,10 +403,10 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" onclick="closeProfileModal()">
+          <button type="button" class="btn btn-secondary" onclick="closeProfileModal()">
             Cancel
           </button>
-          <button class="btn btn-primary" onclick="saveProfileChanges()">
+          <button type="button" class="btn btn-primary" onclick="saveProfileChanges()">
             <i class="fas fa-save"></i> Save Changes
           </button>
         </div>
