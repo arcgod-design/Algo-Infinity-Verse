@@ -7087,3 +7087,24 @@ body.light-mode .nav-auth-link:hover {
   margin-bottom: 1.5rem;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--dark-bg, #0a0a1a);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--dark-card, #252550);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary, #7c3aed);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-card, #252550) var(--dark-bg, #0a0a1a);
+}
+
