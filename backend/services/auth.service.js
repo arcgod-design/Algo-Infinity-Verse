@@ -1,10 +1,12 @@
 import crypto from "crypto";
+import Redis from "ioredis";
+
+// Initialize Redis Client
+const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
 
 export const ACCESS_TOKEN_MAX_AGE_SECONDS = 15 * 60; // 15 mins
 export const REFRESH_TOKEN_MAX_AGE_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
-// Tracking families for token rotation
-export const activeRefreshFamilies = new Map();
 const PBKDF2_ITERATIONS = 210000;
 const PASSWORD_KEY_LENGTH = 32;
 
@@ -86,8 +88,6 @@ function fromBase64Url(input) {
 function sessionSecret() {
   const secret = process.env.SESSION_SECRET;
   if (!secret) {
-    // Fail closed: never fall back to a hardcoded secret, regardless of NODE_ENV.
-    // A known fallback would let anyone forge session JWTs.
     throw new Error(
       "SESSION_SECRET is required. Set it in the environment before starting the server.",
     );
@@ -117,8 +117,11 @@ export function createAccessToken(user) {
   return `${body}.${sign(body)}`;
 }
 
-export function createRefreshToken(user, familyId = crypto.randomUUID(), nonce = crypto.randomUUID()) {
-  activeRefreshFamilies.set(familyId, { currentNonce: nonce });
+// 🔴 MODIFIED: Now an async function storing the nonce in Redis
+export async function createRefreshToken(user, familyId = crypto.randomUUID(), nonce = crypto.randomUUID()) {
+  // Store family nonce in Redis with an expiration matching the token
+  await redis.set(`refresh_family:${familyId}`, nonce, "EX", REFRESH_TOKEN_MAX_AGE_SECONDS);
+  
   const header = base64Url(JSON.stringify({ alg: "HS256", typ: "JWT" }));
   const payload = base64Url(
     JSON.stringify({
@@ -135,8 +138,9 @@ export function createRefreshToken(user, familyId = crypto.randomUUID(), nonce =
   return `${body}.${sign(body)}`;
 }
 
-export function revokeTokenFamily(familyId) {
-  activeRefreshFamilies.delete(familyId);
+// 🔴 MODIFIED: Async deletion from Redis
+export async function revokeTokenFamily(familyId) {
+  await redis.del(`refresh_family:${familyId}`);
 }
 
 export function verifyToken(token, expectedType) {
@@ -169,15 +173,18 @@ export function verifyAccessToken(token) {
   return verifyToken(token, "access");
 }
 
-export function verifyRefreshToken(token) {
+// 🔴 MODIFIED: Async verification fetching state from Redis (Theft Detection)
+export async function verifyRefreshToken(token) {
   const session = verifyToken(token, "refresh");
   if (!session) return null;
   
-  const family = activeRefreshFamilies.get(session.familyId);
-  if (!family) return null;
+  // Fetch current valid nonce for this token family from Redis
+  const currentNonce = await redis.get(`refresh_family:${session.familyId}`);
+  if (!currentNonce) return null; // Family revoked or expired
   
-  if (family.currentNonce !== session.nonce) {
-    revokeTokenFamily(session.familyId);
+  if (currentNonce !== session.nonce) {
+    // REUSE DETECTED: Revoke the entire family immediately
+    await revokeTokenFamily(session.familyId);
     return null;
   }
   return session;
