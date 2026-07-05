@@ -4854,20 +4854,27 @@ body.light-mode .nav-auth-link:hover {
 
 /* ===== SCROLLBAR STYLING ===== */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--dark-card);
+  background: var(--dark-bg, #0a0a1a);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gradient-1);
-  border-radius: 5px;
+  background: var(--dark-card, #252550);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-light);
+  background: var(--primary, #7c3aed);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-card, #252550) var(--dark-bg, #0a0a1a);
 }
 
 /* ===== GLASSMORPHISM ===== */
