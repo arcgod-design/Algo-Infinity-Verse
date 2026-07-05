@@ -176,6 +176,21 @@ class QuizUI {
         });
     }
 
+    renderSkeleton(categoryTitle) {
+        this.quizTopicLabel.textContent = categoryTitle;
+        this.quizProgressLabel.textContent = 'Loading...';
+        this.quizProgressBar.style.width = '0%';
+        this.questionText.innerHTML = '<div class="skeleton skeleton-line question"></div>';
+        this.optionsGrid.innerHTML = '';
+        for (let i = 0; i < 4; i++) {
+            const div = document.createElement('div');
+            div.className = 'skeleton skeleton-line option';
+            this.optionsGrid.appendChild(div);
+        }
+        this.feedbackMsg.textContent = '';
+        this.btnNextQuestion.disabled = true;
+    }
+
     renderQuestion(questionData, progressData, categoryTitle) {
         // Update Headers
         this.quizTopicLabel.textContent = categoryTitle;
@@ -257,7 +272,10 @@ class QuizController {
         this.state.startQuiz(categoryId);
         const categoryTitle = QuizData.categories.find(c => c.id === categoryId).title;
         this.ui.switchView('quiz');
-        this.ui.renderQuestion(this.state.getCurrentQuestion(), this.state.getProgress(), categoryTitle);
+        this.ui.renderSkeleton(categoryTitle);
+        setTimeout(() => {
+            this.ui.renderQuestion(this.state.getCurrentQuestion(), this.state.getProgress(), categoryTitle);
+        }, 600);
     }
 
     handleAnswer(selectedIndex, btnElement) {
