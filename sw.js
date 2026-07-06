@@ -7,7 +7,19 @@ function isCacheable(response) {
 }
 
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      // Precache critical files for offline sandbox functionality
+      return cache.addAll([
+        '/offline.html',
+        '/worker.js',
+        '/data/practice-problems.js',
+        '/data/quiz-questions.js',
+        '/data/dsa-topics.js',
+        '/modules/executeCode.js'
+      ]);
+    }).then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', (event) => {
