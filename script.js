@@ -2509,6 +2509,25 @@ function getDifficultyClass(difficulty) {
   }
 }
 
+function getDifficultyIcon(difficulty) {
+  switch (difficulty.toLowerCase()) {
+    case "easy":
+      return "\u2705";
+    case "medium":
+      return "\u26A1";
+    case "hard":
+      return "\uD83D\uDD25";
+    default:
+      return "\u2753";
+  }
+}
+
+function getDifficultyBadge(difficulty) {
+  const cls = getDifficultyClass(difficulty);
+  const icon = getDifficultyIcon(difficulty);
+  return `<span class="difficulty-badge ${cls}"><span class="difficulty-icon">${icon}</span> ${difficulty}</span>`;
+}
+
 // Get quiz topic key from topic object
 function getQuizTopicKey(topic) {
   const normalize = (s) =>
