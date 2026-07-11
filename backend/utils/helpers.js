@@ -157,3 +157,45 @@ export function hashPassword(password) {
 export function passwordMatches(password, stored) {
   return passwordMatchesSecure(password, stored);
 }
+// ── Atomic User Creation (To prevent race conditions on signup) ──────────────
+let _createUserLock = Promise.resolve();
+
+export async function createUserAtomic(userData, useFirestore = false, db = null) {
+  // Case 1: Firestore (Uses native transaction)
+  if (useFirestore) {
+    try {
+      const userRef = db.collection(COLLECTIONS.USERS);
+      const result = await db.runTransaction(async (t) => {
+        const snapshot = await t.get(userRef.where('email', '==', userData.email).limit(1));
+        if (!snapshot.empty) {
+          throw new Error('User already exists');
+        }
+        const newUserRef = userRef.doc();
+        const newUser = { ...userData, id: newUserRef.id };
+        t.set(newUserRef, newUser);
+        return newUser;
+      });
+      return result;
+    } catch (error) {
+      if (error.message === 'User already exists') throw error;
+      console.error('Transaction error:', error);
+      throw new Error('Failed to create user');
+    }
+  }
+
+  // Case 2: Local JSON (Uses a Promise Lock to serialize writes)
+  const run = _createUserLock.then(async () => {
+    const users = await readUsers();
+    const existing = users.find((u) => u.email === userData.email);
+    if (existing) {
+      throw new Error('User already exists');
+    }
+    users.push(userData);
+    await writeUsers(users);
+    return userData;
+  });
+
+  // Update the lock synchronously so the next caller queues behind this write.
+  _createUserLock = run.catch(() => { });
+  return run;
+}

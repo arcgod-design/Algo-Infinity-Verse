@@ -14,6 +14,7 @@ import { applySM2 } from "./utils/sm2.js";
 import { getSession, clearSessionCookie } from "./utils/sessionToken.js";
 import { commonPasswords } from "./config/passwordBlacklist.js";
 import { validateAndNormalizeEmail } from "./utils/emailValidation.js";
+import securityConfig from "./config/security.js";
 
 const MAX_RESUME_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 
