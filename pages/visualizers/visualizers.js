@@ -426,6 +426,11 @@ const visualizers = [
     desc: 'Visualize Git internals: commits, branches, merges, and the DAG commit graph.',
   },
   {
+    name: 'ARIES Recovery Simulator',
+    path: '/pages/visualizers/aries-simulator/aries-simulator.html',
+    category: 'Systems & OS',
+    icon: 'fa-database',
+    desc: 'Visualize ARIES database recovery: Analysis, Redo, and Undo phases.',
     name: 'Spanning Tree Protocol (STP)',
     path: '/pages/visualizers/stp-simulator/stp-simulator.html',
     category: 'Systems & OS',
