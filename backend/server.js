@@ -554,7 +554,23 @@ async function serveStatic(req, res, pathname) {
 
 const server = http.createServer(async (req, res) => {
   try {
-    const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+    const hostHeader = req.headers.host;
+
+    const ALLOWED_HOSTS = new Set(
+      (process.env.ALLOWED_HOSTS || 'localhost:3000,localhost,127.0.0.1:3000,127.0.0.1')
+        .split(',')
+        .map(h => h.trim())
+        .filter(Boolean)
+    );
+
+    if (!hostHeader || typeof hostHeader !== 'string' || !ALLOWED_HOSTS.has(hostHeader)) {
+      return sendJson(res, 400, { error: 'Invalid or unexpected Host header.' });
+    }
+
+    
+    const protocol = req.socket?.encrypted ? 'https' : 'http';
+    const url = new URL(req.url, `${protocol}://${hostHeader}`);
+
     const pathname = normalizePathname(decodeURIComponent(url.pathname));
 
     const requestValidation = validateRequest(req);
