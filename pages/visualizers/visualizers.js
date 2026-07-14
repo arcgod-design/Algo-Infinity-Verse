@@ -431,6 +431,8 @@ const visualizers = [
     category: 'Systems & OS',
     icon: 'fa-database',
     desc: 'Visualize ARIES database recovery: Analysis, Redo, and Undo phases.',
+  },
+  {
     name: 'Spanning Tree Protocol (STP)',
     path: '/pages/visualizers/stp-simulator/stp-simulator.html',
     category: 'Systems & OS',
@@ -503,6 +505,13 @@ const visualizers = [
     category: 'Distributed Systems',
     icon: 'fa-shield-halved',
     desc: 'Practical Byzantine Fault Tolerance consensus visualized.',
+  },
+  {
+    name: 'Load Balancer Visualizer',
+    path: '/pages/visualizers/load-balancer-visualizer/load-balancer-visualizer.html',
+    category: 'Distributed Systems',
+    icon: 'fa-network-wired',
+    desc: 'Visualize real-time traffic distribution across backend servers using diverse algorithms, with failure simulations.',
   },
   {
     name: 'Consistent Hashing Visualizer',
