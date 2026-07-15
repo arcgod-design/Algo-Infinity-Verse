@@ -526,7 +526,12 @@
             renderAuthNav();
             updateProfileNames(currentSession.user);
           } else {
-            const errorBody = await response.text().catch(() => 'Unknown error');
+            let errorBody = 'Unknown error';
+            try {
+              errorBody = await response.json();
+            } catch {
+              errorBody = await response.text().catch(() => 'Unknown error');
+            }
             console.error('[auth] Supabase bridge failed:', response.status, errorBody);
           }
         } else {
