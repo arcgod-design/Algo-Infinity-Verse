@@ -8,6 +8,7 @@ import express from 'express';
 import apiRouter from './backend/routes/api.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { spawn } from 'child_process';
 import { FieldValue } from 'firebase-admin/firestore';
 import { initializeFirebase, COLLECTIONS } from './firebase.js';
 import { verifyCsrfToken } from './utils/csrf-verify.js';
@@ -3035,14 +3036,89 @@ async function handleApi(req, res, pathname) {
     }
   }
 
-  // ── AI Code Reviewer ──────────────────────────────────────────────────────
-  if (pathname === '/api/ai/review' && req.method === 'POST') {
+  // Helper function to run javascript in child process securely for complexity profiling
+  function runInChild(code, N) {
+    return new Promise((resolve) => {
+      // Spawn node with 16MB heap memory limit and read from stdin (-)
+      const child = spawn(process.execPath, ['--max-old-space-size=16', '-'], {
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+
+      const runnerScript = `
+        const vm = require('vm');
+        const code = ${JSON.stringify(code)};
+        const N = ${N};
+        
+        const sandbox = {
+          console: { log: () => {}, error: () => {} },
+          Math, Array, Object, String, Number, Boolean, Date, Set, Map, N
+        };
+        
+        try {
+          const memStart = process.memoryUsage().heapUsed;
+          const timeStart = performance.now();
+          
+          const scriptContent = code + '\\n' + 'solve(N);';
+          
+          vm.runInNewContext(scriptContent, sandbox, { timeout: 150 });
+          
+          const timeEnd = performance.now();
+          const memEnd = process.memoryUsage().heapUsed;
+          
+          const timeMs = timeEnd - timeStart;
+          const memBytes = Math.max(0, memEnd - memStart);
+          
+          console.log(JSON.stringify({ success: true, timeMs, memKb: memBytes / 1024 }));
+        } catch (err) {
+          console.log(JSON.stringify({ success: false, error: err.message }));
+        }
+      `;
+
+      let stdoutData = '';
+      let stderrData = '';
+
+      child.stdout.on('data', (data) => {
+        stdoutData += data.toString();
+      });
+
+      child.stderr.on('data', (data) => {
+        stderrData += data.toString();
+      });
+
+      child.on('close', (exitCode) => {
+        if (exitCode !== 0) {
+          if (stderrData.includes('Allocation failed') || stderrData.includes('Out of memory')) {
+            resolve({ success: false, error: 'Memory limit of 16MB exceeded.' });
+          } else {
+            resolve({
+              success: false,
+              error: stderrData.trim() || `Process exited with code ${exitCode}`,
+            });
+          }
+          return;
+        }
+
+        try {
+          const result = JSON.parse(stdoutData.trim());
+          resolve(result);
+        } catch (e) {
+          resolve({ success: false, error: 'Internal execution sandbox crash.' });
+        }
+      });
+
+      child.stdin.write(runnerScript);
+      child.stdin.end();
+    });
+  }
+
+  // ── Complexity Sandbox Profiler ───────────────────────────────────────────
+  if (pathname === '/api/execute/profile' && req.method === 'POST') {
     if (
       !applyRateLimit(
         req,
         res,
         sdlcAdvisorLimiter,
-        'Too many review requests. Please try again later.'
+        'Too many profile requests. Please try again later.'
       )
     ) {
       return;

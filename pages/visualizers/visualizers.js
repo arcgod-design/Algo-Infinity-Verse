@@ -54,6 +54,13 @@ const visualizers = [
     desc: 'Visualize time complexity growth rates across different algorithms.',
   },
   {
+    name: 'Algorithmic Complexity Sandbox',
+    path: '/pages/visualizers/complexity-analyzer/index.html',
+    category: 'Sorting & Searching',
+    icon: 'fa-gauge-high',
+    desc: 'Profile and compare execution runtimes and memory curves for two custom solutions side by side.',
+  },
+  {
     name: 'Binary Search Visualizer',
     path: '/pages/learning/binary-search/binary-search.html',
     category: 'Sorting & Searching',
@@ -1033,16 +1040,22 @@ const visualizers = [
     category: 'Systems & OS',
     icon: 'fa-globe',
     desc: 'Interactive simulator tracing recursive DNS queries.',
+  },
+  {
     name: 'Consistent Hashing Visualizer',
     path: '/pages/visualizers/consistent-hashing-simulator/consistent-hashing-simulator.html',
     category: 'Systems & OS',
     icon: 'fa-server',
     desc: 'Interactive hash ring showing node distribution and key routing.',
+  },
+  {
     name: 'gRPC & HTTP/2 Multiplexing Visualizer',
     path: '/pages/visualizers/grpc-simulator/grpc-simulator.html',
     category: 'Architecture',
     icon: 'fa-network-wired',
     desc: 'Compare HTTP/1.1 REST to HTTP/2 multiplexed streams and Protocol Buffers.',
+  },
+  {
     name: 'WebRTC Signaling & ICE Simulator',
     path: '/pages/visualizers/webrtc-simulator/webrtc-simulator.html',
     category: 'Systems & OS',
