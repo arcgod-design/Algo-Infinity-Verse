@@ -496,8 +496,35 @@
 
     if (!currentSession.authenticated && window.__supabaseClient) {
       try {
-        const redirectResult = await window.__supabaseClient.getSessionToken();
-        const accessToken = redirectResult?.accessToken;
+        // Extract an access token from multiple possible Supabase SDK shapes.
+        const client = window.__supabaseClient;
+        let accessToken = null;
+
+        // Most common: client.getSession() -> { data: { session } }
+        if (typeof client?.getSession === 'function') {
+          const res = await client.getSession();
+          const session = res?.data?.session || res?.session || res;
+          accessToken = session?.access_token || session?.accessToken || null;
+        }
+
+        // Variant: client.auth.getSession() -> { data: { session } }
+        if (!accessToken && typeof client?.auth?.getSession === 'function') {
+          const res = await client.auth.getSession();
+          const session = res?.data?.session || res?.session || res;
+          accessToken = session?.access_token || session?.accessToken || null;
+        }
+
+        // Your current assumption: client.getSessionToken() -> { accessToken }
+        if (!accessToken && typeof client?.getSessionToken === 'function') {
+          const res = await client.getSessionToken();
+          accessToken = res?.accessToken || res?.access_token || null;
+        }
+
+        // Another common variant: client.auth.getAccessToken() -> { access_token }
+        if (!accessToken && typeof client?.auth?.getAccessToken === 'function') {
+          const res = await client.auth.getAccessToken();
+          accessToken = res?.access_token || res?.accessToken || null;
+        }
 
         if (accessToken) {
           // Bridge Supabase OAuth -> app session. This app requires CSRF for
@@ -505,7 +532,9 @@
           const csrfResponse = await fetch('/api/csrf-token', {
             credentials: 'include',
           });
-          if (!csrfResponse.ok) throw new Error('Failed to initialize secure session.');
+          if (!csrfResponse.ok) {
+            throw new Error('Failed to initialize secure session.');
+          }
           const { csrfToken } = await csrfResponse.json();
 
           const response = await fetch('/api/auth/supabase', {
@@ -517,6 +546,7 @@
             },
             body: JSON.stringify({ accessToken }),
           });
+
           if (response.ok) {
             const payload = await response.json();
             currentSession = { authenticated: true, user: payload.user };
@@ -538,7 +568,7 @@
           console.debug('[auth] No Supabase access token in session');
         }
       } catch (error) {
-        if (error.message !== 'Supabase not configured')
+        if (error?.message !== 'Supabase not configured')
           console.error('[auth] Supabase bridge error:', error);
       }
     }
