@@ -7,6 +7,7 @@ const practiceTools = [
   { name: "Complexity Analyzer", path: "/pages/tools/complexity-analyzer/complexity-analyzer.html", category: "Analysis", icon: "fa-chart-line", desc: "Analyze time and space complexity of your algorithms with detailed breakdowns and Big-O notation." },
   { name: "Complexity Calculator", path: "/pages/tools/complexity-calculator/complexity-calculator.html", category: "Analysis", icon: "fa-calculator", desc: "Calculate and visualize the computational complexity of your code snippets in real time." },
   { name: "Complexity Comparator", path: "/pages/tools/complexity-comparator/complexity-comparator.html", category: "Analysis", icon: "fa-scale-balanced", desc: "Compare the time and space complexity of multiple algorithms side by side." },
+  { name: "Constraint → Complexity Estimator", path: "/pages/tools/constraint-complexity-estimator/constraint-complexity-estimator.html", category: "Analysis", icon: "fa-gauge", desc: "Map contest constraints (n, m, time, memory) to safe Big-O complexities with operation budgets and TLE warnings." },
   { name: "Reverse Complexity", path: "/pages/tools/reverse-complexity/reverse-complexity.html", category: "Analysis", icon: "fa-arrow-right-arrow-left", desc: "Given a target complexity, reverse-engineer what kind of algorithm would achieve it." },
   { name: "Cognitive Load Analyzer", path: "/pages/tools/cognitive-load-analyzer/cognitive-load-analyzer.html", category: "Analysis", icon: "fa-brain", desc: "Analyze your coding patterns to measure cognitive load and identify areas for improvement." },
 
