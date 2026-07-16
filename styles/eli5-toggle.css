@@ -68,7 +68,11 @@
   color: #1e293b;
 }
 
-/* ═══ Simple mode content visibility ═══ */
+/* ═══ Mode-based content visibility ═══ */
+.eli5-container[data-mode="technical"] [data-technical] {
+  display: block !important;
+}
+
 .eli5-container[data-mode="technical"] [data-simple] {
   display: none !important;
 }
@@ -79,6 +83,15 @@
 
 .eli5-container[data-mode="simple"] [data-simple] {
   display: block !important;
+}
+
+/* Fallback: when no mode is set yet (before JS runs), default to technical */
+.eli5-container:not([data-mode]) [data-technical] {
+  display: block !important;
+}
+
+.eli5-container:not([data-mode]) [data-simple] {
+  display: none !important;
 }
 
 /* ═══ Toggle positioned inline after title ═══ */
