@@ -218,13 +218,17 @@ function authCookies(accessToken, refreshToken, req) {
   // HTTPS. Always require it in production regardless of that header (#2358).
   const secure =
     process.env.NODE_ENV === 'production' || req.headers['x-forwarded-proto'] === 'https';
+  // Use SameSite=None for refresh/access cookies to ensure the cookie is
+  // included after OAuth redirects (Supabase/Google) on Vercel.
+  // This avoids 401s from /api/refresh due to missing aiv_refresh cookie.
   const cookie = (name, value, maxAge) =>
     [
       `${name}=${encodeURIComponent(value)}`,
       'HttpOnly',
-      'SameSite=Lax',
+      'SameSite=None',
       'Path=/',
       `Max-Age=${maxAge}`,
+      // SameSite=None requires Secure in modern browsers.
       secure ? 'Secure' : '',
     ]
       .filter(Boolean)
