@@ -10,6 +10,7 @@ const practiceTools = [
   { name: "Constraint → Complexity Estimator", path: "/pages/tools/constraint-complexity-estimator/constraint-complexity-estimator.html", category: "Analysis", icon: "fa-gauge", desc: "Map contest constraints (n, m, time, memory) to safe Big-O complexities with operation budgets and TLE warnings." },
   { name: "Reverse Complexity", path: "/pages/tools/reverse-complexity/reverse-complexity.html", category: "Analysis", icon: "fa-arrow-right-arrow-left", desc: "Given a target complexity, reverse-engineer what kind of algorithm would achieve it." },
   { name: "Cognitive Load Analyzer", path: "/pages/tools/cognitive-load-analyzer/cognitive-load-analyzer.html", category: "Analysis", icon: "fa-brain", desc: "Analyze your coding patterns to measure cognitive load and identify areas for improvement." },
+  { name: "Accessibility Audit Toolkit", path: "/pages/tools/a11y-audit-toolkit/a11y-audit-toolkit.html", category: "Analysis", icon: "fa-universal-access", desc: "Scan visualizer pages for WCAG-aligned issues: headings, alt text, contrast, focus order, and ARIA — with severity and fix guidance." },
 
   // ── Practice Aids ──
   { name: "Problem Solving Framework", path: "/pages/tools/problem-solving-framework/problem-solving-framework.html", category: "Practice Aids", icon: "fa-sitemap", desc: "Structured framework to break down problems: understand, brute force, optimize, code, test." },
