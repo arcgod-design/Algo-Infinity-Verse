@@ -216,6 +216,13 @@ const visualizers = [
     icon: 'fa-ruler-horizontal',
     desc: 'Augmented BST storing intervals — max-endpoint pruning, overlap queries, and calendar conflict detection in O(log n + k).',
   },
+  {
+    name: 'Suffix Tree Visualizer (Ukkonen\'s)',
+    path: '/pages/visualizers/suffix-tree-visualizer/suffix-tree-visualizer.html',
+    category: 'Special',
+    icon: 'fa-sitemap',
+    desc: 'Online O(n) suffix tree construction — active point, extension rules, and suffix links.',
+  },
 
   // ── Graph Algorithms ──
   {
