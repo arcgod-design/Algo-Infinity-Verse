@@ -277,74 +277,92 @@ function updateBadges() {
   const badges = [
     {
       id: 1,
-      icon: '🌟',
+      icon: '<i class="fas fa-star"></i>',
       name: 'First Steps',
       description: 'Begin your journey',
       criteria: 'Solve 1 problem',
+      color: '#f59e0b',
+      anim: 'badge-hover-spin',
       earned: completedProblems.length >= 1,
     },
     {
       id: 2,
-      icon: '🔥',
+      icon: '<i class="fas fa-fire"></i>',
       name: 'On Fire',
       description: 'Keep the momentum going',
       criteria: 'Maintain a 7-day streak',
+      color: '#ef4444',
+      anim: 'badge-hover-pulse',
       earned: (userProgress.streak || 0) >= 7,
     },
     {
       id: 3,
-      icon: '💎',
+      icon: '<i class="fas fa-gem"></i>',
       name: 'Diamond',
       description: 'Reach a major XP milestone',
       criteria: 'Earn 5,000 XP',
+      color: '#8b5cf6',
+      anim: 'badge-hover-float',
       earned: (userProgress.xp || 0) >= 5000,
     },
     {
       id: 4,
-      icon: '🚀',
+      icon: '<i class="fas fa-rocket"></i>',
       name: 'Rocket',
       description: 'Speed through problems',
       criteria: 'Solve 50 problems',
+      color: '#06b6d4',
+      anim: 'badge-hover-bounce',
       earned: completedProblems.length >= 50,
     },
     {
       id: 5,
-      icon: '👑',
+      icon: '<i class="fas fa-crown"></i>',
       name: 'Master',
       description: 'Achieve expert problem-solving',
       criteria: 'Solve 100 problems',
+      color: '#ec4899',
+      anim: 'badge-hover-glow',
       earned: completedProblems.length >= 100,
     },
     {
       id: 6,
-      icon: '🎯',
+      icon: '<i class="fas fa-bullseye"></i>',
       name: 'Sharpshooter',
       description: 'Hit the target with consistency',
       criteria: 'Solve 25 problems and earn 2,500 XP',
+      color: '#10b981',
+      anim: 'badge-hover-wobble',
       earned: completedProblems.length >= 25 && (userProgress.xp || 0) >= 2500,
     },
     {
       id: 7,
-      icon: '⚔️',
+      icon: '<i class="fas fa-shield-alt"></i>',
       name: 'Gladiator',
       description: 'Win your first coding battle',
       criteria: 'Win 1 battle',
+      color: '#f97316',
+      anim: 'badge-hover-shake',
       earned: (userProgress.battlesWon || 0) >= 1,
     },
     {
       id: 8,
-      icon: '⚡',
+      icon: '<i class="fas fa-bolt"></i>',
       name: 'Speed Demon',
       description: 'Become a battle master',
       criteria: 'Win 5 battles',
+      color: '#a855f7',
+      anim: 'badge-hover-flash',
       earned: (userProgress.battlesWon || 0) >= 5,
     },
     {
       id: 9,
-      icon: '<i class="fas fa-gem" style="font-size:1.1rem"></i>',
+      icon: '<i class="fas fa-trophy"></i>',
       name: 'Exclusive',
       description: 'A mark of true dedication',
       criteria: 'Purchased from the XP Store',
+      color: '#f59e0b',
+      anim: 'badge-hover-grow',
       earned: !!(userProgress.inventory?.exclusiveBadge),
     },
   ];
@@ -363,7 +381,7 @@ function updateBadges() {
       .map((badge) => {
         const tooltipId = `badge-tooltip-${badge.id}`;
         const lockedLabel = badge.earned ? '' : ' (locked)';
-        return `<div class="badge ${badge.earned ? '' : 'locked'}" tabindex="0" aria-describedby="${tooltipId}" aria-label="${badge.name}${lockedLabel}">
+        return `<div class="badge ${badge.earned ? badge.anim : 'locked'}" tabindex="0" aria-describedby="${tooltipId}" aria-label="${badge.name}${lockedLabel}" style="${badge.earned ? `background:${badge.color};box-shadow:0 4px 14px ${badge.color}40` : ''}">
                 <span class="badge-tooltip" id="${tooltipId}" role="tooltip">
                     <strong>${badge.name}</strong>
                     <span>${badge.description}</span>
@@ -380,7 +398,7 @@ function updateBadges() {
       .map((badge) => {
         const tooltipId = `badge-lg-tooltip-${badge.id}`;
         const lockedLabel = badge.earned ? '' : ' (locked)';
-        return `<div class="badge-lg ${badge.earned ? '' : 'locked'}" tabindex="0" aria-describedby="${tooltipId}" aria-label="${badge.name}${lockedLabel}">
+        return `<div class="badge-lg ${badge.earned ? badge.anim : 'locked'}" tabindex="0" aria-describedby="${tooltipId}" aria-label="${badge.name}${lockedLabel}" style="${badge.earned ? `background:${badge.color};box-shadow:0 4px 14px ${badge.color}40` : ''}">
                 <span class="badge-tooltip" id="${tooltipId}" role="tooltip">
                     <strong>${badge.name}</strong>
                     <span>${badge.description}</span>
@@ -391,7 +409,41 @@ function updateBadges() {
       })
       .join('');
   }
+
+  const earnedEl = document.getElementById('badgesEarnedCount');
+  if (earnedEl) earnedEl.textContent = `${earned.length} / ${badges.length} earned`;
 }
+
+const _badgePreviewData = [
+  { icon: '<i class="fas fa-star"></i>', name: 'First Steps', color: '#f59e0b', anim: 'badge-hover-spin' },
+  { icon: '<i class="fas fa-fire"></i>', name: 'On Fire', color: '#ef4444', anim: 'badge-hover-pulse' },
+  { icon: '<i class="fas fa-gem"></i>', name: 'Diamond', color: '#8b5cf6', anim: 'badge-hover-float' },
+  { icon: '<i class="fas fa-rocket"></i>', name: 'Rocket', color: '#06b6d4', anim: 'badge-hover-bounce' },
+  { icon: '<i class="fas fa-crown"></i>', name: 'Master', color: '#ec4899', anim: 'badge-hover-glow' },
+  { icon: '<i class="fas fa-bullseye"></i>', name: 'Sharpshooter', color: '#10b981', anim: 'badge-hover-wobble' },
+  { icon: '<i class="fas fa-shield-alt"></i>', name: 'Gladiator', color: '#f97316', anim: 'badge-hover-shake' },
+  { icon: '<i class="fas fa-bolt"></i>', name: 'Speed Demon', color: '#a855f7', anim: 'badge-hover-flash' },
+  { icon: '<i class="fas fa-trophy"></i>', name: 'Exclusive', color: '#f59e0b', anim: 'badge-hover-grow' },
+];
+
+function previewBadges() {
+  const modal = document.getElementById('badgesPreviewModal');
+  const grid = document.getElementById('badgesPreviewGrid');
+  if (!modal || !grid) return;
+  grid.innerHTML = _badgePreviewData.map(b =>
+    `<div class="badge-lg ${b.anim}" style="background:${b.color};box-shadow:0 4px 14px ${b.color}40"><span class="badge-tooltip"><strong>${b.name}</strong></span>${b.icon}</div>`
+  ).join('');
+  modal.classList.add('active');
+  modal.onclick = (e) => { if (e.target === modal) closeBadgesPreview(); };
+}
+
+function closeBadgesPreview() {
+  const modal = document.getElementById('badgesPreviewModal');
+  if (modal) modal.classList.remove('active');
+}
+
+window.previewBadges = previewBadges;
+window.closeBadgesPreview = closeBadgesPreview;
 
 function escapeHtml(text) {
   const div = document.createElement('div');

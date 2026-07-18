@@ -3624,74 +3624,92 @@ function updateBadges() {
   const badges = [
     {
       id: 1,
-      icon: '🌟',
+      icon: '<i class="fas fa-star"></i>',
       name: 'First Steps',
       description: 'Begin your journey',
       criteria: 'Solve 1 problem',
+      color: '#f59e0b',
+      anim: 'badge-hover-spin',
       earned: userProgress.completedProblems.length >= 1,
     },
     {
       id: 2,
-      icon: '🔥',
+      icon: '<i class="fas fa-fire"></i>',
       name: 'On Fire',
       description: 'Keep the momentum going',
       criteria: 'Maintain a 7-day streak',
+      color: '#ef4444',
+      anim: 'badge-hover-pulse',
       earned: userProgress.streak >= 7,
     },
     {
       id: 3,
-      icon: '💎',
+      icon: '<i class="fas fa-gem"></i>',
       name: 'Diamond',
       description: 'Reach a major XP milestone',
       criteria: 'Earn 5,000 XP',
+      color: '#8b5cf6',
+      anim: 'badge-hover-float',
       earned: userProgress.xp >= 5000,
     },
     {
       id: 4,
-      icon: '🚀',
+      icon: '<i class="fas fa-rocket"></i>',
       name: 'Rocket',
       description: 'Speed through problems',
       criteria: 'Solve 50 problems',
+      color: '#06b6d4',
+      anim: 'badge-hover-bounce',
       earned: userProgress.completedProblems.length >= 50,
     },
     {
       id: 5,
-      icon: '👑',
+      icon: '<i class="fas fa-crown"></i>',
       name: 'Master',
       description: 'Achieve expert problem-solving',
       criteria: 'Solve 100 problems',
+      color: '#ec4899',
+      anim: 'badge-hover-glow',
       earned: userProgress.completedProblems.length >= 100,
     },
     {
       id: 6,
-      icon: '🎯',
+      icon: '<i class="fas fa-bullseye"></i>',
       name: 'Sharpshooter',
       description: 'Hit the target with consistency',
       criteria: 'Solve 25 problems and earn 2,500 XP',
+      color: '#10b981',
+      anim: 'badge-hover-wobble',
       earned: userProgress.completedProblems.length >= 25 && userProgress.xp >= 2500,
     },
     {
       id: 7,
-      icon: '⚔️',
+      icon: '<i class="fas fa-shield-alt"></i>',
       name: 'Gladiator',
       description: 'Win your first coding battle',
       criteria: 'Win 1 battle',
+      color: '#f97316',
+      anim: 'badge-hover-shake',
       earned: (userProgress.battlesWon || 0) >= 1,
     },
     {
       id: 8,
-      icon: '⚡',
+      icon: '<i class="fas fa-bolt"></i>',
       name: 'Speed Demon',
       description: 'Become a battle master',
       criteria: 'Win 5 battles',
+      color: '#a855f7',
+      anim: 'badge-hover-flash',
       earned: (userProgress.battlesWon || 0) >= 5,
     },
     {
       id: 9,
-      icon: '<i class="fas fa-gem" style="font-size:1.1rem"></i>',
+      icon: '<i class="fas fa-trophy"></i>',
       name: 'Exclusive',
       description: 'A mark of true dedication',
       criteria: 'Purchased from the XP Store',
+      color: '#f59e0b',
+      anim: 'badge-hover-grow',
       earned: !!userProgress.inventory?.exclusiveBadge,
     },
   ];
@@ -3704,16 +3722,18 @@ function updateBadges() {
     container.innerHTML = badges
       .map(
         (badge) =>
-          `<div class="badge ${badge.earned ? '' : 'locked'}" tabindex="0"><span class="badge-tooltip"><strong>${badge.name}</strong><span>${badge.description}</span><span>${badge.criteria}</span></span>${badge.icon}</div>`
+          `<div class="badge ${badge.earned ? badge.anim : 'locked'}" tabindex="0" style="${badge.earned ? `background:${badge.color};box-shadow:0 4px 14px ${badge.color}40` : ''}"><span class="badge-tooltip"><strong>${badge.name}</strong><span>${badge.description}</span><span>${badge.criteria}</span></span>${badge.icon}</div>`
       )
       .join('');
   if (grid)
     grid.innerHTML = badges
       .map(
         (badge) =>
-          `<div class="badge-lg ${badge.earned ? '' : 'locked'}" tabindex="0"><span class="badge-tooltip"><strong>${badge.name}</strong><span>${badge.description}</span><span>${badge.criteria}</span></span>${badge.icon}</div>`
+          `<div class="badge-lg ${badge.earned ? badge.anim : 'locked'}" tabindex="0" style="${badge.earned ? `background:${badge.color};box-shadow:0 4px 14px ${badge.color}40` : ''}"><span class="badge-tooltip"><strong>${badge.name}</strong><span>${badge.description}</span><span>${badge.criteria}</span></span>${badge.icon}</div>`
       )
       .join('');
+  const earnedEl = document.getElementById('badgesEarnedCount');
+  if (earnedEl) earnedEl.textContent = `${earned.length} / ${badges.length} earned`;
 }
 
 // ============================================
