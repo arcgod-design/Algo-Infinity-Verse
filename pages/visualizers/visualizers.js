@@ -997,6 +997,13 @@ const visualizers = [
     icon: 'fa-align-left',
     desc: 'How VS Code and Google Docs edit huge documents in O(log n) — split, concat, and weight-guided indexing.',
   },
+  {
+    name: 'Alias Method Visualizer',
+    path: '/pages/visualizers/alias-method-visualizer/alias-method-visualizer.html',
+    category: 'Data Structures',
+    icon: 'fa-dice',
+    desc: 'O(1) weighted random sampling via Vose\'s Alias Method — loot tables, load balancers, ML sampling.',
+  },
 
   // ── Special & Creative ──
   {
