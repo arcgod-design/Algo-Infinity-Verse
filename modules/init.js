@@ -65,6 +65,34 @@ function initFooterCurrentDate() {
 }
 window.initFooterCurrentDate = initFooterCurrentDate;
 
+function initFooterVisibilityObserver() {
+  const checkFooter = () => {
+    const footer = document.querySelector('.footer');
+    if (!footer) return false;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const isVisible = entries[0].isIntersecting;
+        document.body.toggleAttribute('data-footer-visible', isVisible);
+      },
+      { rootMargin: '0px 0px -20px 0px', threshold: 0 }
+    );
+    observer.observe(footer);
+    return true;
+  };
+
+  // Footer may load via partial — retry until it's in the DOM
+  if (!checkFooter()) {
+    const observer = new MutationObserver(() => {
+      if (checkFooter()) observer.disconnect();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    // Safety timeout — stop watching after 10s to avoid leaks
+    setTimeout(() => observer.disconnect(), 10000);
+  }
+}
+window.initFooterVisibilityObserver = initFooterVisibilityObserver;
+
 function initDateDisplay() {
   const currentDateEl = document.getElementById('currentDateDisplay');
   const profileDateEl = document.getElementById('profileCurrentDate');
@@ -122,6 +150,7 @@ function initializeApp() {
   initKeyboardShortcuts();
   initDidYouKnow();
   initFooterCurrentDate();
+  initFooterVisibilityObserver();
   initDateDisplay();
   initLanguageDetect();
   initActivityFeed();
