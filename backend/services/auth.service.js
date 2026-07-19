@@ -152,7 +152,42 @@ function sign(value) {
   return crypto.createHmac('sha256', sessionSecret()).update(value).digest('base64url');
 }
 
+/**
+ * Validates the user object before it is encoded into an access or refresh
+ * token (see issue #2412). Returns `null` if valid, otherwise a string
+ * describing the first detected problem so callers can surface a consistent
+ * error message.
+ *
+ * Contract:
+ *   - `user` must be a non-null object
+ *   - `id`, `name`, `email` must each be present and a non-empty string
+ *
+ * We deliberately only stringify-check the three required claims; extra
+ * fields (rating, role, avatarUrl, ...) are passed through untouched. The
+ * function never mutates `user` or any of its properties.
+ */
+export function validateUserForToken(user) {
+  if (user === null || typeof user !== 'object' || Array.isArray(user)) {
+    return 'A valid user object is required to generate an access token.';
+  }
+  const required = ['id', 'name', 'email'];
+  for (const field of required) {
+    const value = user[field];
+    if (value === undefined || value === null) {
+      return `Missing required field "${field}" on user object.`;
+    }
+    if (typeof value !== 'string' || value.trim() === '') {
+      return `Field "${field}" on the user object must be a non-empty string.`;
+    }
+  }
+  return null;
+}
+
 export function createAccessToken(user) {
+  const validationError = validateUserForToken(user);
+  if (validationError) {
+    throw new Error(validationError);
+  }
   const header = base64Url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
   const payload = base64Url(
     JSON.stringify({
@@ -172,6 +207,10 @@ export async function createRefreshToken(
   familyId = crypto.randomUUID(),
   nonce = crypto.randomUUID()
 ) {
+  const validationError = validateUserForToken(user);
+  if (validationError) {
+    throw new Error(validationError);
+  }
   if (redisAvailable && redisClient) {
     await redisClient.set(`refresh:${familyId}`, nonce, 'EX', REFRESH_TOKEN_MAX_AGE_SECONDS);
   } else {
