@@ -4,6 +4,7 @@
   var lastReport = null;
   var lastAuditMeta = null;
 
+  
   var DEMO_CLIENT =
     "async function pay(orderId, amount) {\n" +
     "  for (let attempt = 1; attempt <= 5; attempt++) {\n" +

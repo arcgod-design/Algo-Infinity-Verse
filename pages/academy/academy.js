@@ -5,6 +5,15 @@
 const academies = [
   // ── Featured (new) ──
   {
+    id: 'quorum-latency-budget',
+    name: 'Quorum Latency Budget Lab',
+    path: '/pages/academy/quorum-latency-budget-lab/index.html',
+    category: 'System Design',
+    icon: 'fa-solid fa-network-wired',
+    difficulty: 'Advanced',
+    desc: 'Hands-on quorum math (R+W>N), leader timeout storms, latency budgets, and CAP tradeoffs with quizzes.',
+  },
+  {
     id: 'db-isolation-anomaly',
     name: 'DB Isolation Anomaly Lab',
     path: '/pages/academy/db-isolation-anomaly-lab/index.html',

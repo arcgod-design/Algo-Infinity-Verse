@@ -12,6 +12,7 @@
   --idem-safe: #2dd4bf;
 }
 
+
 html.light-mode {
   --idem-glass: rgba(15, 23, 42, 0.04);
   --idem-border: rgba(15, 23, 42, 0.12);

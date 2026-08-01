@@ -5,6 +5,20 @@
 const aiTools = [
   // ── Featured (new) ──
   {
+    name: 'AI Idempotency Replay Auditor',
+    path: '/pages/ai-features/ai-idempotency-replay-auditor/index.html',
+    category: 'Crypto & Security',
+    icon: 'fa-clone',
+    desc: 'Detect missing idempotency keys, simulate retry collisions, and generate safe key-scope hardening patches.',
+  },
+  {
+    name: 'AI CQRS Consistency Detector',
+    path: '/pages/ai-features/ai-cqrs-consistency-detector/index.html',
+    category: 'Analysis & Profiling',
+    icon: 'fa-stream',
+    desc: 'Find event ordering gaps, missing projections, and dual-write risks with rebuild vs catch-up coaching.',
+  },
+  {
     name: 'AI Prompt Injection Defense Lab',
     path: '/pages/ai-features/ai-prompt-injection-defense-lab/index.html',
     category: 'Crypto & Security',

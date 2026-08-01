@@ -5,6 +5,20 @@
 const practiceTools = [
   // ── Featured (new) ──
   {
+    name: 'Trusted Types Migration Planner',
+    path: '/pages/tools/trusted-types-migration-planner/index.html',
+    category: 'Other',
+    icon: 'fa-shield-virus',
+    desc: 'Scan DOM sinks, map Trusted Types policy gaps, and export an incremental XSS-hardening migration plan.',
+  },
+  {
+    name: 'SRI CDN Integrity Lab',
+    path: '/pages/tools/sri-cdn-integrity-lab/index.html',
+    category: 'Other',
+    icon: 'fa-link',
+    desc: 'Audit missing SRI on CDN assets, simulate hash mismatch after compromise, and generate integrity patches.',
+  },
+  {
     name: 'Layout Thrashing Profiler',
     path: '/pages/tools/layout-thrashing-profiler/index.html',
     category: 'Debugging',
