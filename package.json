@@ -16,6 +16,7 @@
     "start": "node server.js",
     "dev": "node server.js",
     "dev:api": "node dev-server.js",
+    "build:legacy": "node scripts/build-legacy.mjs",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "generate:viz": "node scripts/generate-visualizer.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
