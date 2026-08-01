@@ -70,12 +70,19 @@ import {
   bulkAuditLimiter,
   logErrorLimiter,
   aiHintLimiter,
+  sharedSnippetLimiter,
 } from './backend/utils/rateLimiter.js';
 import { applyRedisRateLimit, repoAnalysisRedisLimiter } from './backend/utils/redisRateLimiter.js';
 import { generateAIHint } from './backend/services/aiHint.service.js';
 import { applySM2 } from './backend/services/memory.service.js';
 import { sendVerificationEmail } from './backend/services/email.service.js';
 import { TEST_CASES, runDetailedTestCases } from './pages/Dsa-Battle/Battleservice.js';
+import battlesHandler from './battles.js';
+import {
+  createSharedSnippet,
+  getSharedSnippet,
+  sharedSnippetUrl,
+} from './backend/controllers/sharedSnippets.js';
 
 // import { instrumentJS } from './modules/code-tracer.js';
 
@@ -2216,23 +2223,91 @@ async function handleApi(req, res, pathname) {
     }
   }
 
+  // ── Shared DSA Insight routes ──────────────────────────────────────────────
+  // The Code Playground "Share a DSA Insight" flow creates a short public link
+  // (/shared/:id) that resolves back to a read-only copy of { language, title,
+  // code }. The store lives in backend/controllers/sharedSnippets.js and
+  // expires snippets after 7 days.
+
+  if (pathname === '/api/shared' && req.method === 'POST') {
+    if (
+      !applyRateLimit(
+        req,
+        res,
+        sharedSnippetLimiter,
+        'Too many shared links created. Please try again later.'
+      )
+    ) {
+      return;
+    }
+    let body = {};
+    try {
+      body = await readJsonBody(req);
+    } catch {
+      body = {};
+    }
+    const language = typeof body.language === 'string' ? body.language : 'javascript';
+    const title = typeof body.title === 'string' ? body.title : '';
+    const code = typeof body.code === 'string' ? body.code : '';
+
+    if (!code.trim()) {
+      return sendJson(res, 400, { error: 'Nothing to share — the editor is empty.' });
+    }
+    if (code.length > 100000) {
+      return sendJson(res, 413, { error: 'Code is too large to share (max 100KB).' });
+    }
+
+    try {
+      const snippet = await createSharedSnippet({ language, title, code });
+      return sendJson(res, 201, {
+        id: snippet.id,
+        url: sharedSnippetUrl(snippet.id),
+        language: snippet.language,
+        title: snippet.title,
+        createdAt: snippet.createdAt,
+        expiresAt: snippet.expiresAt,
+      });
+    } catch (err) {
+      console.error('[shared] Failed to create snippet:', err);
+      return sendJson(res, 500, { error: err.message || 'Failed to create shared link.' });
+    }
+  }
+
+  // GET /api/shared/:id — public lookup used by the /shared/:id page.
+  const sharedGetMatch = pathname.match(/^\/api\/shared\/([^/]+)\/?$/);
+  if (sharedGetMatch && req.method === 'GET') {
+    const snippet = await getSharedSnippet(sharedGetMatch[1]);
+    if (!snippet) {
+      return sendJson(res, 404, { error: 'Shared insight not found or has expired.' });
+    }
+    return sendJson(res, 200, snippet);
+  }
+
   // ── Battle routes ──────────────────────────────────────────────────────────
-  // Battle mode relies on a document store (previously Firestore). It is
-  // disabled in this pure-JWT build, so every battle route returns 503.
-  // All routes still require an active session — unauthenticated requests get 401.
+  // Battle mode relies on a Firestore document store (see ./battles.js). The
+  // handler is mounted here so the email-invite flow — createBattle,
+  // joinBattle, submitSolution — works under both the persistent Node server
+  // and Vercel's serverless catch-all (api/[...path].js). All routes require
+  // an active session; unauthenticated requests get 401.
 
   if (pathname === '/api/battles' && req.method === 'POST') {
-    const session = await getSession(req);
-    if (!session) return sendJson(res, 401, { error: 'Login required.' });
-    return sendJson(res, 503, { error: 'Battle mode is currently unavailable.' });
+    return battlesHandler(req, res);
   }
 
   // GET /api/battles/history  — must be declared BEFORE the :id pattern below
   // or "history" gets captured as a battle ID.
   if (pathname === '/api/battles/history' && req.method === 'GET') {
-    const session = await getSession(req);
-    if (!session) return sendJson(res, 401, { error: 'Login required.' });
-    return sendJson(res, 503, { error: 'Battle mode is currently unavailable.' });
+    return battlesHandler(req, res);
+  }
+
+  const battleGetMatch = pathname.match(/^\/api\/battles\/([^/]+)\/?$/);
+  if (battleGetMatch && battleGetMatch[1] !== 'history' && req.method === 'GET') {
+    return battlesHandler(req, res);
+  }
+
+  const battleActionMatch = pathname.match(/^\/api\/battles\/([^/]+)\/(join|submit)\/?$/);
+  if (battleActionMatch && req.method === 'POST') {
+    return battlesHandler(req, res);
   }
 
   // ── End battle routes ─────
@@ -3189,6 +3264,14 @@ async function requestHandler(req, res, next) {
 
     if (pathname === '/logout') {
       return redirect(res, '/login', { 'Set-Cookie': clearAuthCookies() });
+    }
+
+    // Short shared-insight links — /shared/:id loads the Code Playground in a
+    // read-only "shared insight" mode. The page reads the id off the path and
+    // fetches the payload from /api/shared/:id. Public by design so anyone with
+    // the link can view and fork it.
+    if (/^\/shared\/[A-Za-z0-9_-]{4,32}$/.test(pathname)) {
+      return await serveStatic(req, res, '/code-playground.html');
     }
 
     const authorization = await authorizeRequest(req, pathname);

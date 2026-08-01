@@ -121,6 +121,10 @@
     {
       "source": "/api/battles/:path*",
       "destination": "/api/battles"
+    },
+    {
+      "source": "/shared/:path*",
+      "destination": "/code-playground.html"
     }
   ],
   "headers": [

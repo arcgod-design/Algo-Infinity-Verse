@@ -213,6 +213,15 @@ export const aiHintLimiter = new RateLimiter({
   cooldownMs: 15 * 60 * 1000,
 });
 
+// Sharing a DSA insight creates a short URL that is public until it expires.
+// Cap the rate so an anonymous client cannot spam the store with links. The
+// generous window still allows normal "share then re-share after edits" usage.
+export const sharedSnippetLimiter = new RateLimiter({
+  windowMs: 15 * 60 * 1000,
+  maxAttempts: 20,
+  cooldownMs: 15 * 60 * 1000,
+});
+
 // Centralized helper to check and apply rate limits on HTTP server requests
 export function applyRateLimit(
   req,

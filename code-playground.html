@@ -11,7 +11,7 @@
     <script src="/modules/lazyVisualizer.js"></script>
     <script src="/modules/snippets.js"></script>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap');
 
       :root {
         --bg-color: #0b0f19;
@@ -1107,6 +1107,592 @@
         }
       }
     </style>
+    <!-- ================================================================== -->
+    <!--  Share a DSA Insight — surfaces follow the homepage design language  -->
+    <!--  (deep neutral dark + soft pastels + serif display + floating blobs) -->
+    <!-- ================================================================== -->
+    <style>
+      .aiv-insight {
+        --aiv-bg: #0e0e14;
+        --aiv-surface: #16161e;
+        --aiv-card: #1c1c26;
+        --aiv-card-hover: #262632;
+        --aiv-border: rgba(212, 196, 240, 0.08);
+        --aiv-border-strong: rgba(212, 196, 240, 0.18);
+        --aiv-text: #e8e4f2;
+        --aiv-text-secondary: #a398c0;
+        --aiv-text-tertiary: #7a7298;
+        --aiv-lavender: #d4c4f0;
+        --aiv-lavender-rgb: 212, 196, 240;
+        --aiv-periwinkle: #bcc8f0;
+        --aiv-peach: #f2d5c4;
+        --aiv-rose: #edc8d2;
+        --aiv-mint: #c4e2d0;
+        --aiv-sky: #c0d4ea;
+        --aiv-serif: 'DM Serif Display', Georgia, serif;
+        --aiv-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        --aiv-transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      html.light-mode .aiv-insight {
+        --aiv-bg: #fafaf9;
+        --aiv-surface: #f4f2ee;
+        --aiv-card: #f0eee8;
+        --aiv-card-hover: #e8e4dc;
+        --aiv-border: rgba(124, 58, 237, 0.14);
+        --aiv-border-strong: rgba(124, 58, 237, 0.28);
+        --aiv-text: #2c1e4a;
+        --aiv-text-secondary: #6b5b7f;
+        --aiv-text-tertiary: #8a7a9d;
+        --aiv-lavender: #8b5cf6;
+        --aiv-lavender-rgb: 139, 92, 246;
+        --aiv-periwinkle: #7c6cf0;
+        --aiv-peach: #d98f63;
+        --aiv-rose: #c86a83;
+        --aiv-mint: #3f9d74;
+        --aiv-sky: #4f7db8;
+      }
+
+      /* ── Toolbar buttons ── */
+      .insight-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 16px;
+        border-radius: 100px;
+        border: 1px solid transparent;
+        font-family: var(--ui-font);
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--aiv-transition);
+      }
+      .insight-btn i {
+        font-size: 0.9rem;
+      }
+      .insight-btn--share {
+        background: transparent;
+        color: var(--aiv-lavender);
+        border-color: rgba(var(--aiv-lavender-rgb), 0.35);
+      }
+      .insight-btn--share:hover {
+        background: rgba(var(--aiv-lavender-rgb), 0.1);
+        transform: translateY(-1px);
+      }
+      .insight-btn--challenge {
+        background: linear-gradient(135deg, var(--aiv-rose), var(--aiv-peach));
+        color: #0e0e14;
+      }
+      html.light-mode .insight-btn--challenge {
+        color: #fff;
+      }
+      .insight-btn--challenge:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(237, 200, 210, 0.35);
+      }
+      .insight-btn:focus-visible,
+      .aiv-btn:focus-visible,
+      .aiv-modal-close:focus-visible,
+      .aiv-link-field button:focus-visible {
+        outline: 2px solid var(--aiv-periwinkle);
+        outline-offset: 2px;
+      }
+
+      /* ── Shared Insight banner ── */
+      .aiv-insight-banner {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--aiv-border);
+        border-radius: 20px;
+        background:
+          radial-gradient(ellipse 70% 90% at 8% 10%, rgba(var(--aiv-lavender-rgb), 0.12), transparent 60%),
+          radial-gradient(ellipse 55% 80% at 92% 20%, rgba(188, 200, 240, 0.1), transparent 55%),
+          var(--aiv-surface);
+        color: var(--aiv-text);
+        padding: 22px 26px;
+        margin: 18px 0 4px;
+      }
+      .aiv-insight-blobs {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .aiv-insight-blobs span {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(34px);
+        opacity: 0.22;
+        animation: aivBlobFloat 18s ease-in-out infinite;
+      }
+      .aiv-insight-blobs span:nth-child(1) {
+        width: 220px;
+        height: 220px;
+        background: var(--aiv-lavender);
+        top: -70px;
+        left: -40px;
+      }
+      .aiv-insight-blobs span:nth-child(2) {
+        width: 170px;
+        height: 170px;
+        background: var(--aiv-peach);
+        bottom: -70px;
+        right: 6%;
+        animation-delay: -6s;
+      }
+      .aiv-insight-blobs span:nth-child(3) {
+        width: 120px;
+        height: 120px;
+        background: var(--aiv-mint);
+        top: 30%;
+        right: 32%;
+        animation-delay: -11s;
+      }
+      @keyframes aivBlobFloat {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+        }
+        50% {
+          transform: translate(16px, -14px) scale(1.06) rotate(6deg);
+        }
+      }
+      .aiv-insight-banner-inner {
+        position: relative;
+        z-index: 1;
+      }
+      .aiv-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--aiv-lavender);
+      }
+      .aiv-eyebrow::before {
+        content: '';
+        display: inline-block;
+        width: 22px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--aiv-lavender);
+      }
+      .aiv-insight-title {
+        font-family: var(--aiv-serif);
+        font-weight: 400;
+        font-size: clamp(1.5rem, 3.5vw, 2rem);
+        letter-spacing: -0.01em;
+        margin: 10px 0 4px;
+        color: var(--aiv-text);
+      }
+      .aiv-insight-meta {
+        font-family: var(--aiv-mono);
+        font-size: 0.78rem;
+        color: var(--aiv-text-secondary);
+        margin: 0 0 16px;
+      }
+      .aiv-insight-banner-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      /* ── Buttons ── */
+      .aiv-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 22px;
+        border-radius: 100px;
+        border: 1px solid transparent;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all var(--aiv-transition);
+      }
+      .aiv-btn[hidden] {
+        display: none;
+      }
+      .aiv-insight[hidden] {
+        display: none;
+      }
+      .aiv-btn--primary {
+        background: linear-gradient(135deg, var(--aiv-lavender), var(--aiv-periwinkle));
+        color: #0e0e14;
+        box-shadow: 0 4px 20px rgba(var(--aiv-lavender-rgb), 0.28);
+      }
+      html.light-mode .aiv-btn--primary {
+        color: #fff;
+      }
+      .aiv-btn--primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(var(--aiv-lavender-rgb), 0.4);
+      }
+      .aiv-btn--ghost {
+        background: transparent;
+        color: var(--aiv-text);
+        border-color: rgba(var(--aiv-lavender-rgb), 0.3);
+      }
+      .aiv-btn--ghost:hover {
+        background: rgba(var(--aiv-lavender-rgb), 0.1);
+        border-color: rgba(var(--aiv-lavender-rgb), 0.5);
+      }
+      .aiv-btn--accent {
+        background: linear-gradient(135deg, var(--aiv-rose), var(--aiv-peach));
+        color: #0e0e14;
+        box-shadow: 0 4px 18px rgba(237, 200, 210, 0.3);
+      }
+      html.light-mode .aiv-btn--accent {
+        color: #fff;
+      }
+      .aiv-btn--accent:hover {
+        transform: translateY(-2px);
+      }
+      .aiv-btn--accept {
+        background: linear-gradient(135deg, var(--aiv-mint), var(--aiv-sky));
+        color: #0e0e14;
+        box-shadow: 0 4px 18px rgba(196, 226, 208, 0.3);
+      }
+      html.light-mode .aiv-btn--accept {
+        color: #fff;
+      }
+      .aiv-btn--accept:hover {
+        transform: translateY(-2px);
+      }
+      .aiv-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      /* ── Modal shell ── */
+      .aiv-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 2500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(10, 10, 20, 0.6);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .aiv-modal[hidden] {
+        display: none;
+      }
+      .aiv-modal-card {
+        position: relative;
+        width: 100%;
+        max-width: 480px;
+        border-radius: 22px;
+        border: 1px solid var(--aiv-border-strong);
+        background:
+          radial-gradient(ellipse 90% 60% at 15% 0%, rgba(var(--aiv-lavender-rgb), 0.14), transparent 55%),
+          var(--aiv-card);
+        color: var(--aiv-text);
+        padding: 30px 30px 26px;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+        animation: aivModalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        overflow: hidden;
+      }
+      .aiv-blobs {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .aiv-blobs span {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(40px);
+        opacity: 0.2;
+        animation: aivBlobFloat 16s ease-in-out infinite;
+      }
+      .aiv-blobs span:nth-child(1) {
+        width: 200px;
+        height: 200px;
+        background: var(--aiv-lavender);
+        top: -80px;
+        right: -60px;
+      }
+      .aiv-blobs span:nth-child(2) {
+        width: 150px;
+        height: 150px;
+        background: var(--aiv-peach);
+        bottom: -60px;
+        left: -50px;
+        animation-delay: -7s;
+      }
+      .aiv-blobs span:nth-child(3) {
+        width: 90px;
+        height: 90px;
+        background: var(--aiv-mint);
+        top: 40%;
+        left: 45%;
+        animation-delay: -12s;
+      }
+      @keyframes aivModalIn {
+        from {
+          opacity: 0;
+          transform: translateY(16px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .aiv-modal-card > *:not(.aiv-blobs) {
+        position: relative;
+        z-index: 1;
+      }
+      .aiv-modal-close {
+        position: absolute;
+        top: 14px;
+        right: 16px;
+        z-index: 2;
+        background: rgba(var(--aiv-lavender-rgb), 0.1);
+        border: 1px solid var(--aiv-border);
+        color: var(--aiv-text-secondary);
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        font-size: 1.15rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .aiv-modal-close:hover {
+        background: rgba(var(--aiv-lavender-rgb), 0.2);
+        color: var(--aiv-text);
+      }
+      .aiv-modal-title {
+        font-family: var(--aiv-serif);
+        font-weight: 400;
+        font-size: 1.8rem;
+        letter-spacing: -0.01em;
+        margin: 10px 0 8px;
+      }
+      .aiv-modal-sub {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: var(--aiv-text-secondary);
+        margin: 0 0 20px;
+      }
+
+      /* ── Form ── */
+      .aiv-form label {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--aiv-text-secondary);
+        margin: 14px 0 6px;
+      }
+      .aiv-form input,
+      .aiv-form select {
+        width: 100%;
+        padding: 11px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--aiv-border);
+        background: var(--aiv-surface);
+        color: var(--aiv-text);
+        font-family: var(--aiv-mono);
+        font-size: 0.88rem;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .aiv-form input:focus,
+      .aiv-form select:focus {
+        border-color: var(--aiv-lavender);
+        box-shadow: 0 0 0 3px rgba(var(--aiv-lavender-rgb), 0.15);
+      }
+      .aiv-form-error {
+        margin: 12px 0 0;
+        color: var(--aiv-rose);
+        font-size: 0.84rem;
+        font-weight: 500;
+      }
+
+      /* ── Link field ── */
+      .aiv-link-field {
+        display: flex;
+        gap: 10px;
+        align-items: stretch;
+        margin: 4px 0 8px;
+      }
+      .aiv-link-field input {
+        flex: 1;
+        min-width: 0;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(var(--aiv-lavender-rgb), 0.28);
+        background: var(--aiv-surface);
+        color: var(--aiv-lavender);
+        font-family: var(--aiv-mono);
+        font-size: 0.82rem;
+        outline: none;
+      }
+      .aiv-link-field button {
+        padding: 12px 20px;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(135deg, var(--aiv-lavender), var(--aiv-periwinkle));
+        color: #0e0e14;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s;
+      }
+      html.light-mode .aiv-link-field button {
+        color: #fff;
+      }
+      .aiv-link-field button:hover {
+        transform: translateY(-1px);
+      }
+      .aiv-link-meta {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.78rem;
+        color: var(--aiv-text-tertiary);
+        margin: 6px 0 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .aiv-link-tag {
+        font-family: var(--aiv-mono);
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        letter-spacing: 0.05em;
+        padding: 3px 10px;
+        border-radius: 100px;
+        border: 1px solid rgba(var(--aiv-lavender-rgb), 0.3);
+        color: var(--aiv-lavender);
+      }
+      .aiv-share-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 4px;
+      }
+      .aiv-result-line {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--aiv-mint);
+        margin: 6px 0 14px;
+      }
+
+      /* ── Battle strip ── */
+      .aiv-battle {
+        border: 1px solid var(--aiv-border);
+        border-radius: 16px;
+        background: var(--aiv-surface);
+        color: var(--aiv-text);
+        margin-top: 14px;
+        overflow: hidden;
+      }
+      .aiv-battle[hidden] {
+        display: none;
+      }
+      .aiv-battle-bar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        padding: 14px 18px;
+      }
+      .aiv-battle-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--aiv-text);
+      }
+      .aiv-battle-status .aiv-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--aiv-lavender);
+        box-shadow: 0 0 0 0 rgba(var(--aiv-lavender-rgb), 0.6);
+        animation: aivPulse 1.6s infinite;
+      }
+      @keyframes aivPulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(var(--aiv-lavender-rgb), 0.5);
+        }
+        70% {
+          box-shadow: 0 0 0 8px rgba(var(--aiv-lavender-rgb), 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(var(--aiv-lavender-rgb), 0);
+        }
+      }
+      .aiv-battle-timer {
+        font-family: var(--aiv-mono);
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: var(--aiv-text);
+        letter-spacing: 0.05em;
+        margin-left: auto;
+      }
+      .aiv-battle-timer.aiv-timer-low {
+        color: var(--aiv-rose);
+      }
+      .aiv-battle-msg {
+        padding: 0 18px 14px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.84rem;
+        color: var(--aiv-text-secondary);
+        min-height: 0;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 720px) {
+        .aiv-modal-card {
+          padding: 24px 20px 20px;
+        }
+        .aiv-link-field {
+          flex-direction: column;
+        }
+        .aiv-battle-bar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .aiv-battle-timer {
+          margin-left: 0;
+        }
+        .insight-btn span {
+          display: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .aiv-insight-blobs span,
+        .aiv-blobs span,
+        .aiv-battle-status .aiv-dot {
+          animation: none;
+        }
+        .aiv-modal-card {
+          animation: none;
+        }
+      }
+    </style>
     <script src="/theme.js"></script>
   </head>
   <body>
@@ -1208,6 +1794,24 @@
         >
           <i class="fas fa-code-branch"></i> <span>Snippets</span>
         </button>
+        <button
+          type="button"
+          id="shareBtn"
+          class="insight-btn insight-btn--share aiv-insight"
+          aria-label="Share this code as a DSA insight"
+          title="Share a short link to this code"
+        >
+          <i class="fas fa-link"></i> <span>Share</span>
+        </button>
+        <button
+          type="button"
+          id="challengeBtn"
+          class="insight-btn insight-btn--challenge aiv-insight"
+          aria-label="Challenge a friend to a battle on this code"
+          title="Create a head-to-head battle using this code"
+        >
+          <i class="fas fa-swords"></i> <span>Challenge a Friend</span>
+        </button>
       </div>
       <div class="editor-wrapper">
         <div id="editor-container" aria-label="Code editor"></div>
@@ -1288,6 +1892,40 @@
           </div>
         </aside>
       </div>
+
+      <!-- Shared DSA Insight banner — shown when the page is opened as /shared/:id -->
+      <section id="sharedInsightBanner" class="aiv-insight aiv-insight-banner" hidden aria-label="Shared DSA insight">
+        <div class="aiv-insight-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="aiv-insight-banner-inner">
+          <span class="aiv-eyebrow"><i class="fas fa-asterisk" aria-hidden="true"></i> Shared DSA Insight</span>
+          <h2 id="sharedInsightTitle" class="aiv-insight-title">—</h2>
+          <p id="sharedInsightMeta" class="aiv-insight-meta"></p>
+          <div class="aiv-insight-banner-actions">
+            <button type="button" id="forkRunBtn" class="aiv-btn aiv-btn--primary">
+              <i class="fas fa-code-branch" aria-hidden="true"></i> Fork &amp; Run
+            </button>
+            <button type="button" id="sharedChallengeBtn" class="aiv-btn aiv-btn--ghost">
+              <i class="fas fa-swords" aria-hidden="true"></i> Challenge a Friend
+            </button>
+            <button type="button" id="acceptChallengeBtn" class="aiv-btn aiv-btn--accept" hidden>
+              <i class="fas fa-crosshairs" aria-hidden="true"></i> Accept Challenge
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Battle strip — shown when a battle is in progress on this shared insight -->
+      <section id="battlePanel" class="aiv-insight aiv-battle" hidden aria-label="Active battle">
+        <div class="aiv-battle-bar">
+          <span class="aiv-battle-status" id="battleStatus"><span class="aiv-dot" aria-hidden="true"></span> Waiting for opponent…</span>
+          <span class="aiv-battle-timer" id="battleTimer" aria-label="Time remaining">05:00</span>
+          <button type="button" id="battleSubmitBtn" class="aiv-btn aiv-btn--accent" disabled>
+            <i class="fas fa-paper-plane" aria-hidden="true"></i> Submit Solution
+          </button>
+        </div>
+        <div class="aiv-battle-msg" id="battleMsg" aria-live="polite"></div>
+      </section>
+
       <div class="output" id="output" role="status" aria-live="polite" aria-atomic="true">
         Run your code to see output here...
       </div>
@@ -1303,6 +1941,87 @@
           <div class="modal-body">
             <div id="predictionResults">
               <!-- Results will be inserted here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share a DSA Insight modal -->
+      <div id="shareModal" class="aiv-insight aiv-modal" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle" hidden>
+        <div class="aiv-modal-card">
+          <div class="aiv-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+          <button type="button" id="shareModalClose" class="aiv-modal-close" aria-label="Close share dialog">&times;</button>
+          <span class="aiv-eyebrow">Insight Link</span>
+          <h2 id="shareModalTitle" class="aiv-modal-title">Share a DSA Insight</h2>
+          <p class="aiv-modal-sub">
+            Turn your editor buffer into a short link. Anyone with the link can open it
+            read-only and fork it — no sign-in needed.
+          </p>
+          <div class="aiv-form">
+            <label for="shareTitleInput">Insight title</label>
+            <input type="text" id="shareTitleInput" maxlength="120" placeholder="e.g. Two Sum — O(n) hash map approach" />
+            <button type="button" id="shareCreateBtn" class="aiv-btn aiv-btn--primary" style="margin-top: 16px; width: 100%; justify-content: center">
+              <i class="fas fa-link" aria-hidden="true"></i> Create link
+            </button>
+          </div>
+          <div class="aiv-link-field">
+            <input type="text" id="shareLinkInput" readonly aria-label="Shared link" placeholder="Your link will appear here" />
+            <button type="button" id="shareCopyBtn" aria-label="Copy shared link">Copy</button>
+          </div>
+          <div class="aiv-link-meta">
+            <span id="shareExpiryNote"></span>
+            <span class="aiv-link-tag" id="shareLangTag"></span>
+          </div>
+          <div class="aiv-share-actions">
+            <a id="shareOpenBtn" class="aiv-btn aiv-btn--ghost" target="_blank" rel="noopener" href="#" hidden>
+              <i class="fas fa-external-link-alt" aria-hidden="true"></i> Open link
+            </a>
+            <button type="button" id="shareChallengeBtn" class="aiv-btn aiv-btn--accent" hidden>
+              <i class="fas fa-swords" aria-hidden="true"></i> Challenge a Friend
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge a Friend modal -->
+      <div id="challengeModal" class="aiv-insight aiv-modal" role="dialog" aria-modal="true" aria-labelledby="challengeModalTitle" hidden>
+        <div class="aiv-modal-card">
+          <div class="aiv-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+          <button type="button" id="challengeModalClose" class="aiv-modal-close" aria-label="Close challenge dialog">&times;</button>
+          <span class="aiv-eyebrow">Head-to-Head</span>
+          <h2 id="challengeModalTitle" class="aiv-modal-title">Challenge a Friend</h2>
+          <p class="aiv-modal-sub">
+            They'll race you on this exact insight. Enter their account email and we'll
+            open a battle — first valid submission wins.
+          </p>
+          <form id="challengeForm" class="aiv-form">
+            <label for="challengeEmail">Friend's email</label>
+            <input type="email" id="challengeEmail" required autocomplete="off" placeholder="friend@example.com" />
+            <label for="challengeDifficulty">Difficulty</label>
+            <select id="challengeDifficulty" aria-label="Battle difficulty">
+              <option value="Easy">Easy</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+            <p id="challengeError" class="aiv-form-error" hidden></p>
+            <button type="submit" id="challengeSubmitBtn" class="aiv-btn aiv-btn--accent" style="margin-top: 18px; width: 100%; justify-content: center">
+              <i class="fas fa-swords" aria-hidden="true"></i> Send Challenge
+            </button>
+          </form>
+          <div id="challengeResult" hidden>
+            <p class="aiv-result-line"><i class="fas fa-check-circle" aria-hidden="true"></i> Battle created!</p>
+            <div class="aiv-link-field">
+              <input type="text" id="challengeJoinLink" readonly aria-label="Battle join link" />
+              <button type="button" id="challengeCopyBtn" aria-label="Copy join link">Copy</button>
+            </div>
+            <p class="aiv-link-meta">
+              Share this link with your friend. They must open it, accept the challenge,
+              and the clock starts for both of you.
+            </p>
+            <div class="aiv-share-actions">
+              <a id="challengeOpenArena" class="aiv-btn aiv-btn--primary" href="#">
+                <i class="fas fa-crosshairs" aria-hidden="true"></i> Open Battle Arena
+              </a>
             </div>
           </div>
         </div>
@@ -2575,6 +3294,547 @@
       window.saveSnippetForm = saveSnippetForm;
       window.resetToDefaultSnippets = resetToDefaultSnippets;
       window.updateSnippetsView = updateSnippetsView;
+    </script>
+    <script>
+      (function () {
+        'use strict';
+
+        var $ = function (id) {
+          return document.getElementById(id);
+        };
+
+        var MODE_MAP = {
+          javascript: 'javascript',
+          python: 'python',
+          java: 'java',
+          cpp: 'cpp',
+          lisp: 'lisp',
+          groovy: 'groovy',
+          vbnet: 'vb',
+          fsharp: 'fsharp',
+          prolog: 'prolog',
+          elixir: 'elixir',
+        };
+
+        var pathMatch = window.location.pathname.match(/^\/shared\/([A-Za-z0-9_-]{4,32})$/);
+        var sharedIdFromPath = pathMatch ? pathMatch[1] : null;
+
+        var sharedState = null;
+        var battleState = null;
+        var battlePollTimer = null;
+        var battleCountdownTimer = null;
+
+        function setEditorLanguage(lang) {
+          var sel = $('lang');
+          var safe = MODE_MAP[lang] ? lang : 'javascript';
+          if (sel) {
+            var found = Array.prototype.some.call(sel.options, function (o) {
+              return o.value === safe;
+            });
+            sel.value = found ? safe : 'javascript';
+            sel.dispatchEvent(new Event('change'));
+          }
+        }
+
+        function setEditorReadOnly(flag) {
+          if (editor) editor.updateOptions({ readOnly: !!flag });
+        }
+
+        function whenEditorReady(cb, tries) {
+          if (tries === undefined) tries = 100;
+          if (editor) {
+            cb();
+            return;
+          }
+          if (tries <= 0) return;
+          setTimeout(function () {
+            whenEditorReady(cb, tries - 1);
+          }, 100);
+        }
+
+        function openModal(id) {
+          var m = $(id);
+          if (m) m.hidden = false;
+        }
+        function closeModal(id) {
+          var m = $(id);
+          if (m) m.hidden = true;
+        }
+
+        function setOutput(text, type) {
+          if (typeof window.setOutput === 'function') {
+            window.setOutput(text, type);
+            return;
+          }
+          var out = $('output');
+          if (out) {
+            out.textContent = text;
+            out.className = 'output' + (type ? ' ' + type : '');
+          }
+        }
+
+        function copyText(text) {
+          if (!text) return;
+          var ok = function () {
+            setOutput('✅ Copied to clipboard.', 'success');
+          };
+          var fallback = function () {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+              document.execCommand('copy');
+              ok();
+            } catch (e) {
+              setOutput('❌ Could not copy. Copy manually from the field.', 'error');
+            }
+            document.body.removeChild(ta);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(ok).catch(fallback);
+          } else {
+            fallback();
+          }
+        }
+
+        // ── Shared view bootstrap ──
+        async function bootstrapSharedView() {
+          if (!sharedIdFromPath) return;
+          try {
+            var res = await fetch('/api/shared/' + encodeURIComponent(sharedIdFromPath));
+            var data = await res.json().catch(function () {
+              return {};
+            });
+            if (!res.ok) {
+              setOutput('❌ ' + (data.error || 'Shared insight not found or has expired.'), 'error');
+              return;
+            }
+            sharedState = data;
+            var meta = $('sharedInsightMeta');
+            var title = $('sharedInsightTitle');
+            var banner = $('sharedInsightBanner');
+            if (title) title.textContent = data.title || 'Shared DSA Insight';
+            if (meta) {
+              var len = data.code ? data.code.length : 0;
+              meta.textContent =
+                (data.language || 'javascript') + ' · ' + len + ' chars · read-only';
+            }
+            if (banner) banner.hidden = false;
+
+            var battleParam = new URLSearchParams(window.location.search).get('battle');
+            if (battleParam) {
+              var acceptBtn = $('acceptChallengeBtn');
+              if (acceptBtn) acceptBtn.hidden = false;
+              setOutput('You have been challenged! Accept to start the battle.', '');
+            }
+
+            whenEditorReady(function () {
+              setEditorLanguage(data.language || 'javascript');
+              if (data.code) editor.setValue(data.code);
+              setEditorReadOnly(true);
+            });
+          } catch (e) {
+            setOutput('❌ Could not load shared insight.', 'error');
+          }
+        }
+
+        // ── Share flow ──
+        async function createSharedLink() {
+          var code = editor ? editor.getValue() : '';
+          if (!code.trim()) {
+            setOutput('❌ Nothing to share — the editor is empty.', 'error');
+            return;
+          }
+          var title = ($('shareTitleInput').value || '').trim();
+          var language = $('lang') ? $('lang').value : 'javascript';
+          var btn = $('shareCreateBtn');
+          if (btn) btn.disabled = true;
+          try {
+            var res = await fetch('/api/shared', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ language: language, title: title, code: code }),
+            });
+            var data = await res.json().catch(function () {
+              return {};
+            });
+            if (!res.ok) {
+              setOutput('❌ ' + (data.error || 'Failed to create link.'), 'error');
+              return;
+            }
+            sharedState = data;
+            var url = window.location.origin + (data.url || '/shared/' + data.id);
+            $('shareLinkInput').value = url;
+            $('shareCopyBtn').hidden = false;
+            var openBtn = $('shareOpenBtn');
+            if (openBtn) {
+              openBtn.href = url;
+              openBtn.hidden = false;
+            }
+            $('shareChallengeBtn').hidden = false;
+            $('shareLangTag').textContent = data.language || 'javascript';
+            var days = Math.max(
+              1,
+              Math.ceil((new Date(data.expiresAt).getTime() - Date.now()) / 86400000)
+            );
+            $('shareExpiryNote').textContent =
+              'Link expires in ~' + days + ' day' + (days > 1 ? 's' : '');
+            setOutput('✅ Link created! Copy it and share your insight.', 'success');
+          } finally {
+            if (btn) btn.disabled = false;
+          }
+        }
+
+        async function ensureSharedId() {
+          if (sharedState && sharedState.id) return sharedState.id;
+          var code = editor ? editor.getValue() : '';
+          if (!code.trim()) {
+            setOutput('❌ Nothing to share — the editor is empty.', 'error');
+            return null;
+          }
+          var language = $('lang') ? $('lang').value : 'javascript';
+          var res = await fetch('/api/shared', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              language: language,
+              title: 'Untitled DSA Insight',
+              code: code,
+            }),
+          });
+          var data = await res.json().catch(function () {
+            return {};
+          });
+          if (!res.ok) {
+            setOutput('❌ ' + (data.error || 'Failed to create link.'), 'error');
+            return null;
+          }
+          sharedState = data;
+          return data.id;
+        }
+
+        // ── Challenge flow ──
+        async function openChallengeModal() {
+          var sharedId = await ensureSharedId();
+          if (!sharedId) return;
+          $('challengeEmail').value = '';
+          $('challengeError').hidden = true;
+          $('challengeForm').hidden = false;
+          $('challengeResult').hidden = true;
+          openModal('challengeModal');
+          setTimeout(function () {
+            var email = $('challengeEmail');
+            if (email) email.focus();
+          }, 50);
+        }
+
+        async function sendChallenge(e) {
+          e.preventDefault();
+          var opponentEmail = ($('challengeEmail').value || '').trim();
+          var difficulty = $('challengeDifficulty') ? $('challengeDifficulty').value : 'Medium';
+          var sharedId = sharedState ? sharedState.id : null;
+          var err = $('challengeError');
+          if (!opponentEmail) {
+            err.textContent = 'Enter your friend\'s email.';
+            err.hidden = false;
+            return;
+          }
+          if (!sharedId) {
+            err.textContent = 'No shared insight to battle on yet.';
+            err.hidden = false;
+            return;
+          }
+          var btn = $('challengeSubmitBtn');
+          if (btn) btn.disabled = true;
+          try {
+            var res = await fetch('/api/battles', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ opponentEmail: opponentEmail, difficulty: difficulty, sharedId: sharedId }),
+            });
+            var data = await res.json().catch(function () {
+              return {};
+            });
+            if (!res.ok) {
+              err.textContent = data.error || 'Failed to send challenge.';
+              err.hidden = false;
+              return;
+            }
+            err.hidden = true;
+            var joinUrl =
+              window.location.origin + '/shared/' + sharedId + '?battle=' + data.battleId;
+            $('challengeJoinLink').value = joinUrl;
+            var arena = $('challengeOpenArena');
+            if (arena) arena.href = joinUrl;
+            $('challengeForm').hidden = true;
+            $('challengeResult').hidden = false;
+            startBattleTracking(data.battleId, true);
+          } finally {
+            if (btn) btn.disabled = false;
+          }
+        }
+
+        // ── Battle tracking ──
+        function startBattleTracking(battleId, isCreator) {
+          stopBattleTracking();
+          battleState = { id: battleId, isCreator: isCreator };
+          var panel = $('battlePanel');
+          if (panel) panel.hidden = false;
+          var submitBtn = $('battleSubmitBtn');
+          if (submitBtn) submitBtn.disabled = true;
+          battlePollTimer = setInterval(function () {
+            pollBattle(battleId);
+          }, 1500);
+          pollBattle(battleId);
+        }
+
+        function stopBattleTracking() {
+          if (battlePollTimer) {
+            clearInterval(battlePollTimer);
+            battlePollTimer = null;
+          }
+          if (battleCountdownTimer) {
+            clearInterval(battleCountdownTimer);
+            battleCountdownTimer = null;
+          }
+        }
+
+        function startCountdown(timeRemainingMs) {
+          if (battleCountdownTimer) clearInterval(battleCountdownTimer);
+          var deadline = Date.now() + (timeRemainingMs || 0);
+          var tick = function () {
+            var ms = Math.max(0, deadline - Date.now());
+            var secs = Math.ceil(ms / 1000);
+            var el = $('battleTimer');
+            if (!el) return;
+            el.textContent =
+              String(Math.floor(secs / 60)).padStart(2, '0') +
+              ':' +
+              String(secs % 60).padStart(2, '0');
+            el.classList.toggle('aiv-timer-low', secs <= 60);
+            if (secs <= 0) clearInterval(battleCountdownTimer);
+          };
+          tick();
+          battleCountdownTimer = setInterval(tick, 1000);
+        }
+
+        async function pollBattle(battleId) {
+          var res;
+          try {
+            res = await fetch('/api/battles/' + battleId);
+          } catch (e) {
+            return;
+          }
+          if (!res.ok) return;
+          var data = await res.json().catch(function () {
+            return {};
+          });
+          if (!battleState) return;
+          battleState.status = data.status;
+          var statusEl = $('battleStatus');
+          var submitBtn = $('battleSubmitBtn');
+          if (data.status === 'pending') {
+            if (statusEl)
+              statusEl.innerHTML =
+                '<span class="aiv-dot" aria-hidden="true"></span> Waiting for opponent…';
+            if (submitBtn) submitBtn.disabled = true;
+          } else if (data.status === 'active') {
+            if (statusEl)
+              statusEl.innerHTML =
+                '<span class="aiv-dot" aria-hidden="true"></span> Battle active — solve it!';
+            if (submitBtn) submitBtn.disabled = false;
+            setEditorReadOnly(false);
+            startCountdown(data.timeRemainingMs);
+            if (data.problemCode && !(sharedState && sharedState.id)) {
+              whenEditorReady(function () {
+                setEditorLanguage(data.problemLanguage || 'javascript');
+                editor.setValue(data.problemCode);
+                setEditorReadOnly(false);
+              });
+            }
+          } else if (data.status === 'completed') {
+            stopBattleTracking();
+            if (statusEl)
+              statusEl.innerHTML =
+                '<span class="aiv-dot" aria-hidden="true"></span> Battle completed!';
+            if (submitBtn) submitBtn.disabled = true;
+            var msg = $('battleMsg');
+            if (msg)
+              msg.textContent = data.winner
+                ? 'A winner has been decided.'
+                : 'Battle completed without a winner.';
+          } else if (data.status === 'expired') {
+            stopBattleTracking();
+            if (statusEl)
+              statusEl.innerHTML =
+                '<span class="aiv-dot" aria-hidden="true"></span> Battle expired';
+            if (submitBtn) submitBtn.disabled = true;
+            var msg2 = $('battleMsg');
+            if (msg2) msg2.textContent = 'Time is up — no valid submission in time.';
+          }
+        }
+
+        async function submitBattleSolution() {
+          if (!battleState || !battleState.id) return;
+          var code = editor ? editor.getValue() : '';
+          if (!code.trim()) {
+            var m = $('battleMsg');
+            if (m) m.textContent = 'Your editor is empty. Write a solution first.';
+            return;
+          }
+          var btn = $('battleSubmitBtn');
+          if (btn) btn.disabled = true;
+          var res = await fetch('/api/battles/' + battleState.id + '/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: code }),
+          });
+          var data = await res.json().catch(function () {
+            return {};
+          });
+          var statusEl = $('battleStatus');
+          var msgEl = $('battleMsg');
+          if (!res.ok) {
+            if (msgEl) msgEl.textContent = '❌ ' + (data.error || 'Submission failed.');
+            if (data.error && /already|finished/i.test(data.error)) {
+              if (statusEl)
+                statusEl.innerHTML =
+                  '<span class="aiv-dot" aria-hidden="true"></span> Opponent submitted first — you lose';
+              stopBattleTracking();
+            } else if (btn) {
+              btn.disabled = false;
+            }
+            return;
+          }
+          stopBattleTracking();
+          if (statusEl)
+            statusEl.innerHTML =
+              '<span class="aiv-dot" aria-hidden="true"></span> Submitted! You won 🎉';
+          if (msgEl)
+            msgEl.textContent = 'You won the battle and earned ' + (data.xpAwarded || 0) + ' XP.';
+        }
+
+        async function acceptChallenge() {
+          var battleParam = new URLSearchParams(window.location.search).get('battle');
+          if (!battleParam) return;
+          var btn = $('acceptChallengeBtn');
+          if (btn) btn.disabled = true;
+          try {
+            var res = await fetch('/api/battles/' + battleParam + '/join', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({}),
+            });
+            var data = await res.json().catch(function () {
+              return {};
+            });
+            if (!res.ok) {
+              setOutput('❌ ' + (data.error || 'Could not join battle.'), 'error');
+              return;
+            }
+            if (btn) btn.hidden = true;
+            setEditorReadOnly(false);
+            startBattleTracking(battleParam, false);
+            await pollBattle(battleParam);
+          } finally {
+            if (btn) btn.disabled = false;
+          }
+        }
+
+        // ── Wire up ──
+        function initInsights() {
+          var shareBtn = $('shareBtn');
+          if (shareBtn) {
+            shareBtn.addEventListener('click', function () {
+              $('shareTitleInput').value = '';
+              $('shareLinkInput').value = '';
+              $('shareCopyBtn').hidden = true;
+              var openBtn = $('shareOpenBtn');
+              if (openBtn) openBtn.hidden = true;
+              $('shareChallengeBtn').hidden = true;
+              $('shareExpiryNote').textContent = '';
+              $('shareLangTag').textContent = '';
+              openModal('shareModal');
+              setTimeout(function () {
+                var t = $('shareTitleInput');
+                if (t) t.focus();
+              }, 50);
+            });
+          }
+          if ($('shareCreateBtn'))
+            $('shareCreateBtn').addEventListener('click', createSharedLink);
+          if ($('shareModalClose'))
+            $('shareModalClose').addEventListener('click', function () {
+              closeModal('shareModal');
+            });
+          if ($('shareModal'))
+            $('shareModal').addEventListener('click', function (e) {
+              if (e.target === $('shareModal')) closeModal('shareModal');
+            });
+          if ($('shareCopyBtn'))
+            $('shareCopyBtn').addEventListener('click', function () {
+              copyText($('shareLinkInput').value);
+            });
+          if ($('shareChallengeBtn'))
+            $('shareChallengeBtn').addEventListener('click', function () {
+              closeModal('shareModal');
+              openChallengeModal();
+            });
+
+          var challengeBtn = $('challengeBtn');
+          if (challengeBtn) challengeBtn.addEventListener('click', openChallengeModal);
+          var sharedChallengeBtn = $('sharedChallengeBtn');
+          if (sharedChallengeBtn)
+            sharedChallengeBtn.addEventListener('click', openChallengeModal);
+          if ($('challengeModalClose'))
+            $('challengeModalClose').addEventListener('click', function () {
+              closeModal('challengeModal');
+            });
+          if ($('challengeModal'))
+            $('challengeModal').addEventListener('click', function (e) {
+              if (e.target === $('challengeModal')) closeModal('challengeModal');
+            });
+          var challengeForm = $('challengeForm');
+          if (challengeForm)
+            challengeForm.addEventListener('submit', sendChallenge);
+          if ($('challengeCopyBtn'))
+            $('challengeCopyBtn').addEventListener('click', function () {
+              copyText($('challengeJoinLink').value);
+            });
+
+          var forkRun = $('forkRunBtn');
+          if (forkRun) {
+            forkRun.addEventListener('click', function () {
+              setEditorReadOnly(false);
+              var runBtn = $('runBtn');
+              if (runBtn) runBtn.click();
+              setOutput('Forked! The editor is now editable — your copy is independent.', 'success');
+            });
+          }
+          if ($('acceptChallengeBtn'))
+            $('acceptChallengeBtn').addEventListener('click', acceptChallenge);
+          if ($('battleSubmitBtn'))
+            $('battleSubmitBtn').addEventListener('click', submitBattleSolution);
+
+          document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+              closeModal('shareModal');
+              closeModal('challengeModal');
+            }
+          });
+
+          bootstrapSharedView();
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initInsights);
+        } else {
+          initInsights();
+        }
+      })();
     </script>
   </body>
 </html>
