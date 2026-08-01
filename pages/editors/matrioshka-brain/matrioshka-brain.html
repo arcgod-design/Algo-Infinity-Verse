@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Matrioshka Brain Orchestrator | Algo Infinity Verse</title>
+    <title>Matrioshka Brain Computational Core | Algo Infinity Verse</title>
     <link rel="stylesheet" href="/styles.css" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -13,27 +13,26 @@
       body { margin: 0; overflow: hidden; background: #000; font-family: 'Poppins', sans-serif; color: #fff; }
       .app-container { display: flex; height: 100vh; }
       
-      .sidebar { width: 450px; background: rgba(15, 23, 42, 0.95); border-right: 1px solid #eab308; display: flex; flex-direction: column; z-index: 10; }
+      .sidebar { width: 450px; background: rgba(15, 23, 42, 0.95); border-right: 1px solid #f59e0b; display: flex; flex-direction: column; z-index: 10; }
       .header { padding: 20px; border-bottom: 1px solid #334155; }
-      .header h2 { margin: 0; color: #eab308; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; }
+      .header h2 { margin: 0; color: #f59e0b; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; }
       .header p { margin: 5px 0 0 0; font-size: 0.8rem; color: #94a3b8; }
       
       #editor-container { flex: 1; min-height: 300px; }
       
       .controls { padding: 20px; border-top: 1px solid #334155; background: rgba(0,0,0,0.5); }
-      .btn { background: linear-gradient(90deg, #ca8a04, #a16207); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
-      .btn:hover { background: #eab308; transform: translateY(-2px); box-shadow: 0 0 15px rgba(234, 179, 8, 0.5); }
+      .btn { background: linear-gradient(90deg, #d97706, #b45309); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+      .btn:hover { background: #f59e0b; transform: translateY(-2px); box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); }
       
-      .sim-container { flex: 1; position: relative; background: #000; overflow: hidden; }
+      .sim-container { flex: 1; position: relative; background: #020617; overflow: hidden; }
+      canvas { width: 100%; height: 100%; display: block; filter: contrast(1.2); }
       
-      canvas { width: 100%; height: 100%; display: block; }
-      
-      .hud { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; border: 1px solid #eab308; width: 280px; z-index: 10; pointer-events: none; }
-      .hud h3 { margin: 0 0 10px 0; color: #eab308; font-size: 1rem; font-family: 'Orbitron', sans-serif; }
+      .hud { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; border: 1px solid #f59e0b; width: 300px; z-index: 10; pointer-events: none; }
+      .hud h3 { margin: 0 0 10px 0; color: #f59e0b; font-size: 1rem; font-family: 'Orbitron', sans-serif; }
       .metric { display: flex; justify-content: space-between; font-size: 0.8rem; color: #cbd5e1; margin-bottom: 5px; }
       .val { font-weight: bold; font-family: monospace; }
-      .val-flops { color: #8b5cf6; }
-      .val-temp { color: #f97316; }
+      .val-flops { color: #38bdf8; }
+      .val-heat { color: #ef4444; }
     </style>
   </head>
   <body>
@@ -41,30 +40,30 @@
     <div class="app-container">
       <div class="sidebar">
         <div class="header">
-          <h2><i class="fas fa-microchip"></i> Matrioshka Brain Orchestrator</h2>
-          <p>Megascale thermodynamic computing</p>
+          <h2><i class="fas fa-microchip"></i> Matrioshka Brain</h2>
+          <p>Stellar-Scale Distributed Computing</p>
         </div>
         
         <div id="editor-container"></div>
         
         <div class="controls">
-          <button class="btn" onclick="bootSystem()"><i class="fas fa-power-off"></i> Boot Megastructure</button>
+          <button class="btn" onclick="bootMainframe()"><i class="fas fa-power-off"></i> Initialize Stellar Core</button>
         </div>
       </div>
       
       <div class="sim-container">
-        <!-- Background -->
-        <div style="position: absolute; inset:0; background: radial-gradient(circle, #1e1b4b 0%, #000 100%); pointer-events: none; z-index: 0;"></div>
+        <!-- Starfield -->
+        <div style="position: absolute; inset:0; background: url('data:image/svg+xml,%3Csvg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"n\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.5\" numOctaves=\"2\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"0.05\"/%3E%3C/svg%3E'); pointer-events: none; z-index: 0;"></div>
         
         <canvas id="brainCanvas" style="position: relative; z-index: 1;"></canvas>
         
         <div class="hud">
-          <h3>System Telemetry</h3>
-          <div class="metric"><span>Processing Power:</span> <span class="val val-flops" id="flopsVal">0 YFLOP/s</span></div>
-          <div class="metric"><span>Avg Core Temp:</span> <span class="val val-temp" id="tempVal">0 K</span></div>
-          <div class="metric"><span>Structural Integrity:</span> <span class="val" id="hullVal" style="color:#10b981">100%</span></div>
+          <h3>Computational Telemetry</h3>
+          <div class="metric"><span>Processing Power:</span> <span class="val val-flops" id="flopsVal">0 YFLOPS</span></div>
+          <div class="metric"><span>Thermal Output:</span> <span class="val val-heat" id="heatVal">0 K</span></div>
+          <div class="metric"><span>Data Latency:</span> <span class="val" id="latVal" style="color:#facc15">0 ms</span></div>
           <div class="metric" style="margin-top: 10px; border-top: 1px solid #334155; padding-top: 5px;">
-            <span>Orchestrator:</span> <span class="val" id="statusVal" style="color:#94a3b8">OFFLINE</span>
+            <span>System State:</span> <span class="val" id="statusVal" style="color:#94a3b8">OFFLINE</span>
           </div>
         </div>
       </div>
@@ -75,19 +74,22 @@
       require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.36.1/min/vs' }});
       require(['vs/editor/editor.main'], function() {
         editor = monaco.editor.create(document.getElementById('editor-container'), {
-          value: `// Matrioshka Brain Workload Orchestration
-// The brain consists of 5 nested Dyson spheres (shells).
-// Shell 0 (inner) is blisteringly hot, computing fast but melting easily.
-// Shell 4 (outer) runs near absolute zero, slow but stable.
-// Waste heat from inner shells powers the outer shells.
+          value: `// Matrioshka Brain Scheduling Algorithm
+// The computer is built of concentric Dyson shells around a star.
+// Inner shells are hot and fast. Outer shells are cold and slow.
+// You must route compute tasks between shells.
+// Inner shell computes fast but overheats. Outer shell computes slow but dissipates heat.
 
-function distributeWorkload(shellTemps, currentFlopsRequired) {
-    // Return an array of 5 floats (0.0 to 1.0) indicating workload per shell.
+function scheduleComputeTasks(innerHeat, innerCapacity, outerCapacity) {
+    // Return { routeToInner: float (0.0 to 1.0) }
+    // Proportion of tasks to route to the inner high-speed shell.
     
-    // Naive logic: Max workload on all shells!
-    // Result: The inner shells instantly overheat and melt, causing structural collapse.
+    // Naive logic: Route everything to the fastest inner shell!
+    // Result: Inner shell melts into plasma. Computer destroyed.
     
-    return [1.0, 1.0, 1.0, 1.0, 1.0];
+    return {
+        routeToInner: 1.0
+    };
 }`,
           language: 'javascript',
           theme: 'vs-dark',
@@ -102,25 +104,16 @@ function distributeWorkload(shellTemps, currentFlopsRequired) {
       let isSimulating = false;
       let time = 0;
       
-      let shells = [];
-      let totalFlops = 0;
-      let targetFlops = 1000;
-      let integrity = 100;
+      let innerTemp = 0; // Starts cold, operating temp is high
+      let yottaFlops = 0;
+      let latency = 0;
+      
+      // Data packets visualization
+      let packets = [];
       
       function resize() { 
           canvas.width = canvas.clientWidth; 
           canvas.height = canvas.clientHeight;
-          initShells();
-      }
-      
-      function initShells() {
-          shells = [
-              { radius: 50,  temp: 4000, maxTemp: 6000, workload: 0, color: '#f97316' }, // Inner (Hot)
-              { radius: 90,  temp: 2000, maxTemp: 3500, workload: 0, color: '#facc15' },
-              { radius: 140, temp: 800,  maxTemp: 1500, workload: 0, color: '#4ade80' },
-              { radius: 200, temp: 300,  maxTemp: 600,  workload: 0, color: '#38bdf8' },
-              { radius: 270, temp: 50,   maxTemp: 150,  workload: 0, color: '#8b5cf6' }  // Outer (Cold)
-          ];
       }
       
       setTimeout(resize, 100);
@@ -131,150 +124,147 @@ function distributeWorkload(shellTemps, currentFlopsRequired) {
           let cx = canvas.width / 2;
           let cy = canvas.height / 2;
 
-          // Draw Central Star
-          ctx.fillStyle = '#fff';
-          ctx.beginPath(); ctx.arc(cx, cy, 20, 0, Math.PI*2); ctx.fill();
-          ctx.shadowBlur = 30; ctx.shadowColor = '#fff'; ctx.fill(); ctx.shadowBlur = 0;
+          let innerRadius = 80;
+          let outerRadius = 250;
 
           if (isSimulating) {
               time += 0.05;
-              targetFlops += 2; // Increasing demand
               
-              let currentTemps = shells.map(s => s.temp);
-              let workloads = [0,0,0,0,0];
+              let routeToInner = 0.5;
               
               try {
                   eval(editor.getValue());
-                  let res = distributeWorkload(currentTemps, targetFlops);
-                  if (Array.isArray(res) && res.length === 5) {
-                      workloads = res.map(v => Math.max(0, Math.min(1.0, v)));
+                  let res = scheduleComputeTasks(innerTemp, 100, 100);
+                  if (res && res.routeToInner !== undefined) {
+                      routeToInner = Math.max(0, Math.min(1.0, res.routeToInner));
                   }
               } catch(e) {}
               
-              totalFlops = 0;
-              let avgTemp = 0;
-              let stress = 0;
+              // Physics & Computation
+              // Inner shell heats up fast based on load. Outer shell cools it down (waste heat radiates outward)
+              let heatGenerated = routeToInner * 50;
+              let heatRadiated = 20; // Constant cooling to outer shell
               
-              for(let i=0; i<5; i++) {
-                  let s = shells[i];
-                  s.workload = workloads[i];
-                  
-                  // Computing generates heat
-                  let heatGenerated = s.workload * (5000 / (i+1));
-                  
-                  // Heat flows outward from star and inner shells
-                  let heatReceived = 0;
-                  if (i === 0) heatReceived = 1000; // From star
-                  else heatReceived = shells[i-1].temp * 0.1; // From inner shell
-                  
-                  // Heat radiates outward
-                  let heatRadiated = s.temp * 0.15;
-                  
-                  s.temp += (heatGenerated + heatReceived - heatRadiated) * 0.05;
-                  
-                  // Cap minimum temp at space background (3K)
-                  if(s.temp < 3) s.temp = 3;
-                  
-                  // Flops calculation: Inner shells are faster, but throttled by high temps
-                  let efficiency = Math.max(0, 1.0 - (s.temp / s.maxTemp));
-                  let shellFlops = s.workload * (1000 / (i+1)) * efficiency;
-                  totalFlops += shellFlops;
-                  
-                  avgTemp += s.temp;
-                  
-                  // Damage calculation
-                  if (s.temp > s.maxTemp) {
-                      stress += (s.temp - s.maxTemp) * 0.01;
+              innerTemp += (heatGenerated - heatRadiated) * 0.1;
+              
+              // Base temp of a star
+              if(innerTemp < 5000) innerTemp += 10;
+              
+              // Compute power
+              // Inner shell is 10x faster
+              let innerFlops = routeToInner * 1000;
+              let outerFlops = (1.0 - routeToInner) * 100;
+              yottaFlops = innerFlops + outerFlops;
+              
+              // Latency: Outer shell is huge, light takes time to travel
+              let innerLat = 10;
+              let outerLat = 500;
+              latency = (routeToInner * innerLat) + ((1.0 - routeToInner) * outerLat);
+              
+              // Generate visual packets based on load
+              if (Math.random() < routeToInner) {
+                  packets.push({ r: innerRadius, angle: Math.random()*Math.PI*2, speed: 0.1, color: '#facc15' });
+              }
+              if (Math.random() < (1.0 - routeToInner)) {
+                  packets.push({ r: outerRadius, angle: Math.random()*Math.PI*2, speed: 0.02, color: '#38bdf8' });
+              }
+              
+              // Update packets
+              for(let i=packets.length-1; i>=0; i--) {
+                  packets[i].angle += packets[i].speed;
+                  // fade out
+                  if(Math.random() < 0.05) packets.splice(i, 1);
+              }
+              
+              // End States
+              if (innerTemp > 20000) {
+                  isSimulating = false;
+                  document.getElementById('statusVal').innerText = "INNER SHELL MELTDOWN";
+                  document.getElementById('statusVal').style.color = "#ef4444";
+              } else if (time > 30 && yottaFlops > 500 && innerTemp < 15000) {
+                  isSimulating = false;
+                  document.getElementById('statusVal').innerText = "COMPUTATION OPTIMIZED";
+                  document.getElementById('statusVal').style.color = "#10b981";
+              } else {
+                  if (innerTemp > 15000) {
+                      document.getElementById('statusVal').innerText = "WARNING: CRITICAL TEMPERATURE";
+                      document.getElementById('statusVal').style.color = "#ef4444";
+                  } else if (latency > 400) {
+                      document.getElementById('statusVal').innerText = "WARNING: HIGH LATENCY";
+                      document.getElementById('statusVal').style.color = "#facc15";
+                  } else {
+                      document.getElementById('statusVal').innerText = "PROCESSING DATA...";
+                      document.getElementById('statusVal').style.color = "#38bdf8";
                   }
               }
               
-              avgTemp /= 5;
-              integrity -= stress;
-              if (integrity < 0) integrity = 0;
-              
-              // Draw Data Flow
-              ctx.strokeStyle = '#fff';
-              ctx.lineWidth = 1;
-              for(let i=0; i<20; i++) {
-                  let angle = (i/20) * Math.PI*2 + time*0.5;
-                  ctx.beginPath();
-                  ctx.moveTo(cx, cy);
-                  ctx.lineTo(cx + Math.cos(angle)*shells[4].radius, cy + Math.sin(angle)*shells[4].radius);
-                  ctx.stroke();
-              }
-              
               // HUD
-              document.getElementById('flopsVal').innerText = totalFlops.toFixed(0) + " YFLOP/s";
-              document.getElementById('tempVal').innerText = avgTemp.toFixed(0) + " K";
+              document.getElementById('flopsVal').innerText = Math.floor(yottaFlops) + " YFLOPS";
+              document.getElementById('heatVal').innerText = Math.floor(innerTemp) + " K";
+              document.getElementById('latVal').innerText = Math.floor(latency) + " ms";
               
-              let intEl = document.getElementById('hullVal');
-              intEl.innerText = integrity.toFixed(1) + "%";
-              if(integrity < 50) intEl.style.color = "#ef4444";
-              else intEl.style.color = "#10b981";
-              
-              if (integrity <= 0) {
-                  isSimulating = false;
-                  document.getElementById('statusVal').innerText = "MEGASTRUCTURE COLLAPSE";
-                  document.getElementById('statusVal').style.color = "#ef4444";
-                  
-                  // Explosion
-                  ctx.fillStyle = '#ef4444';
-                  ctx.beginPath(); ctx.arc(cx, cy, shells[4].radius, 0, Math.PI*2); ctx.fill();
-              } else if (totalFlops > 3000) {
-                  document.getElementById('statusVal').innerText = "TRANSCENDENCE ACHIEVED";
-                  document.getElementById('statusVal').style.color = "#10b981";
-              } else {
-                  document.getElementById('statusVal').innerText = "PROCESSING...";
-                  document.getElementById('statusVal').style.color = "#38bdf8";
-              }
+              if(innerTemp > 15000) document.getElementById('heatVal').style.color = "#ef4444";
+              else document.getElementById('heatVal').style.color = "#facc15";
           }
-
-          // Draw Shells
-          for(let i=0; i<shells.length; i++) {
-              let s = shells[i];
-              
-              // Base shell
-              ctx.strokeStyle = \`rgba(148, 163, 184, 0.3)\`;
-              ctx.lineWidth = 2;
-              ctx.beginPath(); ctx.arc(cx, cy, s.radius, 0, Math.PI*2); ctx.stroke();
-              
-              // Temperature glow
-              if(s.temp > 0) {
-                  let dangerPct = Math.min(1.0, s.temp / s.maxTemp);
-                  let r = Math.floor(dangerPct * 255);
-                  let g = Math.floor((1-dangerPct) * 200);
-                  ctx.strokeStyle = \`rgba(\${r},\${g},0, 0.6)\`;
-                  ctx.lineWidth = 5;
-                  ctx.beginPath(); ctx.arc(cx, cy, s.radius, 0, Math.PI*2); ctx.stroke();
-              }
-              
-              // Workload indicator
-              if (isSimulating && s.workload > 0) {
-                  ctx.strokeStyle = '#38bdf8';
-                  ctx.lineWidth = 4;
-                  ctx.setLineDash([10, 20]);
-                  ctx.lineDashOffset = -time * 50;
-                  ctx.beginPath();
-                  ctx.arc(cx, cy, s.radius, 0, Math.PI*2 * s.workload);
-                  ctx.stroke();
-                  ctx.setLineDash([]);
-              }
+          
+          // Draw Star
+          ctx.beginPath();
+          ctx.arc(cx, cy, 30, 0, Math.PI*2);
+          ctx.fillStyle = '#fff';
+          ctx.shadowBlur = 40;
+          ctx.shadowColor = '#facc15';
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          
+          // Draw Inner Shell (Hot)
+          ctx.beginPath();
+          ctx.arc(cx, cy, innerRadius, 0, Math.PI*2);
+          ctx.strokeStyle = innerTemp > 15000 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(250, 204, 21, 0.5)';
+          ctx.lineWidth = 4 + (Math.sin(time*10)*2);
+          ctx.stroke();
+          
+          // Draw Outer Shell (Cool)
+          ctx.beginPath();
+          ctx.arc(cx, cy, outerRadius, 0, Math.PI*2);
+          ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+          ctx.lineWidth = 10;
+          ctx.stroke();
+          
+          // Draw Structural Struts
+          ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+          ctx.lineWidth = 2;
+          for(let i=0; i<8; i++) {
+              let angle = (i/8) * Math.PI*2 + (time*0.01);
+              ctx.beginPath();
+              ctx.moveTo(cx + Math.cos(angle)*innerRadius, cy + Math.sin(angle)*innerRadius);
+              ctx.lineTo(cx + Math.cos(angle)*outerRadius, cy + Math.sin(angle)*outerRadius);
+              ctx.stroke();
           }
+          
+          // Draw Data Packets
+          packets.forEach(p => {
+              ctx.fillStyle = p.color;
+              ctx.beginPath();
+              ctx.arc(cx + Math.cos(p.angle)*p.r, cy + Math.sin(p.angle)*p.r, 3, 0, Math.PI*2);
+              ctx.fill();
+          });
 
           requestAnimationFrame(animate);
       }
       
       animate();
 
-      function bootSystem() {
+      function bootMainframe() {
           if(isSimulating) return;
-          initShells();
           isSimulating = true;
           time = 0;
-          targetFlops = 1000;
-          integrity = 100;
-          document.getElementById('statusVal').innerText = "BOOTING KERNEL...";
-          document.getElementById('statusVal').style.color = "#eab308";
+          innerTemp = 5000;
+          yottaFlops = 0;
+          latency = 0;
+          packets = [];
+          
+          document.getElementById('statusVal').innerText = "BOOTING...";
+          document.getElementById('statusVal').style.color = "#f59e0b";
       }
     </script>
   </body>
