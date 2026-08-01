@@ -114,6 +114,15 @@ const academies = [
     difficulty: 'Intermediate',
     desc: 'Create polished React apps with Material Design components, theming, and customization.',
   },
+  {
+    id: 'webassembly',
+    name: 'WebAssembly Academy',
+    path: '/pages/webassembly-academy/webassembly-academy.html',
+    category: 'Frontend',
+    icon: 'fa-solid fa-microchip',
+    difficulty: 'Intermediate',
+    desc: 'Master WebAssembly end-to-end — binary format & LEB128, module lifecycle, linear memory, JS interop, WAT & toolchains, SIMD, and security with a live WAT simulator.',
+  },
 
   // ── Backend ──
   {
@@ -374,7 +383,7 @@ const academies = [
 /* ─── Categories with counts ─── */
 const categoryDefs = [
   { label: 'All', key: 'all', count: academies.length },
-  { label: 'Frontend', key: 'frontend', count: 8 },
+  { label: 'Frontend', key: 'frontend', count: 9 },
   { label: 'Backend', key: 'backend', count: 14 },
   { label: 'System Design', key: 'system-design', count: 1 },
   { label: 'Cloud & DevOps', key: 'cloud-devops', count: 3 },
@@ -616,6 +625,7 @@ function initFlipAnimation() {
     { name: 'Svelte', cat: 'frontend' },
     { name: 'Vue.js', cat: 'frontend' },
     { name: 'Tailwind', cat: 'frontend' },
+    { name: 'WebAssembly', cat: 'frontend' },
     { name: 'FastAPI', cat: 'backend' },
     { name: 'Node.js', cat: 'backend' },
     { name: 'TypeScript', cat: 'backend' },
