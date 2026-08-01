@@ -14,6 +14,15 @@ const languages = [
     desc: 'Beginner-friendly, versatile, and powerful. Ideal for data science, web development, automation, and AI.',
   },
   {
+    name: 'Ruby',
+    path: '/pages/learning/ruby-learning/ruby-learning.html',
+    category: 'General Purpose',
+    icon: 'fa-gem',
+    isBrandIcon: false,
+    langKey: 'ruby',
+    desc: "A language designed for developer happiness — elegant syntax, pure OOP, expressive blocks, and the power of Ruby on Rails.",
+  },
+  {
     name: 'JavaScript',
     path: '/pages/learning/javascript-learning/javascript-learning.html',
     category: 'Web',
@@ -139,6 +148,7 @@ const categories = ['All', 'General Purpose', 'Systems', 'Web', 'Enterprise'];
 /* ─── Language brand colors for icons ─── */
 const langColors = {
   python: '#3572A5',
+  ruby: '#CC342D',
   javascript: '#f7df1e',
   typescript: '#3178C6',
   java: '#b07219',
