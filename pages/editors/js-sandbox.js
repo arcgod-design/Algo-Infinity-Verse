@@ -199,7 +199,6 @@ async function run({ hidden }) {
     }
 
     // Run Zero-Knowledge Proof Verification if tests passed
-    const allPassed = data.tests && data.tests.length > 0 && data.tests.every(t => t.pass);
     if (allPassed) {
       generateZKP();
     } else {
@@ -596,7 +595,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (output && output.length > 0) {
           const generatedHTML = output[0].generated_text;
           // Simple sanitization to prevent breakage
-          const safeHTML = generatedHTML.replace(/<script\\b[^<]*(?:(?!<\\/script>)<[^<]*)*<\\/script>/gi, "");
+          const safeHTML = generatedHTML.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
           
           resultDiv.innerHTML = `
             <div style="border-left: 3px solid #8b5cf6; padding-left: 10px; margin-top: 10px;">
