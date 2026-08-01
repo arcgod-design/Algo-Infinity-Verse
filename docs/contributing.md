@@ -190,11 +190,6 @@ Screenshots are stored in `screenshots/`. When submitting a PR with visual chang
 
 1. Capture a screenshot of the changed UI
 2. Save it to `screenshots/` with a descriptive filename
-3. Reference it in your PR description:
-   ```markdown
-   Before: ![Before](../screenshots/topics-grid-before.png)
-   After:  ![After](../screenshots/topics-grid-after.png)
-   ```
 
 ---
 
