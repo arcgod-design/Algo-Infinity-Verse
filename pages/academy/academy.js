@@ -273,6 +273,15 @@ const academies = [
     difficulty: 'Intermediate',
     desc: 'Containerize apps with Docker and orchestrate at scale with Kubernetes.',
   },
+  {
+    id: 'terraform',
+    name: 'Terraform & IaC Academy',
+    path: '/pages/terraform-academy/terraform-academy.html',
+    category: 'Cloud & DevOps',
+    icon: 'terraform',
+    difficulty: 'Intermediate',
+    desc: 'Master Infrastructure as Code with Terraform — HCL syntax, providers & resources, state & backends, modules, workspaces, and Terraform Cloud CI/CD.',
+  },
 
   // ── Version Control ──
   {
@@ -368,7 +377,7 @@ const categoryDefs = [
   { label: 'Frontend', key: 'frontend', count: 8 },
   { label: 'Backend', key: 'backend', count: 14 },
   { label: 'System Design', key: 'system-design', count: 1 },
-  { label: 'Cloud & DevOps', key: 'cloud-devops', count: 2 },
+  { label: 'Cloud & DevOps', key: 'cloud-devops', count: 3 },
   { label: 'Databases', key: 'databases', count: 7 },
   { label: 'DevOps & CI/CD', key: 'devops-ci-cd', count: 1 },
   { label: 'AI / Misc', key: 'ai-misc', count: 1 },
@@ -524,6 +533,8 @@ const svgIcons = {
     '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="14" font-weight="bold" fill="currentColor" font-family="system-ui, sans-serif">R</text>',
   go:
     '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="14" font-weight="bold" fill="currentColor" font-family="system-ui, sans-serif">Go</text>',
+  terraform:
+    'M1.44 0v7.575l6.561 3.79V3.787zm21.12 4.227l-6.561 3.791v7.574l6.56-3.787zM8.72 4.23v7.575l6.561 3.787V8.018zm0 8.405v7.575L15.28 24v-7.578z',
 };
 
 const iconViewBox = {
@@ -618,6 +629,7 @@ function initFlipAnimation() {
     { name: 'System Design', cat: 'system-design' },
     { name: 'AWS', cat: 'cloud-devops' },
     { name: 'Docker & K8s', cat: 'cloud-devops' },
+    { name: 'Terraform', cat: 'cloud-devops' },
     { name: 'PostgreSQL', cat: 'databases' },
     { name: 'MongoDB', cat: 'databases' },
     { name: 'Elasticsearch', cat: 'databases' },
