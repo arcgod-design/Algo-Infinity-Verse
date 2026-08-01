@@ -140,6 +140,17 @@ const languages = [
     desc: 'Google\'s UI toolkit for building beautiful, natively compiled apps for mobile, web, and desktop from a single Dart codebase.',
     svgIcon: `<img src="https://cdn.simpleicons.org/flutter/a8c8dc" alt="Flutter" style="width:1em;height:1em;display:block;">`
   },
+  {
+    name: 'Dart',
+    path: '/pages/learning/dart-learning/dart-learning.html',
+    category: 'General Purpose',
+    icon: 'fa-code',
+    isBrandIcon: false,
+    langKey: 'dart',
+    langColor: '#0175C2',
+    desc: 'Fast, client-optimized language that powers Flutter. Sound null safety, rich collections, and async streams for apps on any platform.',
+    svgIcon: `<img src="https://cdn.simpleicons.org/dart/0175C2" alt="Dart" style="width:1em;height:1em;display:block;">`
+  },
 ];
 
 /* ─── Categories ─── */
@@ -160,6 +171,7 @@ const langColors = {
   csharp: '#e8b0b0',
   swift: '#f2a88a',
   flutter: '#a8c8dc',
+  dart: '#0175C2',
 };
 
 /* ─── DOM refs ─── */
@@ -232,7 +244,7 @@ function render() {
 
   emptyState.style.display = 'none';
   grid.innerHTML = filtered.map((v, i) => {
-    const iconColor = langColors[v.langKey] || 'var(--lang-primary)';
+    const iconColor = v.langColor || langColors[v.langKey] || 'var(--lang-primary)';
     let iconHtml;
     if (v.svgIcon) {
       iconHtml = v.svgIcon;
