@@ -5,6 +5,7 @@
 (function () {
   'use strict';
 
+  
   var STORAGE_KEY = 'trace-context-propagation-lab-progress';
 
   var MODULES = [
