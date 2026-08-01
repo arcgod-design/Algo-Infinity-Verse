@@ -162,6 +162,15 @@ const academies = [
     desc: 'Enterprise-grade Node.js backend development with NestJS modular architecture.',
   },
   {
+    id: 'graphql',
+    name: 'GraphQL Academy',
+    path: '/pages/graphql-academy/graphql-academy.html',
+    category: 'Backend',
+    icon: 'fa-brands fa-graphql',
+    difficulty: 'Intermediate',
+    desc: 'Master GraphQL end-to-end — SDL & types, queries & mutations, resolvers & DataLoader, subscriptions, Apollo Client, and federation & security with a live query playground.',
+  },
+  {
     id: 'firebase',
     name: 'Firebase Academy',
     path: '/pages/firebase-academy/firebase-academy.html',
@@ -357,7 +366,7 @@ const academies = [
 const categoryDefs = [
   { label: 'All', key: 'all', count: academies.length },
   { label: 'Frontend', key: 'frontend', count: 8 },
-  { label: 'Backend', key: 'backend', count: 13 },
+  { label: 'Backend', key: 'backend', count: 14 },
   { label: 'System Design', key: 'system-design', count: 1 },
   { label: 'Cloud & DevOps', key: 'cloud-devops', count: 2 },
   { label: 'Databases', key: 'databases', count: 7 },
@@ -621,6 +630,7 @@ function initFlipAnimation() {
     { name: 'WebSocket & SSE', cat: 'backend' },
     { name: 'gRPC & Protobuf', cat: 'backend' },
     { name: 'Rails', cat: 'backend' },
+    { name: 'GraphQL', cat: 'backend' },
   ];
 
   const inner = document.getElementById('acFlipInner');
