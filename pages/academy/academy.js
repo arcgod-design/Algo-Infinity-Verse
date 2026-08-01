@@ -224,6 +224,15 @@ const academies = [
     difficulty: 'Intermediate',
     desc: 'Master high-performance RPC with gRPC and Protocol Buffers — message definitions, service definitions, HTTP/2 communication, streaming, and error handling.',
   },
+  {
+    id: 'rails',
+    name: 'Ruby on Rails Academy',
+    path: '/pages/rails-academy/rails-academy.html',
+    category: 'Backend',
+    icon: 'fa-solid fa-gem',
+    difficulty: 'Intermediate',
+    desc: 'Master the Ruby on Rails framework — MVC architecture, routing, controllers, ActiveRecord & migrations, ERB views, authentication, and deployment.',
+  },
 
   // ── System Design ──
   {
@@ -348,7 +357,7 @@ const academies = [
 const categoryDefs = [
   { label: 'All', key: 'all', count: academies.length },
   { label: 'Frontend', key: 'frontend', count: 8 },
-  { label: 'Backend', key: 'backend', count: 12 },
+  { label: 'Backend', key: 'backend', count: 13 },
   { label: 'System Design', key: 'system-design', count: 1 },
   { label: 'Cloud & DevOps', key: 'cloud-devops', count: 2 },
   { label: 'Databases', key: 'databases', count: 7 },
@@ -611,6 +620,7 @@ function initFlipAnimation() {
     { name: 'Fail', cat: 'ai-misc' },
     { name: 'WebSocket & SSE', cat: 'backend' },
     { name: 'gRPC & Protobuf', cat: 'backend' },
+    { name: 'Rails', cat: 'backend' },
   ];
 
   const inner = document.getElementById('acFlipInner');
